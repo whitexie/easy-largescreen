@@ -2,16 +2,18 @@
   "name": "easy-data-dashboard",
   "version": "1.0.0",
   "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
   "main": "index.js",
   "scripts": {
     "designer:dev": "pnpm run -C packages/designer dev"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "typescript": "~5.4.0",
     "@antfu/eslint-config": "^2.13.2",
-    "eslint": "^9.0.0"
+    "eslint": "^9.0.0",
+    "eslint-plugin-format": "^0.1.0",
+    "typescript": "~5.4.0",
+    "vitest": "^1.4.0"
   }
 }

@@ -1,13 +1,13 @@
 {
   "name": "@yss/dashboard-core",
+  "version": "0.0.1",
   "main": "index.ts",
   "scripts": {},
+  "peerDependencies": {
+    "vue": "^3.2.37"
+  },
   "dependencies": {
     "dayjs": "^1.11.10",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
-  },
-  "version": "0.0.1",
-  "peerDependencies": {
-    "vue": "^3.2.37"
   }
 }

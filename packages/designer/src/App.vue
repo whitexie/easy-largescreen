@@ -1,8 +1,33 @@
 <script setup lang="ts">
+import type { GlobalThemeOverrides } from 'naive-ui';
+import { NConfigProvider, NMessageProvider, dateZhCN, zhCN } from 'naive-ui';
+
+const themeOverrides: GlobalThemeOverrides = {
+  // common: {
+  //   primaryColor: '#18181B',
+  //   primaryColorHover: '#18181BE6',
+  //   primaryColorPressed: '#18181BE6',
+  //   primaryColorSuppl: '#18181BE6',
+  // },
+  // Button: {
+  //   borderRadiusLarge: '6px',
+  //   borderRadiusTiny: '6px',
+  //   borderRadiusMedium: '6px',
+  //   borderRadiusSmall: '6px',
+  //   heightMedium: '40px',
+  //   textColorTertiary: '#18181BE6',
+  //   colorTertiary: '#f4f4f5',
+  //   colorTertiaryHover: '#f4f4f5cc',
+  // },
+};
 </script>
 
 <template>
-  <RouterView />
+  <NConfigProvider preflight-style-disabled class="h-full" :theme-overrides="themeOverrides" :locale="zhCN" :date-locale="dateZhCN">
+    <NMessageProvider>
+      <RouterView />
+    </NMessageProvider>
+  </NConfigProvider>
 </template>
 
 <style scoped>
