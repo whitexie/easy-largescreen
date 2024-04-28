@@ -1,4 +1,4 @@
-import type { UnwrapNestedRefs } from 'vue';
+import { type UnwrapNestedRefs, h } from 'vue';
 import type { Dataset } from '@/types/dataset';
 
 export function useDataPreview(dataset: UnwrapNestedRefs<Dataset>) {
@@ -8,10 +8,13 @@ export function useDataPreview(dataset: UnwrapNestedRefs<Dataset>) {
 
   const columns = computed(() => {
     return dataset.fields.map((item) => {
-      const { name } = item;
+      const { name, id } = item;
       return {
-        title: name,
-        key: name,
+        'width': 150,
+        'min-width': 150,
+        'ma-width': 300,
+        'title': name,
+        'key': id,
       };
     });
   });
@@ -21,7 +24,21 @@ export function useDataPreview(dataset: UnwrapNestedRefs<Dataset>) {
       'size': 'small',
       'max-height': '300px',
       'data': data.value,
-      'columns': columns.value,
+      'columns': [
+        {
+          title: '序号',
+          key: 'index',
+          width: 60,
+          titleAlign: 'center',
+          align: 'center',
+          render: (_: object, rowIndex: number) => {
+            return h('div', {}, rowIndex + 1);
+          },
+        },
+        ...columns.value,
+      ],
+      'table-layout': 'fixed',
+      'scroll-x': columns.value.length * 150 + 60,
     } as const;
   });
 

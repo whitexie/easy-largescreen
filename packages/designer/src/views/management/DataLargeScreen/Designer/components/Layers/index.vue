@@ -16,7 +16,7 @@ function handleClick() {
 
 <template>
   <div class="layers  h-full bg-white w-200px overflow-hidden z-1001" :class="layersClass">
-    <div class="title flex items-center select-none justify-between h-40px border-b border-gray-200 border-b-solid">
+    <div :class="isExpand && 'px-2'" class="title flex items-center select-none justify-between h-40px border-b border-gray-200 border-b-solid">
       <span v-show="isExpand" class="pl-3 whitespace-nowrap flex-1 text-center">页面图层</span>
       <div :class="icon" class="size-1.6em cursor-pointer shrink-0" @click="handleClick" />
     </div>

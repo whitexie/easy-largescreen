@@ -69,7 +69,7 @@ function clearCurDataset() {
 
   <NDrawer
     :show="showDrawer"
-    default-width="80vw"
+    default-width="100vw"
     placement="right"
     resizable
   >

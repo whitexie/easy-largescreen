@@ -1,5 +1,6 @@
 import type { Sheet2JSONOpts, WorkBook } from 'xlsx';
 import { read, utils } from 'xlsx';
+import { generateRandomString } from '@yss/utils';
 import type { CellType, Field, RawData } from './types';
 
 function readExcel(file: File): Promise<WorkBook> {
@@ -42,7 +43,7 @@ export class ParseExcel {
     if (dateFields.length) {
       result.forEach((row) => {
         dateFields.forEach((f) => {
-          const key = f.name as keyof T;
+          const key = f.id as keyof T;
           const value = row[key];
           if (value instanceof Date)
             (row[key] as unknown) = value.getTime();
@@ -73,16 +74,22 @@ export class ParseExcel {
     if (!sheet['!ref'])
       return [];
 
-    const fields = [];
+    const fields: Field[] = [];
     const range = sheet['!ref']?.split(':');
     const maxCol = utils.decode_col(range[1].replace(/\d+/, ''));
 
     for (let i = 0; i <= maxCol; i++) {
+      const id = generateRandomString(8, 'y');
       const nameAddress = `${utils.encode_col(i)}1`;
       const valueAddress = `${utils.encode_col(i)}2`;
       const name = sheet[nameAddress].v;
       const type = getCellType(sheet[valueAddress].t);
-      fields.push({ name, type });
+
+      // 将id作为表头
+      sheet[nameAddress].v = id;
+      sheet[nameAddress].h = id;
+      sheet[nameAddress].w = id;
+      fields.push({ id, name, type });
     }
 
     this.fields = fields;

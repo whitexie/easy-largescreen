@@ -2,7 +2,7 @@ export function useSpacebarDraggable() {
   const canvasRef = ref<HTMLElement | null>(null);
   const isDragging = ref(false);
   const spacePressed = ref(false);
-  const offset = reactive({ x: 0, y: 0 });
+  const offset = reactive({ x: 30, y: 30 });
   let startX = 0;
   let startY = 0;
 

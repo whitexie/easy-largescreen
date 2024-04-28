@@ -37,8 +37,9 @@ const managementRoutes: ManagementRouteRecordRaw[] = [
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'home',
-    component: () => import('@/views/Home.vue'),
+    // name: 'home',
+    redirect: '/management',
+    // component: () => import('@/views/Home.vue'),
   },
   {
     path: '/management',

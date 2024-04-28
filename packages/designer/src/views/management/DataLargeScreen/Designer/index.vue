@@ -2,10 +2,33 @@
 import Layers from './components/Layers/index.vue';
 import Pane from './components/PropsPane/Pane.vue';
 import { useSpacebarDraggable } from '@/composables/useSpacebarDraggable';
+import { useLargeScreenDesigner } from '@/stores/designer';
 
-const width = ref(1920);
-const height = ref(1080);
-const scale = ref(100);
+const designerStore = useLargeScreenDesigner();
+const width = computed({
+  get() {
+    return designerStore.state.pageConfig.width;
+  },
+  set(val: number) {
+    designerStore.state.pageConfig.width = val;
+  },
+});
+const height = computed({
+  get() {
+    return designerStore.state.pageConfig.height;
+  },
+  set(val: number) {
+    designerStore.state.pageConfig.height = val;
+  },
+});
+const scale = computed({
+  get() {
+    return designerStore.temporaryState.scale;
+  },
+  set(val: number) {
+    designerStore.temporaryState.scale = val;
+  },
+});
 
 const { canvasRef, offsetStyle, cursorStyle, handleMouseDown, setOffset } = useSpacebarDraggable();
 
@@ -74,7 +97,7 @@ function hadnleBestFitScale() {
   <main class="h-calc[100%-50px] w-full relative grid grid-cols-3 canvas-warpper bg-#f2f2f2">
     <Layers />
     <div class="relative">
-      <div class=" bg-#f2f2f2 overflow-auto relative w-full flex-1 p-7.5  h-calc[100%-36px]">
+      <div class="bg-#f2f2f2 overflow-auto relative w-full flex-1 p-7.5  h-calc[100%-36px]">
         <div ref="canvasRef" class="canvas absolute bg-white transform-origin-top-left " :style="canvasStyle" @mousedown="handleMouseDown" />
       </div>
       <div class="flex justify-between absolute bottom-0 right-0 w-full h-36px bg-white px-3">
@@ -110,7 +133,7 @@ function hadnleBestFitScale() {
 .canvas-warpper {
   display: grid;
   gap: 1px;
-  grid-template-columns: max-content 1fr 200px;
+  grid-template-columns: max-content 1fr max-content;
 }
 .canvas {
   --line-color: rgba(60, 10, 30, 0.2);
