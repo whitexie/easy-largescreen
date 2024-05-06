@@ -1,4 +1,4 @@
-import { defineConfig, presetAttributify, presetIcons, presetUno } from 'unocss';
+import { defineConfig, presetAttributify, presetIcons, presetUno, transformerVariantGroup } from 'unocss';
 
 export default defineConfig({
   presets: [
@@ -11,6 +11,9 @@ export default defineConfig({
       // },
       cdn: 'https://cdn.skypack.dev/',
     }),
+  ],
+  transformers: [
+    transformerVariantGroup(),
   ],
   rules: [
     [/^w-(calc\[.*\])/, ([, d]) => {

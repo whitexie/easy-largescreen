@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import Layers from './components/Layers/index.vue';
-import Pane from './components/PropsPane/Pane.vue';
+import Layers from '@/components/Designer/Layers/index.vue';
+import Pane from '@/components/Designer/PropsPane/Pane.vue';
+import Menus from '@/components/Designer/Menus/Menus.vue';
 import { useSpacebarDraggable } from '@/composables/useSpacebarDraggable';
 import { useLargeScreenDesigner } from '@/stores/designer';
 
@@ -80,9 +81,12 @@ function hadnleBestFitScale() {
 
 <template>
   <div class="px-2">
-    <div class="border-b-1px flex items-center justify-between border-gray-200 border-b-solid h-50px">
+    <div class="border-b-1px gap-2 flex items-center justify-between border-gray-200 border-b-solid h-50px">
       <div class="left">
         <n-input placeholder="大屏名称" class="w-160px!" />
+      </div>
+      <div class="center flex-1 h-full">
+        <Menus />
       </div>
       <div class="right">
         <div class="flex items-center gap-2">

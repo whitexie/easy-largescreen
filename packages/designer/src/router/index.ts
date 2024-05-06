@@ -37,9 +37,7 @@ const managementRoutes: ManagementRouteRecordRaw[] = [
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    // name: 'home',
     redirect: '/management',
-    // component: () => import('@/views/Home.vue'),
   },
   {
     path: '/management',
@@ -52,7 +50,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/largescreen/designer',
     name: 'DataLargeScreenDesigner',
-    component: () => import('@/views/management/DataLargeScreen/Designer/index.vue'),
+    component: () => import('@/views/management/DataLargeScreen/Designer.vue'),
     meta: {
       title: '大屏设计',
     },

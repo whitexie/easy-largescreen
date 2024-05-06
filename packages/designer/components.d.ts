@@ -7,7 +7,13 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    DatasetPane: typeof import('./src/components/Designer/PropsPane/DatasetPane.vue')['default']
+    FieldPane: typeof import('./src/components/Designer/PropsPane/FieldPane.vue')['default']
+    LayerItem: typeof import('./src/components/Designer/Layers/LayerItem.vue')['default']
+    Layers: typeof import('./src/components/Designer/Layers/index.vue')['default']
     ManagementLayout: typeof import('./src/components/Layout/ManagementLayout.vue')['default']
+    MenuItem: typeof import('./src/components/Designer/Menus/MenuItem.vue')['default']
+    Menus: typeof import('./src/components/Designer/Menus/Menus.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
     NCollapse: typeof import('naive-ui')['NCollapse']
@@ -21,6 +27,7 @@ declare module 'vue' {
     NInput: typeof import('naive-ui')['NInput']
     NInputNumber: typeof import('naive-ui')['NInputNumber']
     NPopconfirm: typeof import('naive-ui')['NPopconfirm']
+    NPopover: typeof import('naive-ui')['NPopover']
     NSelect: typeof import('naive-ui')['NSelect']
     NSlider: typeof import('naive-ui')['NSlider']
     NSpace: typeof import('naive-ui')['NSpace']
@@ -28,6 +35,9 @@ declare module 'vue' {
     NTag: typeof import('naive-ui')['NTag']
     NTooltip: typeof import('naive-ui')['NTooltip']
     NUpload: typeof import('naive-ui')['NUpload']
+    PagePane: typeof import('./src/components/Designer/PropsPane/PagePane.vue')['default']
+    Pane: typeof import('./src/components/Designer/PropsPane/Pane.vue')['default']
+    PaneContainer: typeof import('./src/components/Designer/PropsPane/PaneContainer.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

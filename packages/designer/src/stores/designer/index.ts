@@ -1,4 +1,9 @@
 import { defineStore } from 'pinia';
+import { generateRandomString } from '@yss/utils';
+import type { DataLargeScreenField, MenuItem, Widget } from '@/types/dataLargeScreen';
+import { useMenus } from '@/components/Designer/Menus/useMenus';
+
+const { getMenuConfig, getWidgetProps } = useMenus();
 
 interface PageConfig {
   background: {
@@ -31,14 +36,55 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     useDatsetIds: [],
   });
 
+  const { widgets, addWidget, removeWidget } = useWidgets();
+
   /**
    * 临时的状态，仅在设计器中使用
    */
   const temporaryState = reactive({
     currentDatsetId: '',
+    currentWidgetId: '',
     scale: 100,
     showDataset: true,
   });
 
-  return { state, temporaryState };
+  function setCurrentWidget(id: string) {
+    temporaryState.currentWidgetId = id;
+  }
+
+  return { state, temporaryState, widgets, setCurrentWidget, addWidget, removeWidget };
 });
+
+export function useWidgets() {
+  const widgets = reactive<DataLargeScreenField[]>([]);
+
+  function addWidget(menuItem: MenuItem) {
+    const id = generateRandomString(8, 'w');
+
+    const menuConfig = getMenuConfig(menuItem.id);
+    const props = getWidgetProps(menuItem.id);
+    const { id: component, name } = menuItem;
+    const { size = [300, 200] } = menuConfig;
+
+    widgets.push({
+      id,
+      name,
+      component,
+      size,
+      isLock: false,
+      location: [0, 0],
+      props: structuredClone(props),
+      menuConfig,
+    });
+  }
+
+  function removeWidget(id: string) {
+    widgets.splice(widgets.findIndex(item => item.id === id), 1);
+  }
+
+  return {
+    widgets,
+    addWidget,
+    removeWidget,
+  };
+}

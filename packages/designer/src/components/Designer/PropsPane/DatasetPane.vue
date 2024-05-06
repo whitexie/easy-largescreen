@@ -55,6 +55,9 @@ function useFields(id: Ref<string>) {
       if (result)
         fields.push(...result);
     },
+    {
+      immediate: true,
+    },
   );
 
   return {
