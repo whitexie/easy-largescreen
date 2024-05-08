@@ -1,9 +1,9 @@
-import { Props, meneConfig } from './config';
+import { MenuConfig, Props } from './config';
 import Text from './Text.vue';
 import Pane from './Pane.vue';
 
 export default {
-  meneConfig,
+  MenuConfig,
   props: Props,
   Render: Text,
   Pane,

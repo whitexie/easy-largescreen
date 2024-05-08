@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { generateRandomString } from '@yss/utils';
+// import { useDraggable } from './useDraggable';
 import type { DataLargeScreenField, MenuItem, Widget } from '@/types/dataLargeScreen';
 import { useMenus } from '@/components/Designer/Menus/useMenus';
 
@@ -37,6 +38,7 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
   });
 
   const { widgets, addWidget, removeWidget } = useWidgets();
+  // const { setPosition, position, handleMouseDown } = useDraggable();
 
   /**
    * 临时的状态，仅在设计器中使用
