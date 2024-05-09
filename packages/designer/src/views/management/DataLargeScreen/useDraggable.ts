@@ -3,14 +3,14 @@ import type { ComputedRef } from 'vue';
 type Options = ComputedRef<{ scale: number, beforeMouseDown?: () => void[] }>;
 
 export function useDraggable(option: Options) {
-  let isDragging = false;
+  const isDragging = ref(false);
 
   const position = ref({ x: 0, y: 0 });
   const startOffsetPosition = { x: 0, y: 0 };
 
   function setPosition(newPosition: { x: number, y: number }) {
-    position.value.x = newPosition.x / option.value.scale;
-    position.value.y = newPosition.y / option.value.scale;
+    position.value.x = Math.round(newPosition.x / option.value.scale);
+    position.value.y = Math.round(newPosition.y / option.value.scale);
   }
 
   function initPosition(newPosition: { x: number, y: number }) {
@@ -28,7 +28,7 @@ export function useDraggable(option: Options) {
   }
 
   function handleMove(event: MouseEvent) {
-    isDragging = true;
+    isDragging.value = true;
     event.stopPropagation();
     // console.log('handleMove');
 
@@ -39,7 +39,7 @@ export function useDraggable(option: Options) {
 
   function handleMouseUp() {
     console.log('handleMouseUp', position.value);
-    isDragging = false;
+    isDragging.value = false;
     document.removeEventListener('mousemove', handleMove);
     document.removeEventListener('mouseup', handleMouseUp);
   }

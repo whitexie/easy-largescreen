@@ -30,6 +30,7 @@ export default antfu({
         shallowOnly: true,
       },
     ],
+    'curly': ['error', 'all'],
   },
   files,
 })

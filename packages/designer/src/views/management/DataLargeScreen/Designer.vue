@@ -2,6 +2,7 @@
 import DesignerWidget from './DesignerWidget.vue';
 import Footer from './Footer.vue';
 import DesignerHeader from './DesignerHeader.vue';
+import DragDistanceIndicator from './DragDistanceIndicator.vue';
 import { useDraggable } from './useDraggable';
 import Layers from '@/components/Designer/Layers/index.vue';
 import Pane from '@/components/Designer/PropsPane/Pane.vue';
@@ -19,8 +20,8 @@ const draggableOption = computed(() => {
   };
 });
 
-const { handleMouseDown: handleDragEvent, initPosition, position } = useDraggable(draggableOption);
-let dragWidget: DataLargeScreenField | null = null;
+const { handleMouseDown: handleDragEvent, initPosition, position, isDragging } = useDraggable(draggableOption);
+const dragWidget = ref<DataLargeScreenField | null>(null);
 const canvasStyle = computed(() => {
   const { pageConfig: { width, height } } = designerStore.state;
   const { scale } = designerStore.temporaryState;
@@ -45,18 +46,28 @@ function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) 
   designerStore.setCurrentWidget(widget.id);
   const { location: [x, y] } = widget;
   initPosition({ x, y });
-  dragWidget = widget;
+  dragWidget.value = widget;
   handleDragEvent(event);
 }
 
 watch(
   position.value,
   (val) => {
-    if (!dragWidget)
+    if (!dragWidget.value) {
       return;
+    }
     const { x, y } = val;
-    dragWidget.location[0] = x;
-    dragWidget.location[1] = y;
+    dragWidget.value.location[0] = x;
+    dragWidget.value.location[1] = y;
+  },
+);
+
+watch(
+  () => isDragging.value,
+  (val) => {
+    if (val && dragWidget.value?._el) {
+      console.log('current drag widget => ', dragWidget.value._el);
+    }
   },
 );
 </script>
@@ -71,6 +82,7 @@ watch(
           <template v-for="item in designerStore.widgets" :key="item.id">
             <DesignerWidget :widget="item" @mousedown="handleWidgetMouseDown" @click-widget="handleClickWidget" />
           </template>
+          <DragDistanceIndicator :canvas-ref="canvasRef" :widget="dragWidget" :is-dragging="isDragging" />
         </div>
       </div>
       <Footer :canvas-ref="canvasRef" :set-offset="setOffset" />
@@ -79,7 +91,7 @@ watch(
   </main>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
 .canvas-warpper {
   display: grid;
   gap: 1px;

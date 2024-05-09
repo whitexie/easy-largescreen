@@ -13,6 +13,7 @@ const emits = defineEmits<{
   clickWidget: [DataLargeScreenField]
   mousedown: [MouseEvent, DataLargeScreenField]
 }>();
+const Ref = ref<null | HTMLElement>(null);
 const designerStore = useLargeScreenDesigner();
 
 const componentMap = { text: TextConfig.Render } as const;
@@ -45,10 +46,15 @@ function handleClickWidget() {
 function handleMouseDown(event: MouseEvent) {
   emits('mousedown', event, props.widget);
 }
+
+onMounted(() => {
+  if (Ref.value)
+    props.widget._el = Ref.value;
+});
 </script>
 
 <template>
-  <div v-if="RenderComponent" class="border absolute top-0 left-0 border-gray-400 bg-pink cursor-pointer" :style="layoutStyle" @mousedown="handleMouseDown" @click.stop="handleClickWidget">
+  <div v-if="RenderComponent" ref="Ref" class="border absolute top-0 left-0 border-gray-400 bg-pink cursor-pointer" :style="layoutStyle" @mousedown="handleMouseDown" @click.stop="handleClickWidget">
     <template v-if="activeWidget">
       <div class="mask absolute top-0 left-0 bottom-0 right-0 z-60001" />
       <!-- 左上 -->

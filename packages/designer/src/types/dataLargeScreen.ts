@@ -33,6 +33,7 @@ export interface DataLargeScreenField {
   isLock: boolean
   menuConfig: MenuBaseConfig
   props: Record<string, any>
+  _el: null | HTMLElement
 }
 
 export interface MenuItem {

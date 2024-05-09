@@ -77,6 +77,7 @@ export function useWidgets() {
       location: [0, 0],
       props: structuredClone(props),
       menuConfig,
+      _el: null,
     });
   }
 
