@@ -1,9 +1,11 @@
 <script lang="ts" setup>
+import { provide } from 'vue';
 import DesignerWidget from './DesignerWidget.vue';
 import Footer from './Footer.vue';
 import DesignerHeader from './DesignerHeader.vue';
 import DragDistanceIndicator from './DragDistanceIndicator.vue';
 import { useDraggable } from './useDraggable';
+import { CANVAS_ELEMENT_KEY } from './provideKey';
 import Layers from '@/components/Designer/Layers/index.vue';
 import Pane from '@/components/Designer/PropsPane/Pane.vue';
 import { useSpacebarDraggable } from '@/composables/useSpacebarDraggable';
@@ -12,13 +14,14 @@ import type { DataLargeScreenField } from '@/types/dataLargeScreen';
 
 const designerStore = useLargeScreenDesigner();
 const { canvasRef, offsetStyle, cursorStyle, handleMouseDown, setOffset } = useSpacebarDraggable();
-
 const draggableOption = computed(() => {
   const { temporaryState: { scale } } = designerStore;
   return {
     scale: scale / 100,
   };
 });
+
+provide(CANVAS_ELEMENT_KEY, canvasRef);
 
 const { handleMouseDown: handleDragEvent, initPosition, position, isDragging } = useDraggable(draggableOption);
 const dragWidget = ref<DataLargeScreenField | null>(null);
@@ -34,7 +37,8 @@ const canvasStyle = computed(() => {
   };
 });
 
-function handleClickCanvas() {
+function handleClickCanvas(e: MouseEvent) {
+  console.log('handleClickCanvas => ', e);
   designerStore.setCurrentWidget('');
 }
 
@@ -62,14 +66,14 @@ watch(
   },
 );
 
-watch(
-  () => isDragging.value,
-  (val) => {
-    if (val && dragWidget.value?._el) {
-      console.log('current drag widget => ', dragWidget.value._el);
-    }
-  },
-);
+// watch(
+//   () => isDragging.value,
+//   (val) => {
+//     if (val && dragWidget.value?._el) {
+//       console.log('current drag widget => ', dragWidget.value._el);
+//     }
+//   },
+// );
 </script>
 
 <template>
@@ -82,7 +86,7 @@ watch(
           <template v-for="item in designerStore.widgets" :key="item.id">
             <DesignerWidget :widget="item" @mousedown="handleWidgetMouseDown" @click-widget="handleClickWidget" />
           </template>
-          <DragDistanceIndicator :canvas-ref="canvasRef" :widget="dragWidget" :is-dragging="isDragging" />
+          <DragDistanceIndicator :widget="dragWidget" :is-dragging="isDragging" />
         </div>
       </div>
       <Footer :canvas-ref="canvasRef" :set-offset="setOffset" />

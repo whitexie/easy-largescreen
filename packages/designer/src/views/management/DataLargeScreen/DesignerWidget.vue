@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-import { useDraggable } from './useDraggable';
+import { type Ref, inject } from 'vue';
+import { useWidgetResize } from './useWidgetResize';
+import { CANVAS_ELEMENT_KEY } from './provideKey';
 import TextConfig from '@/dataLargeScreenFields/Text';
 import { useLargeScreenDesigner } from '@/stores/designer';
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
@@ -13,8 +15,12 @@ const emits = defineEmits<{
   clickWidget: [DataLargeScreenField]
   mousedown: [MouseEvent, DataLargeScreenField]
 }>();
-const Ref = ref<null | HTMLElement>(null);
+const canvasRef = inject<Ref<HTMLElement | null>>(CANVAS_ELEMENT_KEY, ref(null));
+const widgetRef = ref<HTMLDivElement | null>(null);
 const designerStore = useLargeScreenDesigner();
+const { handleActiveResize } = useWidgetResize();
+
+const commonClass = 'graphicbox-resize absolute z-10 w-10px h-10px  border-amber';
 
 const componentMap = { text: TextConfig.Render } as const;
 
@@ -29,9 +35,9 @@ const layoutStyle = computed(() => {
 
 const RenderComponent = computed(() => {
   const component = props.widget.component.toLowerCase();
-  console.log('component', component);
-  if (Object.keys(componentMap).includes(component))
+  if (Object.keys(componentMap).includes(component)) {
     return componentMap[component as keyof typeof componentMap];
+  }
 
   return '';
 });
@@ -40,39 +46,76 @@ const activeWidget = computed(() => designerStore.temporaryState.currentWidgetId
 
 function handleClickWidget() {
   emits('clickWidget', props.widget);
-  // designerStore.setCurrentWidget(props.widget.id);
 }
 
 function handleMouseDown(event: MouseEvent) {
   emits('mousedown', event, props.widget);
 }
 
+function handleResize(horizontal: -1 | 0 | 1, vertical: -1 | 0 | 1) {
+  const scale = designerStore.temporaryState.scale / 100;
+  handleActiveResize(props.widget, canvasRef.value, horizontal, vertical, scale);
+}
+
 onMounted(() => {
-  if (Ref.value)
-    props.widget._el = Ref.value;
+  if (widgetRef.value) {
+    props.widget._el = widgetRef.value;
+  }
 });
 </script>
 
 <template>
-  <div v-if="RenderComponent" ref="Ref" class="border absolute top-0 left-0 border-gray-400 bg-pink cursor-pointer" :style="layoutStyle" @mousedown="handleMouseDown" @click.stop="handleClickWidget">
+  <div v-if="RenderComponent" ref="widgetRef" class="border absolute top-0 left-0 border-gray-400 cursor-pointer" :style="layoutStyle" @mousedown="handleMouseDown" @click.stop="handleClickWidget">
     <template v-if="activeWidget">
       <div class="mask absolute top-0 left-0 bottom-0 right-0 z-60001" />
       <!-- 左上 -->
-      <div class="graphicbox-resize absolute z-10 w-10px h-10px  border-amber cursor-nwse-resize top-0 left-0 mt--2px ml--2px border-t-2 border-l-2 border-l-solid border-t-solid" />
+      <div
+        :class="commonClass"
+        class="cursor-nwse-resize top-0 left-0 mt--2px ml--2px border-t-2 border-l-2 border-l-solid border-t-solid"
+        @mousedown.stop="handleResize(-1, -1)"
+      />
       <!-- 左下 -->
-      <div class="graphicbox-resize absolute z-10 w-10px h-10px  border-amber cursor-nesw-resize bottom-0 left-0 mb--2px ml--2px border-b-2 border-b-solid border-l-2 border-l-solid " />
+      <div
+        :class="commonClass"
+        class="cursor-nesw-resize bottom-0 left-0 mb--2px ml--2px border-b-2 border-b-solid border-l-2 border-l-solid"
+        @mousedown.stop="handleResize(-1, 1)"
+      />
       <!-- 上 -->
-      <div class="graphicbox-resize absolute z-10 w-10px h-10px  border-amber cursor-ns-resize top-0 left-50% mt--2px border-t-2 border-t-solid" />
+      <div
+        :class="commonClass"
+        class="cursor-ns-resize top-0 left-50% mt--2px border-t-2 border-t-solid"
+        @mousedown.stop="handleResize(0, -1)"
+      />
       <!-- 下 -->
-      <div class="graphicbox-resize absolute z-10 w-10px h-10px  border-amber cursor-ns-resize bottom-0 left-50% mb--2px border-b-2 border-b-solid" />
+      <div
+        :class="commonClass"
+        class="cursor-ns-resize bottom-0 left-50% mb--2px border-b-2 border-b-solid"
+        @mousedown.stop="handleResize(0, 1)"
+      />
       <!-- 右上 -->
-      <div class="graphicbox-resize absolute z-10 w-10px h-10px  border-amber cursor-nesw-resize top-0 right-0 mt--2px mr--2px  border-t-2 border-t-solid border-r-2 border-r-solid" />
+      <div
+        :class="commonClass"
+        class="cursor-nesw-resize top-0 right-0 mt--2px mr--2px  border-t-2 border-t-solid border-r-2 border-r-solid"
+        @mousedown.stop="handleResize(1, -1)"
+      />
       <!-- 右 -->
-      <div class="graphicbox-resize absolute z-10 w-10px h-10px  border-amber cursor-ew-resize top-50% right-0 mr--2px  border-r-2 border-r-solid" />
+      <div
+        :class="commonClass"
+        class="cursor-ew-resize top-50% right-0 mr--2px  border-r-2 border-r-solid"
+        @mousedown.stop="handleResize(1, 0)"
+      />
       <!-- 左 -->
-      <div class="graphicbox-resize absolute z-10 w-10px h-10px  border-amber cursor-ew-resize top-50% left-0 ml--2px border-l-2 border-l-solid" />
+      <div
+        :class="commonClass"
+        class="cursor-ew-resize top-50% left-0 ml--2px border-l-2 border-l-solid"
+        @mousedown.stop="handleResize(-1, 0)"
+      />
       <!-- 右下 -->
-      <div class="graphicbox-resize absolute z-10 w-10px h-10px  border-amber cursor-nwse-resize bottom-0 right-0 mb--2px mr--2px border-b-2 border-b-solid border-r-2 border-r-solid" />
+      <div
+        :class="commonClass"
+        class="cursor-nwse-resize bottom-0 right-0 mb--2px mr--2px border-b-2 border-b-solid border-r-2 border-r-solid"
+        @mousedown.stop="handleResize(1, 1)"
+      />
     </template>
     <div class="relative z-6000 w-full h-full hidden">
       <component :is="RenderComponent" />

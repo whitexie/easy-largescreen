@@ -37,6 +37,8 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     useDatsetIds: [],
   });
 
+  const canvasRef = ref<HTMLDivElement | null>(null);
+
   const { widgets, addWidget, removeWidget } = useWidgets();
   // const { setPosition, position, handleMouseDown } = useDraggable();
 
@@ -54,7 +56,7 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     temporaryState.currentWidgetId = id;
   }
 
-  return { state, temporaryState, widgets, setCurrentWidget, addWidget, removeWidget };
+  return { state, temporaryState, canvasRef, widgets, setCurrentWidget, addWidget, removeWidget };
 });
 
 export function useWidgets() {

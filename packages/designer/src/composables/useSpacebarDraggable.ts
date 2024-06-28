@@ -7,11 +7,15 @@ export function useSpacebarDraggable() {
   let startY = 0;
 
   const cursorStyle = computed(() => {
-    if (isDragging.value)
+    if (isDragging.value) {
       return 'grabbing';
-    else if (spacePressed.value)
+    }
+    else if (spacePressed.value) {
       return 'grab';
-    else return 'default';
+    }
+    else {
+      return 'default';
+    }
   });
 
   const offsetStyle = computed(() => {
@@ -22,8 +26,9 @@ export function useSpacebarDraggable() {
   });
 
   function handleMouseMove(e: MouseEvent) {
-    if (!isDragging.value)
+    if (!isDragging.value) {
       return;
+    }
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
     startX = e.clientX;
@@ -52,8 +57,9 @@ export function useSpacebarDraggable() {
   function handleKeyDown(e: KeyboardEvent) {
     if (e.code === 'Space') {
       const targetElement = e.target as HTMLElement;
-      if (targetElement.tagName === 'INPUT')
+      if (targetElement.tagName === 'INPUT') {
         return;
+      }
 
       // 防止滚动
       e.preventDefault();
@@ -62,24 +68,28 @@ export function useSpacebarDraggable() {
   }
 
   function handleKeyUp(e: KeyboardEvent) {
-    if (e.code === 'Space')
+    if (e.code === 'Space') {
       spacePressed.value = false;
+    }
   }
 
   function initOffset() {
     const canvas = canvasRef.value as HTMLElement;
-    if (!canvas)
+    if (!canvas) {
       return;
+    }
     offset.x = canvas.offsetLeft;
     offset.y = canvas.offsetTop;
   }
 
   function setOffset(_offset: { x?: number, y?: number }) {
-    if (_offset.x)
+    if (_offset.x) {
       offset.x = _offset.x;
+    }
 
-    if (_offset.y)
+    if (_offset.y) {
       offset.y = _offset.y;
+    }
   }
 
   onMounted(() => {

@@ -1,0 +1,1 @@
+export const CANVAS_ELEMENT_KEY = Symbol('CANVAS_ELEMENT_KEY');
