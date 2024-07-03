@@ -9,10 +9,13 @@
   "scripts": {
     "designer:dev": "pnpm run -C packages/designer dev",
     "designer:type-check": "pnpm run -C packages/designer type-check",
+    "commit": "git-cz",
     "prepare": "husky"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.13.2",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.0.0",
     "eslint-plugin-format": "^0.1.0",
     "husky": "^9.0.11",
@@ -24,5 +27,10 @@
     "{apps,packages}/**/*.{ts,tsx,vue,html,css,md,json,yml,yaml}": [
       "eslint --fix"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
