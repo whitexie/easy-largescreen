@@ -48,12 +48,14 @@ function useFields(id: Ref<string>) {
   watch(
     () => id.value,
     async (val) => {
-      if (!val)
+      if (!val) {
         return;
+      }
 
       const result = await getDatasetFields(val);
-      if (result)
+      if (result) {
         fields.push(...result);
+      }
     },
     {
       immediate: true,

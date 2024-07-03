@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { nextTick } from 'vue';
 import { useMenus } from './useMenus';
 import MenuItemVue from './MenuItem';
 import type { MenuItem } from '@/types/dataLargeScreen';
@@ -8,9 +9,10 @@ const designerStore = useLargeScreenDesigner();
 
 const { MENUS: menus } = useMenus();
 
-function handleClick(item: MenuItem) {
-  designerStore.addWidget(item);
-  console.log('handleClick item => ', item);
+async function handleClick(item: MenuItem) {
+  const wgt = designerStore.addWidget(item);
+  await nextTick();
+  designerStore.setCurrentWidget(wgt.id);
 }
 </script>
 

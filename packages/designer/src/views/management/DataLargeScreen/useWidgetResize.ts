@@ -21,7 +21,9 @@ export function useWidgetResize() {
   }
 
   function initElementBounds(canvasEl: HTMLElement | null) {
-    if (!activeWidget || !canvasEl) return;
+    if (!activeWidget || !canvasEl) {
+      return;
+    }
 
     if (!activeWidget._el) {
       console.error('element not found, widget id =>', activeWidget.id);
@@ -46,7 +48,9 @@ export function useWidgetResize() {
     }
 
     frameId = requestAnimationFrame(() => {
-      if (!activeWidget || !activeWidget._el || !rectBounds || !canvasRect) return;
+      if (!activeWidget || !activeWidget._el || !rectBounds || !canvasRect) {
+        return;
+      }
 
       // 根据方向计算新的宽度和高度
       let newWidth = rectBounds.width;

@@ -18,10 +18,10 @@ const cssVars = computed(() => {
     '--field-color': '',
   };
 
-  if (props.type === 'dimension')
+  if (props.type === 'dimension') {
     result['--field-color'] = '#4a90e2';
-  else
-    result['--field-color'] = '#40c0a8';
+  }
+  else { result['--field-color'] = '#40c0a8'; }
 
   return result;
 });

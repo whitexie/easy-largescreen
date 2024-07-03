@@ -12,3 +12,5 @@ export const Props = {
     fontSize: '14px',
   },
 };
+
+export type TextProps = typeof Props;

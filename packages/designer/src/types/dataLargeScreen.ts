@@ -24,7 +24,7 @@ export interface Widget {
   props: Record<string, any>
 }
 
-export interface DataLargeScreenField {
+export interface DataLargeScreenField<T = unknown> {
   id: string
   name: string
   component: string
@@ -32,7 +32,7 @@ export interface DataLargeScreenField {
   location: [offsetX, offsetY]
   isLock: boolean
   menuConfig: MenuBaseConfig
-  props: Record<string, any>
+  props: T
   _el: null | HTMLElement
 }
 

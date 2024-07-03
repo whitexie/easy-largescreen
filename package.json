@@ -7,13 +7,27 @@
   "keywords": [],
   "main": "index.js",
   "scripts": {
-    "designer:dev": "pnpm run -C packages/designer dev"
+    "designer:dev": "pnpm run -C packages/designer dev",
+    "designer:type-check": "pnpm run -C packages/designer type-check"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.13.2",
     "eslint": "^9.0.0",
     "eslint-plugin-format": "^0.1.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
     "typescript": "~5.4.0",
     "vitest": "^1.4.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx,vue,html,css,md,json,yml,yaml}": [
+      "eslint --fix",
+      "git add"
+    ]
   }
 }

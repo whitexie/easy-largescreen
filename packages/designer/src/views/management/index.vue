@@ -35,8 +35,9 @@ function handleClickMenu(menu: typeof menus[0]) {
 watch(
   () => route,
   (val) => {
-    if (val.fullPath.includes('management'))
+    if (val.fullPath.includes('management')) {
       activeId.value = route.name as string;
+    }
   },
   { deep: true, immediate: true },
 );

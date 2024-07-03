@@ -72,8 +72,9 @@ export function useMenus() {
 function getWidgetName(path: string) {
   const regex = /\/([^\/]+)\/config\.ts$/;
   const matches = path.match(regex);
-  if (!matches)
+  if (!matches) {
     return '';
+  }
 
   return matches[1].toLowerCase();
 }

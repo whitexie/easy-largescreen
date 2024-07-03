@@ -45,8 +45,9 @@ export class ParseExcel {
         dateFields.forEach((f) => {
           const key = f.id as keyof T;
           const value = row[key];
-          if (value instanceof Date)
+          if (value instanceof Date) {
             (row[key] as unknown) = value.getTime();
+          }
         });
       });
     }
@@ -56,8 +57,9 @@ export class ParseExcel {
 
   getRange(sheetName?: string) {
     const sheet = this.getSheet(sheetName);
-    if (!sheet['!ref'])
+    if (!sheet['!ref']) {
       return [0, 0];
+    }
 
     const [startCell, endCell] = sheet['!ref']?.split(':');
     return [
@@ -67,12 +69,14 @@ export class ParseExcel {
   }
 
   getFieldsMate(sheetName?: string): Field[] {
-    if (this.fields.length)
+    if (this.fields.length) {
       return this.fields;
+    }
 
     const sheet = this.getSheet(sheetName);
-    if (!sheet['!ref'])
+    if (!sheet['!ref']) {
       return [];
+    }
 
     const fields: Field[] = [];
     const range = sheet['!ref']?.split(':');
@@ -105,7 +109,8 @@ const CellTypeMap = {
 } as const;
 
 function getCellType(t: string): CellType {
-  if (Object.keys(CellTypeMap).includes(t))
+  if (Object.keys(CellTypeMap).includes(t)) {
     return CellTypeMap[t as keyof typeof CellTypeMap];
+  }
   return 'null';
 }

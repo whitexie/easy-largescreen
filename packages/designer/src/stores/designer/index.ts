@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { generateRandomString } from '@yss/utils';
-// import { useDraggable } from './useDraggable';
-import type { DataLargeScreenField, MenuItem, Widget } from '@/types/dataLargeScreen';
+import type { DataLargeScreenField, MenuItem } from '@/types/dataLargeScreen';
 import { useMenus } from '@/components/Designer/Menus/useMenus';
 
 const { getMenuConfig, getWidgetProps } = useMenus();
@@ -39,7 +38,7 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
 
   const canvasRef = ref<HTMLDivElement | null>(null);
 
-  const { widgets, addWidget, removeWidget } = useWidgets();
+  const { widgets, widgetMap, addWidget, removeWidget } = useWidgets();
   // const { setPosition, position, handleMouseDown } = useDraggable();
 
   /**
@@ -56,13 +55,14 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     temporaryState.currentWidgetId = id;
   }
 
-  return { state, temporaryState, canvasRef, widgets, setCurrentWidget, addWidget, removeWidget };
+  return { state, temporaryState, canvasRef, widgets, widgetMap, setCurrentWidget, addWidget, removeWidget };
 });
 
 export function useWidgets() {
   const widgets = reactive<DataLargeScreenField[]>([]);
+  const widgetMap = reactive<Record<string, DataLargeScreenField>>({});
 
-  function addWidget(menuItem: MenuItem) {
+  function addWidget(menuItem: MenuItem): DataLargeScreenField {
     const id = generateRandomString(8, 'w');
 
     const menuConfig = getMenuConfig(menuItem.id);
@@ -70,7 +70,7 @@ export function useWidgets() {
     const { id: component, name } = menuItem;
     const { size = [300, 200] } = menuConfig;
 
-    widgets.push({
+    const widget: DataLargeScreenField = {
       id,
       name,
       component,
@@ -80,15 +80,23 @@ export function useWidgets() {
       props: structuredClone(props),
       menuConfig,
       _el: null,
-    });
+    };
+
+    widgets.push(widget);
+
+    widgetMap[id] = widget;
+
+    return widget;
   }
 
   function removeWidget(id: string) {
+    delete widgetMap[id];
     widgets.splice(widgets.findIndex(item => item.id === id), 1);
   }
 
   return {
     widgets,
+    widgetMap,
     addWidget,
     removeWidget,
   };

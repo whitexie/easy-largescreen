@@ -65,15 +65,6 @@ watch(
     dragWidget.value.location[1] = y;
   },
 );
-
-// watch(
-//   () => isDragging.value,
-//   (val) => {
-//     if (val && dragWidget.value?._el) {
-//       console.log('current drag widget => ', dragWidget.value._el);
-//     }
-//   },
-// );
 </script>
 
 <template>

@@ -12,7 +12,9 @@ const props = defineProps<{
 const designerStore = useLargeScreenDesigner();
 
 function hadnleBestFitScale() {
-  if (!props.canvasRef) return;
+  if (!props.canvasRef) {
+    return;
+  }
 
   const margin = 30;
   const containerElement = props.canvasRef.parentElement as HTMLElement;

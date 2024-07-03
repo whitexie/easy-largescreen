@@ -26,8 +26,9 @@ const showDrawer = computed(() => {
 });
 
 watch(fileList, async () => {
-  if (!fileList.value.length)
+  if (!fileList.value.length) {
     return;
+  }
 
   const { name, file } = fileList.value[0];
   await parse.init(file as File);
