@@ -8,7 +8,8 @@
   "main": "index.js",
   "scripts": {
     "designer:dev": "pnpm run -C packages/designer dev",
-    "designer:type-check": "pnpm run -C packages/designer type-check"
+    "designer:type-check": "pnpm run -C packages/designer type-check",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.13.2",
@@ -19,15 +20,9 @@
     "typescript": "~5.4.0",
     "vitest": "^1.4.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "src/**/*.{ts,tsx,vue,html,css,md,json,yml,yaml}": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   }
 }
