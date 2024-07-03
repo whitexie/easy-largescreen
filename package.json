@@ -21,7 +21,7 @@
     "vitest": "^1.4.0"
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx,vue,html,css,md,json,yml,yaml}": [
+    "{apps,packages}/**/*.{ts,tsx,vue,html,css,md,json,yml,yaml}": [
       "eslint --fix"
     ]
   }
