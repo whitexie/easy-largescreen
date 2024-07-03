@@ -9,7 +9,7 @@
   "scripts": {
     "designer:dev": "pnpm run -C packages/designer dev",
     "designer:type-check": "pnpm run -C packages/designer type-check",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.13.2",
