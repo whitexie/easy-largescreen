@@ -1,11 +1,11 @@
 {
   "name": "easy-data-dashboard",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
-  "author": "",
+  "author": "ysansan",
   "license": "ISC",
   "keywords": [],
-  "main": "index.js",
   "scripts": {
     "designer:dev": "pnpm run -C packages/designer dev",
     "designer:type-check": "pnpm run -C packages/designer type-check",
