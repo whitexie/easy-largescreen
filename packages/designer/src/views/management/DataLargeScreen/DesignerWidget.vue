@@ -7,7 +7,8 @@ import { useLargeScreenDesigner } from '@/stores/designer';
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
 
 interface Props {
-  widget: DataLargeScreenField
+  // TODO 类型约束
+  widget: DataLargeScreenField<any>
 }
 
 const props = defineProps<Props>();
@@ -117,8 +118,8 @@ onMounted(() => {
         @mousedown.stop="handleResize(1, 1)"
       />
     </template>
-    <div class="relative z-6000 w-full h-full hidden">
-      <component :is="RenderComponent" />
+    <div class="w-full h-full overflow-hidden">
+      <component :is="RenderComponent" :widget="widget" />
     </div>
   </div>
 </template>

@@ -11,9 +11,17 @@ defineProps<Props>();
 
 <template>
   <div class="text-pane">
-    <h2>this is TextPane</h2>
+    <n-collapse :default-expanded-names="['1', '2']" class="mt-4">
+      <n-collapse-item title="文本内容" name="1">
+        <div class="px-2">
+          <n-input v-model:value="widget.props.content" type="textarea" />
+        </div>
+      </n-collapse-item>
+      <n-collapse-item title="文本样式" name="2">
+        <div>谢谢你</div>
+      </n-collapse-item>
+    </n-collapse>
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
