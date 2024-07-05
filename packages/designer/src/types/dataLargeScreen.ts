@@ -7,7 +7,7 @@ export interface MenuBaseConfig {
   id: string
   name: string
   icon: string
-  size?: [Width, Height]
+  size: [Width, Height]
 }
 
 export interface WidgetModule {
@@ -43,3 +43,5 @@ export interface MenuItem {
   children?: MenuItem[]
   icon: string
 }
+
+export type AddWidgetOption = Partial<Pick<DataLargeScreenField, 'id' | 'name' | 'size' | 'location'>>;

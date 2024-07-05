@@ -11,7 +11,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['clickMenu'],
+  emits: ['clickMenu', 'dragstart'],
   methods: {
     handleClick(item: _MenuItem) {
       if (item.type === 'field')
@@ -20,18 +20,23 @@ export default defineComponent({
       const popoverRef = this.$refs.popoverRef as typeof NPopover
       popoverRef?.setShow?.(false)
     },
+
+    handleDragStart(e: DragEvent) {
+      this.$emit('dragstart', e, this.item)
+    },
   },
   render() {
     const props = this.$props
+
     const renderItem = (item: _MenuItem) => {
+      const isGroup = item.type === 'group'
       return (
-        <div class="flex items-center select-none cursor-pointer px-2 h-30px hover:(rounded-l bg-#f2f2f2)" onClick={() => this.handleClick(item)}>
+        <div draggable={!isGroup ? 'true' : 'false'} class="flex items-center select-none cursor-pointer px-2 h-30px hover:(rounded-l bg-#f2f2f2)" onClick={() => this.handleClick(item)} onDragstart={this.handleDragStart}>
           <Icon icon={item.icon} style="width: 18px; height: 18px" />
           <div class="ml-1">
-            {item.name }
+            {item.name}
           </div>
-          {item.type === 'group' && <Icon icon="material-symbols:expand-more-rounded" style="width: 15px; height: 15px" />}
-
+          {isGroup && <Icon icon="material-symbols:expand-more-rounded" style="width: 15px; height: 15px" />}
         </div>
       )
     }

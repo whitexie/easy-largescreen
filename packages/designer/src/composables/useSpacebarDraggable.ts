@@ -1,5 +1,7 @@
-export function useSpacebarDraggable() {
-  const canvasRef = ref<HTMLElement | null>(null);
+import type { Ref } from 'vue';
+
+export function useSpacebarDraggable(elRef?: Ref<HTMLElement | null>) {
+  const canvasRef = elRef || ref<HTMLElement | null>(null);
   const isDragging = ref(false);
   const spacePressed = ref(false);
   const offset = reactive({ x: 30, y: 30 });

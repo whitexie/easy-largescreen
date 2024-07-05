@@ -1,5 +1,5 @@
 <script name="Layers" lang="ts" setup>
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 import LayerItem from './LayerItem.vue';
 import { useLargeScreenDesigner } from '@/stores/designer';
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
@@ -27,23 +27,22 @@ function handleClickLayerItem(item: DataLargeScreenField) {
 
 <template>
   <div class="layers  h-full bg-white w-200px overflow-hidden z-1001" :class="layersClass">
-    <div :class="isExpand && 'px-2'" class="title flex items-center select-none justify-between h-40px border-b border-gray-200 border-b-solid">
+    <div
+      :class="isExpand && 'px-2'"
+      class="title flex items-center select-none justify-between h-40px border-b border-gray-200 border-b-solid"
+    >
       <span v-show="isExpand" class="pl-3 whitespace-nowrap flex-1 text-center">页面图层</span>
       <div :class="icon" class="size-1.6em cursor-pointer shrink-0" @click="handleClick" />
     </div>
     <div>
-      <draggable
-        v-model="designerStore.widgets"
-        group="people"
-        :animation="200"
-        item-key="id"
-        handle=".cursor-move"
-      >
-        <template #item="{ element: item }">
-          <LayerItem :item="item" :is-expand="isExpand" :is-selected="designerStore.temporaryState.currentWidgetId === item.id" @click="handleClickLayerItem" />
-        </template>
-      </draggable>
-      <template v-for="item in designerStore.widgets" :key="item.id" />
+      <VueDraggable v-model="designerStore.widgets" group="people" :animation="200" item-key="id" handle=".cursor-move">
+        <div v-for="item in designerStore.widgets" :key="item.id">
+          <LayerItem
+            :item="item" :is-expand="isExpand"
+            :is-selected="designerStore.temporaryState.currentWidgetId === item.id" @click="handleClickLayerItem"
+          />
+        </div>
+      </VueDraggable>
     </div>
   </div>
 </template>

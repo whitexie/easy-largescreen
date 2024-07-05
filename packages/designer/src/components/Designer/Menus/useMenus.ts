@@ -1,7 +1,7 @@
-import type { MenuItem, WidgetModule } from '@/types/dataLargeScreen';
+import type { MenuBaseConfig, MenuItem, WidgetModule } from '@/types/dataLargeScreen';
 
 const WIDGET_PROPS_MAPPING: Record<string, any> = {};
-const MENU_CONFIG_MAPPING: Record<string, any> = {};
+const MENU_CONFIG_MAPPING: Record<string, MenuBaseConfig> = {};
 const modules = import.meta.glob('@/dataLargeScreenFields/*/config.ts', { eager: true });
 
 for (const key in modules) {

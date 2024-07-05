@@ -21,7 +21,6 @@ export function useDraggable(option: Options) {
   function handleMouseDown(event: MouseEvent) {
     startOffsetPosition.x = (event.clientX - position.value.x * option.value.scale);
     startOffsetPosition.y = (event.clientY - position.value.y * option.value.scale);
-    console.log('[useDraggable] handleMouseDown', startOffsetPosition, option.value.scale);
 
     document.addEventListener('mousemove', handleMove);
     document.addEventListener('mouseup', handleMouseUp);

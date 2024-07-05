@@ -1,7 +1,5 @@
 {
   "vue.server.hybridMode": "typeScriptPluginOnly",
-  // Enable the ESlint flat config support
-  "eslint.experimental.useFlatConfig": true,
 
   // Disable the default formatter, use eslint instead
   "prettier.enable": false,
