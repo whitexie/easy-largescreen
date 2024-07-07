@@ -17,7 +17,7 @@ const widgetMargins = reactive({ top: 0, left: 0, right: 0, bottom: 0, horizonta
 function calculateMargins() {
   const { widget } = props;
 
-  if (!widget || !widget._el) {
+  if (!widget) {
     return;
   }
   const [widgetX, widgetY] = widget.location;
@@ -60,9 +60,7 @@ const verticalVisible = computed(() => props.isDragging && widgetMargins.vertica
 
 watch(
   () => props.widget?.location,
-  () => {
-    calculateMargins();
-  },
+  () => calculateMargins(),
   { deep: true },
 );
 </script>

@@ -34,7 +34,7 @@
     "@vue/tsconfig": "^0.5.1",
     "jsdom": "^24.0.0",
     "less": "^4.2.0",
-    "naive-ui": "^2.38.1",
+    "naive-ui": "^2.38.2",
     "npm-run-all2": "^6.1.2",
     "unocss": "^0.59.2",
     "unplugin-auto-import": "0.17.4",

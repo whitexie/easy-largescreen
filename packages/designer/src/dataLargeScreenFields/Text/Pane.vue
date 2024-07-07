@@ -6,7 +6,11 @@ interface Props {
   widget: DataLargeScreenField<TextProps>
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+const textStyle = computed(() => {
+  return props.widget.props.style;
+});
 </script>
 
 <template>
@@ -18,10 +22,24 @@ defineProps<Props>();
         </div>
       </n-collapse-item>
       <n-collapse-item title="文本样式" name="2">
-        <div>谢谢你</div>
+        <div class="px-2">
+          <div class="flex items-center gap-1">
+            <div class="shrink-0">
+              颜色
+            </div>
+            <n-color-picker v-model:value="textStyle.color" size="small" />
+          </div>
+          <div class="flex items-center gap-1 mt-1">
+            <div class="shrink-0">
+              字号
+            </div>
+            <n-input-number v-model:value="textStyle.fontSize" size="small" />
+          </div>
+        </div>
       </n-collapse-item>
     </n-collapse>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

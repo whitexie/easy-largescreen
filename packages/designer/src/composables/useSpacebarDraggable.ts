@@ -59,7 +59,8 @@ export function useSpacebarDraggable(elRef?: Ref<HTMLElement | null>) {
   function handleKeyDown(e: KeyboardEvent) {
     if (e.code === 'Space') {
       const targetElement = e.target as HTMLElement;
-      if (targetElement.tagName === 'INPUT') {
+
+      if (['TEXTAREA', 'INPUT'].includes(targetElement.tagName)) {
         return;
       }
 

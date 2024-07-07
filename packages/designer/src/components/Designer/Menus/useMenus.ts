@@ -20,30 +20,30 @@ const MENUS = reactive<MenuItem[]>([
     icon: 'fluent:draw-text-24-regular',
   },
   {
-    id: 'chartsMenu',
+    id: 'chart',
     name: '图表',
-    type: 'group',
+    type: 'field',
     icon: 'solar:chart-bold',
-    children: [
-      {
-        id: 'bar',
-        name: '柱状图',
-        type: 'field',
-        icon: 'solar:chart-bold',
-      },
-      {
-        id: 'line',
-        name: '折线图',
-        type: 'field',
-        icon: 'carbon:chart-line',
-      },
-      {
-        id: 'pie',
-        name: '饼图',
-        type: 'field',
-        icon: 'carbon:chart-pie',
-      },
-    ],
+    // children: [
+    //   {
+    //     id: 'bar',
+    //     name: '柱状图',
+    //     type: 'field',
+    //     icon: 'solar:chart-bold',
+    //   },
+    //   {
+    //     id: 'line',
+    //     name: '折线图',
+    //     type: 'field',
+    //     icon: 'carbon:chart-line',
+    //   },
+    //   {
+    //     id: 'pie',
+    //     name: '饼图',
+    //     type: 'field',
+    //     icon: 'carbon:chart-pie',
+    //   },
+    // ],
   },
   {
     id: 'image',

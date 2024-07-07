@@ -121,8 +121,8 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
       naive-ui:
-        specifier: ^2.38.1
-        version: 2.38.1(vue@3.4.21)
+        specifier: ^2.38.2
+        version: 2.38.2(vue@3.4.21)
       npm-run-all2:
         specifier: ^6.1.2
         version: 6.1.2
@@ -4985,8 +4985,8 @@ packages:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
     dev: true
 
-  /naive-ui@2.38.1(vue@3.4.21):
-    resolution: {integrity: sha512-AnU1FQ7K/CbhguAX++V4kCFjk7h7RvWt4nvZPRjORMpq+fUIlzD+EcQ5Cv1VqDloNF8+eMv4Akc2Ogacc9S+5A==}
+  /naive-ui@2.38.2(vue@3.4.21):
+    resolution: {integrity: sha512-WhZ+6DW61aYSmFyfH7evcSGFmd2xR68Yq1mNRrVdJwBhZsnNdAUsMN9IeNCVEPMCND/jzYZghkStoNoR5Xa09g==}
     peerDependencies:
       vue: ^3.0.0
     dependencies:

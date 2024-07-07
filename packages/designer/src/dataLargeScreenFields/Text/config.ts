@@ -9,7 +9,7 @@ export const Props = {
   content: '',
   style: {
     color: '',
-    fontSize: '14px',
+    fontSize: 14,
   },
 };
 

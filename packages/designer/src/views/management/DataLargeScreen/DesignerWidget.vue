@@ -66,7 +66,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="RenderComponent" ref="widgetRef" class="border absolute top-0 left-0 border-gray-400 cursor-pointer" :style="layoutStyle" @mousedown="handleMouseDown" @click.stop="handleClickWidget">
+  <div ref="widgetRef" class="border absolute top-0 left-0 border-gray-400 cursor-pointer" :style="layoutStyle" @mousedown="handleMouseDown" @click.stop="handleClickWidget">
     <template v-if="activeWidget">
       <div class="mask absolute top-0 left-0 bottom-0 right-0 z-60001" />
       <!-- 左上 -->
