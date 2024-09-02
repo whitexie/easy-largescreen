@@ -2,11 +2,11 @@ import antfu from '@antfu/eslint-config'
 
 const files = [
   'api/**/*.ts',
-  'packages/designer/**/*.ts',
-  'packages/designer/**/*.vue',
-  'packages/core/**/*.ts',
-  'packages/core/**/*.vue',
-  'packages/core/**/*.tsx',
+  'apps/designer/**/*.ts',
+  'apps/designer/**/*.vue',
+  'apps/core/**/*.ts',
+  'apps/core/**/*.vue',
+  'apps/core/**/*.tsx',
 ]
 
 export default antfu({

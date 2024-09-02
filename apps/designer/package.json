@@ -5,15 +5,15 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "run -p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build --force"
+    "type-check": "vue-tsc --noEmit --project ./tsconfig.json"
   },
   "dependencies": {
     "@unocss/reset": "^0.59.0",
-    "@yss/dashboard-core": "workspace:^0.0.1",
+    "@yss/dashboard-core": "workspace:*",
     "@yss/utils": "workspace:*",
     "localforage": "^1.10.0",
     "pinia": "^2.1.7",

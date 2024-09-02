@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "description": "",
   "author": "ysansan",
-  "license": "ISC",
+  "license": "MIT",
   "keywords": [],
   "scripts": {
-    "designer:dev": "pnpm run -C packages/designer dev",
-    "designer:type-check": "pnpm run -C packages/designer type-check",
+    "designer:dev": "pnpm -F designer dev",
+    "designer:type-check": "pnpm -F designer type-check",
     "commit": "git-cz",
     "prepare": "husky"
   },
@@ -26,11 +26,8 @@
     "vitest": "^1.4.0"
   },
   "lint-staged": {
-    "{apps,packages}/**/*.{ts,vue}": [
-      "pnpm run type-check"
-    ],
     "{apps,packages}/**/*.{ts,tsx,vue,html,css,md,json,yml,yaml}": [
-      "eslint --fix"
+      "pnpm eslint . --fix --no-ignore"
     ]
   },
   "config": {
