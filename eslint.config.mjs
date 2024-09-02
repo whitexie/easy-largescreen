@@ -1,6 +1,7 @@
 import antfu from '@antfu/eslint-config'
 
 const files = [
+  'packages/**/*.ts',
   'api/**/*.ts',
   'apps/designer/**/*.ts',
   'apps/designer/**/*.vue',

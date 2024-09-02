@@ -112,5 +112,6 @@ function getCellType(t: string): CellType {
   if (Object.keys(CellTypeMap).includes(t)) {
     return CellTypeMap[t as keyof typeof CellTypeMap];
   }
+
   return 'null';
 }
