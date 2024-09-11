@@ -1,3 +1,5 @@
+import { customAlphabet, nanoid } from 'nanoid';
+
 export function generateRandomString(length: number = 8, prefix: string = ''): string {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = `${prefix}`;
@@ -8,3 +10,5 @@ export function generateRandomString(length: number = 8, prefix: string = ''): s
 
   return result;
 }
+
+export const generateId = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_', 8);
