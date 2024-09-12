@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Ref } from 'vue';
-import type { Field } from '@yss/dashboard-core/data-set/types';
 import FieldPane from './FieldPane.vue';
+import type { OriginalField } from '@/types/charts';
 import { useLargeScreenDesigner } from '@/stores/designer';
 import { getDatasetFields, getDatasetList } from '@/api';
 import type { DatasetList } from '@/types/dataset';
@@ -36,13 +36,13 @@ const datasetListOptions = computed(() => {
 });
 
 function useFields(id: Ref<string>) {
-  const fields = reactive<Field[]>([]);
+  const fields = reactive<OriginalField[]>([]);
 
   const dimensionFields = computed(() => {
-    return fields.filter(item => item.type !== 'number');
+    return fields.filter(item => item.valueType !== 'number');
   });
   const metricFields = computed(() => {
-    return fields.filter(item => item.type === 'number');
+    return fields.filter(item => item.valueType === 'number');
   });
 
   watch(
@@ -54,12 +54,11 @@ function useFields(id: Ref<string>) {
 
       const result = await getDatasetFields(val);
       if (result) {
+        fields.splice(0, fields.length);
         fields.push(...result);
       }
     },
-    {
-      immediate: true,
-    },
+    { immediate: true },
   );
 
   return {

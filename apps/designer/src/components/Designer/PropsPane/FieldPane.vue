@@ -1,14 +1,10 @@
 <script lang="ts" setup>
-interface Field {
-  id: string
-  name: string
-  type: string
-}
+import type { OriginalField } from '@/types/charts';
 
 interface Props {
   title: string
   type: 'metric' | 'dimension'
-  fields: Field[]
+  fields: OriginalField[]
 }
 
 const props = defineProps<Props>();

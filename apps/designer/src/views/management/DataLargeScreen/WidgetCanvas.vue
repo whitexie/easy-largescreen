@@ -59,8 +59,8 @@ function handleDragOver(e: DragEvent) {
 }
 
 function handleDrop(e: DragEvent) {
-  console.log('[handleDrop] => ', e);
-  console.log('[dataTransfer.getData] =>', e.dataTransfer?.getData('text/plain'));
+  // console.log('[handleDrop] => ', e);
+  // console.log('[dataTransfer.getData] =>', e.dataTransfer?.getData('text/plain'));
   const menuItem = JSON.parse(e.dataTransfer?.getData('text/plain') || '{}') as MenuItem;
   const widgetConfig = getMenuConfig(menuItem.id);
 

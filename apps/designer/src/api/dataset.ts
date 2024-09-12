@@ -1,5 +1,5 @@
 import localforage from 'localforage';
-import type { Field } from '@yss/dashboard-core';
+import type { Field } from '@/types/charts';
 import type { Dataset, DatasetList } from '@/types/dataset';
 import { generateRandomID } from '@/utils';
 

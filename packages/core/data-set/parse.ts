@@ -39,7 +39,7 @@ export class ParseExcel {
     const sheet = this.getSheet(sheetName);
     const result = utils.sheet_to_json<T>(sheet, opts);
     const fields = this.getFieldsMate(sheetName);
-    const dateFields = fields.filter(f => f.type === 'date');
+    const dateFields = fields.filter(f => f.valueType === 'date');
     if (dateFields.length) {
       result.forEach((row) => {
         dateFields.forEach((f) => {
@@ -87,13 +87,13 @@ export class ParseExcel {
       const nameAddress = `${utils.encode_col(i)}1`;
       const valueAddress = `${utils.encode_col(i)}2`;
       const name = sheet[nameAddress].v;
-      const type = getCellType(sheet[valueAddress].t);
+      const valueType = getCellType(sheet[valueAddress].t);
 
       // 将id作为表头
       sheet[nameAddress].v = id;
       sheet[nameAddress].h = id;
       sheet[nameAddress].w = id;
-      fields.push({ id, name, type });
+      fields.push({ id, name, valueType });
     }
 
     this.fields = fields;
