@@ -1,21 +1,26 @@
-import { computed, ref, watch } from 'vue';
+import { type Ref, computed, ref, watch } from 'vue';
+import { useChartRender } from './useChartRender';
 import { getDatasetFields } from '@/api/dataset';
-import type { Field as OriginalField } from '@/types/charts';
+import type { OriginalField } from '@/types/charts';
 
 export function useChartDesigner(_datasetId?: string) {
-  const { datasetId, fields, metricFields, dimensionFields, setDatasetId } = useDatasetStore(_datasetId || '');
+  const { state, datasetId, addField, removeField } = useChartRender({ datasetId: _datasetId || '' });
+  const { fields, metricFields, dimensionFields, setDatasetId } = useDatasetStore(datasetId);
 
   return {
+    state,
     fields,
     datasetId,
     metricFields,
     dimensionFields,
     setDatasetId,
+    addField,
+    removeField,
   };
 }
 
-export function useDatasetStore(_datasetId: string) {
-  const datasetId = ref(_datasetId);
+export function useDatasetStore(_datasetId: Ref<string>) {
+  const datasetId = _datasetId || ref('');
   const fields = ref<OriginalField[]>([]);
 
   const metricFields = computed(() => fields.value.filter(field => field.valueType === 'number'));

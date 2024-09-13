@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { useChartDesigner } from './composables/useChartDesigner';
-import { useDatasetList } from './composables/useDatasetList';
+import { useDatasetList, useFields } from './composables/useDatasetList';
+import DropFields from './DropFields.vue';
+import type { BoxId, Field, OriginalField } from '@/types/charts';
 import FieldPane from '@/components/Designer/PropsPane/FieldPane.vue';
 
-const { datasetId, metricFields, dimensionFields } = useChartDesigner();
+const { datasetId, state, addField, removeField } = useChartDesigner();
 const { datasetList } = useDatasetList();
+const { dimensionFields, metricFields } = useFields(datasetId);
 
 const datasetListOptions = computed(() => {
   return datasetList.map((item) => {
@@ -13,23 +16,61 @@ const datasetListOptions = computed(() => {
     return { value, label };
   });
 });
+
+function handleAdd(boxId: BoxId, data: { field: OriginalField, index: number }) {
+  addField(boxId, data.field, data.index);
+}
+
+function handleDelete(boxId: BoxId, data: Field) {
+  removeField(boxId, data.id);
+}
 </script>
 
 <template>
-  <div class="w-full h-full">
-    <div class="header h-40px border-b-solid border-gray-200">
-      <!--  -->
+  <div class="w-full h-full bg-gray-200 p-1">
+    <div class="header h-40px border-b-solid bg-white rounded-md border-gray-200 flex items-center justify-between px-2">
+      <n-select v-model:value="datasetId" class="w-150px" size="small" :options="datasetListOptions" />
+      <n-button type="primary" size="small" round>
+        预览
+      </n-button>
     </div>
-    <div class="pane-field w-120px border-r-solid border-gray-200">
-      <n-select v-model:value="datasetId" class="" size="small" :options="datasetListOptions" />
-      <FieldPane title="指标" type="metric" :fields="metricFields" />
-      <FieldPane title="维度" type="dimension" :fields="dimensionFields" />
+    <div class="main-content flex gap-1">
+      <div class="h-full w-120px border-r-solid bg-white rounded-md border-gray-200 px-1">
+        <FieldPane drop-group="123" class="field-pane" title="维度" type="dimension" :fields="dimensionFields" />
+        <FieldPane drop-group="123" class="field-pane" title="度量" type="metric" :fields="metricFields" />
+      </div>
+
+      <div class="input-fields w-160px h-full border-r-solid border-gray-200">
+        <DropFields
+          v-for="item in state.dropBoxSettings"
+          :key="item.id"
+          v-model:fields="item.fields"
+          :title="item.title"
+          :type="item.fieldType"
+          drop-group="123"
+          class="bg-white rounded-md py-1"
+          @add="(e) => handleAdd(item.id, e)"
+          @delete="(e) => handleDelete(item.id, e)"
+        />
+      </div>
+
+      <div class="renderer-container h-full flex-1 bg-white rounded-md">
+        <!--  -->
+      </div>
+      <div class="props-pane h-full w-200px border-l-solid border-gray-200 bg-white rounded-md">
+        <!--  -->
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.pane-field {
-  height: calc(100% - 40px);
+.main-content {
+  margin-top: 4px;
+  height: calc(100% - 40px - 4px);
+
+  .field-pane {
+    max-height: 50%;
+  }
 }
 </style>

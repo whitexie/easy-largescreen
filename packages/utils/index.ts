@@ -12,3 +12,7 @@ export function generateRandomString(length: number = 8, prefix: string = ''): s
 }
 
 export const generateId = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_', 8);
+
+export function hasOwn(obj: object, key: string): boolean {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
