@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    BaseChart: typeof import('./src/components/Charts/BaseChart.vue')['default']
     ChartDesigner: typeof import('./src/components/ChartDesigner/ChartDesigner.vue')['default']
     DatasetPane: typeof import('./src/components/Designer/PropsPane/DatasetPane.vue')['default']
     DropFieldItem: typeof import('./src/components/ChartDesigner/DropFieldItem.vue')['default']

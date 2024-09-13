@@ -12,6 +12,7 @@
     "type-check": "vue-tsc --noEmit --project ./tsconfig.json"
   },
   "dependencies": {
+    "@antv/g2": "^5.2.5",
     "@unocss/reset": "^0.59.0",
     "@yss/dashboard-core": "workspace:*",
     "@yss/utils": "workspace:*",
