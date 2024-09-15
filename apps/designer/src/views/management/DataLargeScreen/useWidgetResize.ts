@@ -1,5 +1,5 @@
-import { onUnmounted } from 'vue';
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
+import { onUnmounted } from 'vue';
 
 export function useWidgetResize() {
   let activeWidget: DataLargeScreenField | null = null;

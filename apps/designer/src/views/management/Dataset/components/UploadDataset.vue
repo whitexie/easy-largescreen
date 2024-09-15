@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, toRaw, watch } from 'vue';
-import type { UploadFileInfo } from 'naive-ui';
-import { useMessage } from 'naive-ui';
-import { ParseExcel, type RawData } from '@yss/dashboard-core';
-import { useDataPreview } from '../composables/useDataPreview';
 import type { Dataset } from '@/types/dataset';
+import type { UploadFileInfo } from 'naive-ui';
 import { createDataset } from '@/api';
+import { ParseExcel, type RawData } from '@yss/dashboard-core';
+import { useMessage } from 'naive-ui';
+import { ref, toRaw, watch } from 'vue';
+import { useDataPreview } from '../composables/useDataPreview';
 
 const props = defineProps<{
   onChanged?: () => void
@@ -40,7 +40,7 @@ watch(fileList, async () => {
     curDataset.data = data;
     curDataset.fields = fields;
   }
-  catch (e) {
+  catch {
     message.error('解析失败');
     fileList.value = [];
   }

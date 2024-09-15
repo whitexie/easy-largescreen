@@ -1,6 +1,6 @@
 import { MenuConfig, Props } from './config';
-import Text from './Text.vue';
 import Pane from './Pane.vue';
+import Text from './Text.vue';
 
 export default {
   MenuConfig,

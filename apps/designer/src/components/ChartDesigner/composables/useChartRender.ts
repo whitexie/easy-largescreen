@@ -1,7 +1,8 @@
-import { computed, reactive } from 'vue';
-import { generateId, hasOwn } from '@yss/utils';
 import type { BoxId, ChartRederStateOptions, Field, FieldType, OriginalField } from '@/types/charts';
+import { getAnlysisData } from '@/api';
 import { CalculateType } from '@/types/charts';
+import { generateId, hasOwn } from '@yss/utils';
+import { computed, reactive, unref } from 'vue';
 
 export function useChartRender(options?: Partial<ChartRederStateOptions>) {
   const state = reactive<ChartRederStateOptions>({
@@ -22,6 +23,8 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
       },
     },
   });
+
+  const data = reactive<any[]>([]);
 
   const datasetId = computed({
     get() {
@@ -53,7 +56,7 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
     };
   }
 
-  function addField(boxId: BoxId, fieldOption: OriginalField, index: number) {
+  function addField(boxId: BoxId, fieldOption: OriginalField, index?: number) {
     const box = state.dropBoxSettings[boxId];
     const length = box.fields.length;
     const fieldType = box.fieldType;
@@ -74,6 +77,40 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
     }
   }
 
+  function conversionFields() {
+    const dimensionFields: Field[] = [];
+    const metricFields: Field[] = [];
+
+    Object.values(state.dropBoxSettings).forEach((box) => {
+      box.fields.forEach((field) => {
+        if (field.fieldType === 'dimension') {
+          dimensionFields.push(unref(field));
+        }
+        else {
+          metricFields.push(unref(field));
+        }
+      });
+    });
+
+    return {
+      dimensionFields,
+      metricFields,
+    };
+  }
+
+  async function requestData() {
+    const { dimensionFields, metricFields } = conversionFields();
+    const result = await getAnlysisData({
+      datasetId: state.datasetId,
+      dimensionFields,
+      metricFields,
+    });
+    data.splice(0, data.length);
+    data.push(...result);
+
+    return result;
+  }
+
   if (options) {
     updateState(options);
   }
@@ -81,7 +118,9 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
   return {
     state,
     datasetId,
+    data,
     addField,
     removeField,
+    requestData,
   };
 }

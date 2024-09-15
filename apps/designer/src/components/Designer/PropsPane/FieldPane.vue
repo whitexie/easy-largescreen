@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { VueDraggable } from 'vue-draggable-plus';
 import type { OriginalField } from '@/types/charts';
+import { VueDraggable } from 'vue-draggable-plus';
 
 interface Props {
   title: string

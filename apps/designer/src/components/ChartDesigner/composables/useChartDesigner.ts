@@ -1,7 +1,7 @@
-import { type Ref, computed, ref, watch } from 'vue';
-import { useChartRender } from './useChartRender';
-import { getDatasetFields } from '@/api/dataset';
 import type { OriginalField } from '@/types/charts';
+import { getDatasetFields } from '@/api/dataset';
+import { computed, type Ref, ref, watch } from 'vue';
+import { useChartRender } from './useChartRender';
 
 export function useChartDesigner(_datasetId?: string) {
   const { state, datasetId, addField, removeField } = useChartRender({ datasetId: _datasetId || '' });

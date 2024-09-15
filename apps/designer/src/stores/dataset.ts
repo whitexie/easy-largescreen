@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia';
 import localforage from 'localforage';
+import { defineStore } from 'pinia';
 
 const datasetInstance = localforage.createInstance({
   name: 'dataset',

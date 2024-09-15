@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import DatasetPane from './DatasetPane.vue';
-import PagePane from './PagePane.vue';
-
-import { useWidgetPane } from './useWidgetPane';
 import { useLargeScreenDesigner } from '@/stores/designer';
+import DatasetPane from './DatasetPane.vue';
+
+import PagePane from './PagePane.vue';
+import { useWidgetPane } from './useWidgetPane';
 
 const designerStore = useLargeScreenDesigner();
 

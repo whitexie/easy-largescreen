@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { Icon } from '@iconify/vue/dist/iconify.js';
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
+import { Icon } from '@iconify/vue/dist/iconify.js';
 
 const props = defineProps<{
   item: DataLargeScreenField

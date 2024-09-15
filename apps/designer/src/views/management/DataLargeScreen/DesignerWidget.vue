@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { type Ref, inject } from 'vue';
-import { useWidgetResize } from './useWidgetResize';
-import { CANVAS_ELEMENT_KEY } from './provideKey';
+import type { DataLargeScreenField } from '@/types/dataLargeScreen';
 import TextConfig from '@/dataLargeScreenFields/Text';
 import { useLargeScreenDesigner } from '@/stores/designer';
-import type { DataLargeScreenField } from '@/types/dataLargeScreen';
+import { inject, type Ref } from 'vue';
+import { CANVAS_ELEMENT_KEY } from './provideKey';
+import { useWidgetResize } from './useWidgetResize';
 
 interface Props {
   // TODO 类型约束

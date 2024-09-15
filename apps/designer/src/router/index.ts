@@ -1,4 +1,4 @@
-import { type RouteRecordRaw, type RouteRecordSingleView, createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, type RouteRecordRaw, type RouteRecordSingleView } from 'vue-router';
 
 interface ManagementRouteRecordRaw extends RouteRecordSingleView {
   name: string

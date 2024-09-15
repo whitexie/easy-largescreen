@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia';
-import DragDistanceIndicator from './DragDistanceIndicator.vue';
-import { useDraggable } from './useDraggable';
-import DesignerWidget from './DesignerWidget.vue';
-import { useSpacebarDraggable } from '@/composables/useSpacebarDraggable';
-import { useLargeScreenDesigner } from '@/stores/designer';
 import type { AddWidgetOption, DataLargeScreenField, MenuItem } from '@/types/dataLargeScreen';
 import { useMenus } from '@/components/Designer/Menus/useMenus';
+import { useSpacebarDraggable } from '@/composables/useSpacebarDraggable';
+import { useLargeScreenDesigner } from '@/stores/designer';
+import { storeToRefs } from 'pinia';
+import DesignerWidget from './DesignerWidget.vue';
+import DragDistanceIndicator from './DragDistanceIndicator.vue';
+import { useDraggable } from './useDraggable';
 
 const designerStore = useLargeScreenDesigner();
 

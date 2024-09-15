@@ -1,5 +1,5 @@
-import { type UnwrapNestedRefs, h } from 'vue';
 import type { Dataset } from '@/types/dataset';
+import { h, type UnwrapNestedRefs } from 'vue';
 
 export function useDataPreview(dataset: UnwrapNestedRefs<Dataset>) {
   const data = computed(() => {

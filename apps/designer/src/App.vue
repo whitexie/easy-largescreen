@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { GlobalThemeOverrides } from 'naive-ui';
-import { NConfigProvider, NMessageProvider, dateZhCN, zhCN } from 'naive-ui';
+import { dateZhCN, NConfigProvider, NMessageProvider, zhCN } from 'naive-ui';
 
 const themeOverrides: GlobalThemeOverrides = {
   // common: {

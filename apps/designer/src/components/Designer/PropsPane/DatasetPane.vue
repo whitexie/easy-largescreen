@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { Ref } from 'vue';
-import FieldPane from './FieldPane.vue';
 import type { OriginalField } from '@/types/charts';
-import { useLargeScreenDesigner } from '@/stores/designer';
-import { getDatasetFields, getDatasetList } from '@/api';
 import type { DatasetList } from '@/types/dataset';
+import type { Ref } from 'vue';
+import { getDatasetFields, getDatasetList } from '@/api';
+import { useLargeScreenDesigner } from '@/stores/designer';
+import FieldPane from './FieldPane.vue';
 
 const emits = defineEmits(['close']);
 

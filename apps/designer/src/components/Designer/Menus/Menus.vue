@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { nextTick } from 'vue';
-import { useMenus } from './useMenus';
-import MenuItemVue from './MenuItem';
 import type { MenuItem } from '@/types/dataLargeScreen';
 import { useLargeScreenDesigner } from '@/stores/designer';
+import { nextTick } from 'vue';
+import MenuItemVue from './MenuItem';
+import { useMenus } from './useMenus';
 
 const designerStore = useLargeScreenDesigner();
 

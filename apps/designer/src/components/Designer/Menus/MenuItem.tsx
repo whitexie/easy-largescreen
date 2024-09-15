@@ -1,7 +1,7 @@
-import { defineComponent } from 'vue'
-import { NPopover } from 'naive-ui'
-import { Icon } from '@iconify/vue'
 import type { MenuItem as _MenuItem } from '@/types/dataLargeScreen'
+import { Icon } from '@iconify/vue'
+import { NPopover } from 'naive-ui'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'MenuItem',
@@ -48,11 +48,11 @@ export default defineComponent({
     return props.item.type === 'field'
       ? renderItem(props.item)
       : (
-        <NPopover ref="popoverRef" trigger="click" v-slots={slots}>
-          <div class="grid grid-cols-2 gap-2">
-            {props.item.children?.map(item => renderItem(item))}
-          </div>
-        </NPopover>
+          <NPopover ref="popoverRef" trigger="click" v-slots={slots}>
+            <div class="grid grid-cols-2 gap-2">
+              {props.item.children?.map(item => renderItem(item))}
+            </div>
+          </NPopover>
         )
   },
 })

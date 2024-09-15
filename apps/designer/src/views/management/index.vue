@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { useRoute, useRouter } from 'vue-router';
 import ManagementLayout from '@/components/Layout/ManagementLayout.vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();

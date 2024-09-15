@@ -1,7 +1,7 @@
-import { type Ref, computed, onMounted, reactive, watch } from 'vue';
-import { getDatasetFields, getDatasetList } from '@/api';
-import type { DatasetList } from '@/types/dataset';
 import type { OriginalField } from '@/types/charts';
+import type { DatasetList } from '@/types/dataset';
+import { getDatasetFields, getDatasetList } from '@/api';
+import { computed, onMounted, reactive, type Ref, watch } from 'vue';
 
 export function useDatasetList() {
   const datasetList = reactive<DatasetList[]>([]);

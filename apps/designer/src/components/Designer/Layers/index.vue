@@ -1,8 +1,8 @@
 <script name="Layers" lang="ts" setup>
+import type { DataLargeScreenField } from '@/types/dataLargeScreen';
+import { useLargeScreenDesigner } from '@/stores/designer';
 import { VueDraggable } from 'vue-draggable-plus';
 import LayerItem from './LayerItem.vue';
-import { useLargeScreenDesigner } from '@/stores/designer';
-import type { DataLargeScreenField } from '@/types/dataLargeScreen';
 
 const isExpand = ref(false);
 

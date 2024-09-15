@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
-import { Icon } from '@iconify/vue/dist/iconify.js';
 import Menus from '@/components/Designer/Menus/Menus.vue';
 import { useLargeScreenDesigner } from '@/stores/designer';
+import { Icon } from '@iconify/vue/dist/iconify.js';
+import { useRouter } from 'vue-router';
 
 const designerStore = useLargeScreenDesigner();
 const router = useRouter();

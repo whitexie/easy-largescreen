@@ -1,6 +1,6 @@
 <script name="TextPane" lang="ts" setup>
-import type { TextProps } from './config';
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
+import type { TextProps } from './config';
 
 interface Props {
   widget: DataLargeScreenField<TextProps>

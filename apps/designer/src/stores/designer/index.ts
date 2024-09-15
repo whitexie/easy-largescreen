@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia';
-import { generateRandomString } from '@yss/utils';
 import type { AddWidgetOption, DataLargeScreenField, MenuItem } from '@/types/dataLargeScreen';
 import { useMenus } from '@/components/Designer/Menus/useMenus';
+import { generateRandomString } from '@yss/utils';
+import { defineStore } from 'pinia';
 
 const { getMenuConfig, getWidgetProps } = useMenus();
 

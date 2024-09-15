@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { Field, OriginalField } from '@/types/charts';
 import { type DraggableEvent, type SortableEvent, VueDraggable } from 'vue-draggable-plus';
 import DropFieldItem from './DropFieldItem.vue';
-import type { Field, OriginalField } from '@/types/charts';
 
 const props = defineProps<{
   title: string

@@ -1,7 +1,7 @@
 <script lang="ts" setup name="Dataset">
-import UploadDataset from './components/UploadDataset.vue';
-import { deleteDataset, getDatasetList } from '@/api';
 import type { DatasetList } from '@/types/dataset';
+import { deleteDataset, getDatasetList } from '@/api';
+import UploadDataset from './components/UploadDataset.vue';
 
 const { datasetList, updateDatasetList, removeDataset } = useDatasetList();
 

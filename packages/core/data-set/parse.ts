@@ -1,7 +1,7 @@
 import type { Sheet2JSONOpts, WorkBook } from 'xlsx';
-import { read, utils } from 'xlsx';
-import { generateRandomString } from '@yss/utils';
 import type { CellType, Field, RawData } from './types';
+import { generateRandomString } from '@yss/utils';
+import { read, utils } from 'xlsx';
 
 function readExcel(file: File): Promise<WorkBook> {
   return new Promise((resolve) => {

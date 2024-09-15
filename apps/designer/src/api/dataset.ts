@@ -1,7 +1,7 @@
-import localforage from 'localforage';
 import type { Field } from '@/types/charts';
 import type { Dataset, DatasetList } from '@/types/dataset';
 import { generateRandomID } from '@/utils';
+import localforage from 'localforage';
 
 interface CreateDatasetReq extends Dataset {
   id: string
@@ -43,8 +43,9 @@ export async function deleteDataset(id: string) {
   ]);
 }
 
-export async function getDatasetData(id: string) {
-  return await dataTableStore.getItem(id);
+export async function getDatasetData<T = unknown>(id: string): Promise<T[]> {
+  const result = await dataTableStore.getItem<T[]>(id);
+  return result || [];
 }
 
 export async function getDatasetFields(id: string) {

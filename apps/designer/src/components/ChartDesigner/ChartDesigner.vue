@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { BoxId, Field, OriginalField } from '@/types/charts';
+import FieldPane from '@/components/Designer/PropsPane/FieldPane.vue';
 import { useChartDesigner } from './composables/useChartDesigner';
 import { useDatasetList, useFields } from './composables/useDatasetList';
 import DropFields from './DropFields.vue';
-import type { BoxId, Field, OriginalField } from '@/types/charts';
-import FieldPane from '@/components/Designer/PropsPane/FieldPane.vue';
 
 const { datasetId, state, addField, removeField } = useChartDesigner();
 const { datasetList } = useDatasetList();

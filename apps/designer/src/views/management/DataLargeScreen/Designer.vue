@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { provide } from 'vue';
-import { storeToRefs } from 'pinia';
-import WidgetCanvas from './WidgetCanvas.vue';
-import Footer from './Footer.vue';
-import DesignerHeader from './DesignerHeader.vue';
-import { CANVAS_ELEMENT_KEY } from './provideKey';
 import Layers from '@/components/Designer/Layers/index.vue';
 import Pane from '@/components/Designer/PropsPane/Pane.vue';
 import { useLargeScreenDesigner } from '@/stores/designer';
+import { storeToRefs } from 'pinia';
+import { provide } from 'vue';
+import DesignerHeader from './DesignerHeader.vue';
+import Footer from './Footer.vue';
+import { CANVAS_ELEMENT_KEY } from './provideKey';
+import WidgetCanvas from './WidgetCanvas.vue';
 
 const designerStore = useLargeScreenDesigner();
 
