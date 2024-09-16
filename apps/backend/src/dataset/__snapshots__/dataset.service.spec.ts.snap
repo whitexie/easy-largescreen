@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`datasetService searchData 应该成功执行查询并返回结果 1`] = `
+[MockFunction] {
+  "calls": [
+    [
+      "
+      SELECT field1 AS "dim1", sum(field2) AS "metric1"
+      FROM test_table
+      GROUP BY field1
+    ",
+    ],
+  ],
+  "results": [
+    {
+      "type": "return",
+      "value": Promise {},
+    },
+  ],
+}
+`;
+
+exports[`datasetService searchData 应该正确处理多个维度和指标字段 1`] = `
+[MockFunction] {
+  "calls": [
+    [
+      "
+      SELECT field1 AS "dim1", field2 AS "dim2", sum(field3) AS "metric1", avg(field4) AS "metric2"
+      FROM test_table
+      GROUP BY field1, field2
+    ",
+    ],
+  ],
+  "results": [
+    {
+      "type": "return",
+      "value": Promise {},
+    },
+  ],
+}
+`;
+
+exports[`datasetService searchData 应该正确处理多个维度和指标字段 2`] = `
+[MockFunction] {
+  "calls": [
+    [
+      "
+      SELECT field1 AS "dim1", field2 AS "dim2", sum(field3) AS "metric1", avg(field4) AS "metric2"
+      FROM test_table
+      GROUP BY field1, field2
+    ",
+    ],
+  ],
+  "results": [
+    {
+      "type": "return",
+      "value": Promise {},
+    },
+  ],
+}
+`;

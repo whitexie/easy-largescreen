@@ -49,6 +49,7 @@ export default antfu(
     ],
     languageOptions: {
       globals: {
+        jest: 'readonly',
         describe: 'readonly',
         beforeEach: 'readonly',
         it: 'readonly',

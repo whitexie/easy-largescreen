@@ -6,6 +6,7 @@
     "experimentalDecorators": true,
     "baseUrl": "./",
     "module": "commonjs",
+    "types": ["jest"],
     "strictBindCallApply": false,
     "strictNullChecks": false,
     "noFallthroughCasesInSwitch": false,
