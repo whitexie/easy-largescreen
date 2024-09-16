@@ -1,5 +1,5 @@
 import * as api from '@/api';
-import { CalculateType, type OriginalField } from '@/types/charts';
+import { CalculateType, type ChartRederStateOptions, type OriginalField } from '@/types/charts';
 import * as utils from '@yss/utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { nextTick } from 'vue';
@@ -11,6 +11,46 @@ describe('useChartRender', () => {
     expect(state.datasetId).toBe('');
     expect(state.dropBoxSettings).toHaveProperty('xAxis');
     expect(state.dropBoxSettings).toHaveProperty('yAxis');
+  });
+
+  it('应该正确初始化dropBoxSettings', () => {
+    const settings: ChartRederStateOptions['dropBoxSettings'] = {
+      xAxis: {
+        id: 'xAxis',
+        title: 'X轴',
+        fieldType: 'dimension',
+        fields: [{
+          name: '日期',
+          valueType: 'date',
+          fieldCode: 'ydqlmbGj',
+          fieldType: 'dimension',
+          datasetId: 'id-1726113264669dSQYOyWg',
+          id: 'TU2MS9S4',
+          calculateType: CalculateType.COUNT,
+        }],
+      },
+      yAxis: {
+        id: 'yAxis',
+        title: 'Y轴',
+        fieldType: 'metric',
+        fields: [{
+          name: '销售金额',
+          valueType: 'number',
+          fieldCode: 'yAQJDYrC',
+          fieldType: 'metric',
+          datasetId: 'id-1726113264669dSQYOyWg',
+          id: '9PB11S17',
+          calculateType: CalculateType.SUM,
+        }],
+      },
+    };
+
+    const options: Partial<ChartRederStateOptions> = {
+      dropBoxSettings: settings,
+    };
+
+    const { state } = useChartRender(options);
+    expect(state.dropBoxSettings).toEqual(settings);
   });
 
   it('应该正确更新datasetId', async () => {

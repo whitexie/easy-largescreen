@@ -4,7 +4,7 @@ import { computed, type Ref, ref, watch } from 'vue';
 import { useChartRender } from './useChartRender';
 
 export function useChartDesigner(_datasetId?: string) {
-  const { state, datasetId, addField, removeField } = useChartRender({ datasetId: _datasetId || '' });
+  const { state, datasetId, ...args } = useChartRender({ datasetId: _datasetId || '' });
   const { fields, metricFields, dimensionFields, setDatasetId } = useDatasetStore(datasetId);
 
   return {
@@ -14,8 +14,7 @@ export function useChartDesigner(_datasetId?: string) {
     metricFields,
     dimensionFields,
     setDatasetId,
-    addField,
-    removeField,
+    ...args,
   };
 }
 

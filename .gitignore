@@ -1,5 +1,10 @@
 node_modules
 apps/backend/build
+apps/backend/dist
+
+
+# env
+*.env
 
 npm-debug.log*
 pnpm-debug.log*

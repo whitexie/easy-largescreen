@@ -7,7 +7,6 @@ import { computed, reactive, unref } from 'vue';
 export function useChartRender(options?: Partial<ChartRederStateOptions>) {
   const state = reactive<ChartRederStateOptions>({
     datasetId: '',
-    // 拖拽框设置
     dropBoxSettings: {
       xAxis: {
         id: 'xAxis',
@@ -100,8 +99,9 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
 
   async function requestData() {
     const { dimensionFields, metricFields } = conversionFields();
+    const { datasetId } = state;
     const result = await getAnlysisData({
-      datasetId: state.datasetId,
+      datasetId,
       dimensionFields,
       metricFields,
     });

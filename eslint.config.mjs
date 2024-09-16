@@ -36,6 +36,14 @@ export default antfu(
   },
   {
     files: [
+      'apps/backend/**/*.ts',
+    ],
+    rules: {
+      'ts/consistent-type-imports': ['error', { prefer: 'no-type-imports' }],
+    },
+  },
+  {
+    files: [
       'apps/backend/**/*.spec.ts',
       'apps/backend/**/*.e2e-spec.ts',
     ],

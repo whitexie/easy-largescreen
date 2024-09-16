@@ -5,7 +5,7 @@ import { useChartDesigner } from './composables/useChartDesigner';
 import { useDatasetList, useFields } from './composables/useDatasetList';
 import DropFields from './DropFields.vue';
 
-const { datasetId, state, addField, removeField } = useChartDesigner();
+const { datasetId, state, addField, removeField, requestData } = useChartDesigner();
 const { datasetList } = useDatasetList();
 const { dimensionFields, metricFields } = useFields(datasetId);
 
@@ -56,6 +56,9 @@ function handleDelete(boxId: BoxId, data: Field) {
 
       <div class="renderer-container h-full flex-1 bg-white rounded-md">
         <!--  -->
+        <n-button size="small" type="primary" rounded @click="requestData">
+          获取数据
+        </n-button>
       </div>
       <div class="props-pane h-full w-200px border-l-solid border-gray-200 bg-white rounded-md">
         <!--  -->

@@ -21,6 +21,7 @@ function transformData(data: any[], fields: Field[]): Record<string, any>[] {
 }
 
 export async function getAnlysisData(params: AnalysisDataParams): Promise<Record<string, any>[]> {
+  // console.log('params => ', JSON.stringify(params));
   const { datasetId, dimensionFields, metricFields } = params;
   let data = await dataTableStore.getItem<any[]>(datasetId);
   if (!data) {

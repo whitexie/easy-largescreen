@@ -1,9 +1,12 @@
+import type { CellType } from '@yss/dashboard-core';
+
 export interface FieldConfigItem {
   name: string
   type: FieldType
 }
 
 export type FieldType = 'dimension' | 'metric';
+export type ValueType = CellType;
 
 export type BoxId = keyof ChartRederStateOptions['dropBoxSettings'];
 
@@ -18,7 +21,7 @@ export enum CalculateType {
 export interface OriginalField {
   id: string
   name: string
-  valueType: 'string' | 'number'
+  valueType: ValueType
 }
 
 export interface Field extends OriginalField {
@@ -30,7 +33,7 @@ export interface Field extends OriginalField {
 }
 
 export interface DropBoxSettings {
-  id: keyof ChartRederStateOptions['dropBoxSettings']
+  id: BoxId
   title: string
   fieldType: FieldType
   fields?: Field[]
