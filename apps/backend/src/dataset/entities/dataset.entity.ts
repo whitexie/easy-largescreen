@@ -11,7 +11,7 @@ export class Dataset extends BaseEntity {
   @Generated('uuid')
   datasetCode: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   @OneToMany(() => Field, field => field.dataset)

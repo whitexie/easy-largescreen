@@ -38,6 +38,11 @@ export default antfu(
     files: [
       'apps/backend/**/*.ts',
     ],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+      },
+    },
     rules: {
       'ts/consistent-type-imports': ['error', { prefer: 'no-type-imports' }],
     },
@@ -49,6 +54,7 @@ export default antfu(
     ],
     languageOptions: {
       globals: {
+        process: 'readonly',
         jest: 'readonly',
         describe: 'readonly',
         beforeEach: 'readonly',

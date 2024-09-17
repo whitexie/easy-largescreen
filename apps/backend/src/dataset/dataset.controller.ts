@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { DatasetService } from './dataset.service';
@@ -12,9 +12,24 @@ export class DatasetController {
     @InjectEntityManager() private entityManager: EntityManager,
   ) { }
 
-  @Post()
+  @Post('/createDataset')
   async create(@Body() createDatasetDto: CreateDatasetDto) {
     return this.datasetService.create(createDatasetDto);
+  }
+
+  @Get('/getDatasetList')
+  async getDatasetList() {
+    return this.datasetService.findAll();
+  }
+
+  @Get('/getDatasetDetailById')
+  async getDatasetDetailById(@Query('datasetId') datasetId: string) {
+    return this.datasetService.findDatasetDetailById(datasetId);
+  }
+
+  @Get('/getFieldsByDatasetId')
+  async getFieldsByDatasetId(@Query('datasetId') datasetId: string) {
+    return this.datasetService.findFieldsByDatasetId(datasetId);
   }
 
   @Post('/searchData')

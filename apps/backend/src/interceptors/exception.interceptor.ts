@@ -14,7 +14,18 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
-      message = typeof exceptionResponse === 'string' ? exceptionResponse : (exceptionResponse as any).message || '未知错误';
+      if (typeof exceptionResponse === 'string') {
+        message = exceptionResponse;
+      }
+      else if (typeof exceptionResponse === 'object' && 'message' in exceptionResponse) {
+        if (Array.isArray(exceptionResponse.message)) {
+          message = exceptionResponse.message.join(',');
+        }
+        else {
+          message = exceptionResponse.message as string;
+        }
+      }
+      // message = typeof exceptionResponse === 'string' ? exceptionResponse : (exceptionResponse as any).message || '未知错误';
       errorCode = status;
     }
 
