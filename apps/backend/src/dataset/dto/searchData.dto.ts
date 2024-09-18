@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
@@ -10,47 +11,52 @@ export enum CalculateType {
 class FieldDto {
   @IsNotEmpty()
   @IsString()
+  @ApiProperty()
   fieldCode: string;
 
   @IsNotEmpty()
   @IsString()
+  @ApiProperty()
   id: string;
 
   @IsOptional()
   @IsString()
-  name?: string;
+  @ApiProperty()
+  name: string;
 
   @IsOptional()
   @IsString()
-  valueType?: string;
+  @ApiProperty()
+  valueType: string;
 
   @IsOptional()
   @IsString()
-  fieldType?: string;
-
-  @IsOptional()
-  @IsString()
-  datasetId?: string;
+  @ApiProperty()
+  fieldType: string;
 }
 
 class MetricFieldDto extends FieldDto {
   @IsNotEmpty()
   @IsEnum(CalculateType)
+  @ApiProperty()
   calculateType: CalculateType;
 }
 
 export class SearchDataDto {
   @IsNotEmpty()
   @IsString()
+  @ApiProperty()
   datasetId: string;
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => FieldDto)
+  @ApiProperty({ type: [FieldDto] })
   dimensionFields: FieldDto[];
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => MetricFieldDto)
+  @ApiProperty({ type: [MetricFieldDto] })
   metricFields: MetricFieldDto[];
 }

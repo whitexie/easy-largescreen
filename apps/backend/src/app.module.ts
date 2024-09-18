@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppDataSourceOptions } from '../ormConfig';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { DatasetModule } from './dataset/dataset.module';
 
 @Module({
@@ -10,7 +8,7 @@ import { DatasetModule } from './dataset/dataset.module';
     TypeOrmModule.forRoot(AppDataSourceOptions),
     DatasetModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule { }

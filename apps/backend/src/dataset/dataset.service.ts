@@ -17,18 +17,15 @@ export class DatasetService {
   ) {}
 
   async create(createDatasetDto: CreateDatasetDto): Promise<Dataset> {
+    // 检查 datasetCode 是否已存在
+    const isDatasetExists = await this.datasetRepository.existsBy({ datasetCode: createDatasetDto.datasetCode });
+    if (isDatasetExists) {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        message: 'datasetCode 已存在',
+      }, HttpStatus.BAD_REQUEST);
+    }
     return this.dataSource.transaction(async (transactionalEntityManager) => {
-      // 检查 datasetCode 是否已存在
-      const isDatasetExists = await transactionalEntityManager.exists(Dataset, {
-        where: { datasetCode: createDatasetDto.datasetCode },
-      });
-      if (isDatasetExists) {
-        throw new HttpException({
-          status: HttpStatus.BAD_REQUEST,
-          message: 'datasetCode 已存在',
-        }, HttpStatus.BAD_REQUEST);
-      }
-
       // 创建并保存 dataset
       let dataset = transactionalEntityManager.create(Dataset, createDatasetDto);
       dataset = await transactionalEntityManager.save(dataset);
@@ -42,15 +39,6 @@ export class DatasetService {
         };
         return transactionalEntityManager.create(Field, fieldOptions);
       });
-
-      // 检查 fieldCode 是否重复
-      const fieldCodes = fieldEntities.map(field => field.fieldCode);
-      if (new Set(fieldCodes).size !== fieldCodes.length) {
-        throw new HttpException({
-          status: HttpStatus.BAD_REQUEST,
-          message: '存在重复的 fieldCode',
-        }, HttpStatus.BAD_REQUEST);
-      }
 
       await transactionalEntityManager.save(fieldEntities);
 
@@ -78,6 +66,12 @@ export class DatasetService {
   async searchData(searchParams: SearchDataDto) {
     const { datasetId, dimensionFields, metricFields } = searchParams;
 
+    const dataset = await this.datasetRepository.findOneBy({ id: datasetId });
+
+    if (!dataset) {
+      throw new HttpException('datasetId not fnound', HttpStatus.BAD_REQUEST);
+    }
+
     // 构建SQL查询
     const selectFields = dimensionFields.map(field =>
       `${field.fieldCode} AS "${field.id}"`,
@@ -91,7 +85,7 @@ export class DatasetService {
 
     const sql = `
       SELECT ${selectFields}, ${aggregateFunctions}
-      FROM ${datasetId}
+      FROM ${dataset.datasetCode}
       GROUP BY ${groupByFields}
     `;
 

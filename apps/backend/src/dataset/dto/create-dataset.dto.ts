@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { ArrayMinSize, IsArray, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsUnique } from '../../common/validators/IsUnique.validator';
 import { CreateFieldDto } from './create-field.dto';
 
 export class CreateDatasetDto {
@@ -23,6 +24,7 @@ export class CreateDatasetDto {
   @IsArray()
   @ArrayMinSize(1, { message: '数据集字段不能少于1个' })
   @IsNotEmpty()
+  @IsUnique('fieldCode')
   @ValidateNested({ each: true })
   @Type(() => CreateFieldDto)
   fields: CreateFieldDto[];
