@@ -1,7 +1,8 @@
 import type { BoxId, ChartRederStateOptions, Field, FieldType, OriginalField } from '@/types/charts';
-import { getAnlysisData } from '@/api';
+import api from '@/api';
 import { CalculateType } from '@/types/charts';
 import { generateId, hasOwn } from '@yss/utils';
+import { pick } from 'lodash-es';
 import { computed, reactive, unref } from 'vue';
 
 export function useChartRender(options?: Partial<ChartRederStateOptions>) {
@@ -44,10 +45,9 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
   }
 
   function createField(fieldOption: OriginalField, type: FieldType): Field {
-    const { id: fieldCode, ...args } = fieldOption;
+    const whiteList: (keyof OriginalField)[] = ['fieldCode', 'name', 'valueType'];
     return {
-      ...args,
-      fieldCode,
+      ...pick(fieldOption, whiteList),
       fieldType: type,
       datasetId: state.datasetId,
       id: generateId(),
@@ -100,15 +100,15 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
   async function requestData() {
     const { dimensionFields, metricFields } = conversionFields();
     const { datasetId } = state;
-    const result = await getAnlysisData({
+    const result = await api.dataset.searchData({
       datasetId,
       dimensionFields,
       metricFields,
     });
     data.splice(0, data.length);
-    data.push(...result);
+    data.push(...result.data);
 
-    return result;
+    return result.data;
   }
 
   if (options) {

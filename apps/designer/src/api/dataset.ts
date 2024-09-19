@@ -1,53 +1,73 @@
-import type { Field } from '@/types/charts';
-import type { Dataset, DatasetList } from '@/types/dataset';
-import { generateRandomID } from '@/utils';
-import localforage from 'localforage';
+/**
+ * 该文件为 @umijs/openapi 插件自动生成，请勿随意修改。如需修改请通过配置 openapi.config.ts 进行定制化。
+ */
 
-interface CreateDatasetReq extends Dataset {
-  id: string
-}
+import { request } from '@/utils';
 
-const datasetTableStore = localforage.createInstance({ name: 'datasetList' });
-const fieldsTableStore = localforage.createInstance({ name: 'datasetFields' });
-
-const dataTableStore = localforage.createInstance({ name: 'datasetData' });
-
-export async function getDatasetList(): Promise<DatasetList[]> {
-  const result: DatasetList[] = [];
-
-  await datasetTableStore.iterate((value) => {
-    result.push(value as DatasetList);
+/** 创建数据集 POST /dataset/createDataset */
+export async function createDataset(body: API.CreateDatasetDto, options?: Record<string, any>) {
+  return request<API.ResponseWrapper & { data?: API.Dataset }>(`/api/dataset/createDataset`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
   });
-
-  return result;
 }
 
-export async function createDataset(dataset: Dataset) {
-  const req: CreateDatasetReq = {
-    id: generateRandomID(),
-    ...dataset,
-  };
-
-  const { fields, data, name } = dataset;
-  await Promise.all([
-    dataTableStore.setItem(req.id, data),
-    fieldsTableStore.setItem(req.id, fields),
-    datasetTableStore.setItem(req.id, { id: req.id, name, fields: fields.length, data: data.length }),
-  ]);
+/** 获取数据集详情, 含字段结构 GET /dataset/getDatasetDetailById */
+export async function getDatasetDetailById(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.GetDatasetDetailByIdParams,
+  options?: Record<string, any>,
+) {
+  return request<API.ResponseWrapper & { data?: API.Dataset }>(
+    `/api/dataset/getDatasetDetailById`,
+    {
+      method: 'GET',
+      params: {
+        ...params,
+      },
+      ...(options || {}),
+    },
+  );
 }
 
-export async function deleteDataset(id: string) {
-  await Promise.all([
-    dataTableStore.removeItem(id),
-    datasetTableStore.removeItem(id),
-  ]);
+/** 获取数据集列表 GET /dataset/getDatasetList */
+export async function getDatasetList(options?: Record<string, any>) {
+  return request<API.ResponseWrapper & { data?: API.Dataset[] }>(`/api/dataset/getDatasetList`, {
+    method: 'GET',
+    ...(options || {}),
+  });
 }
 
-export async function getDatasetData<T = unknown>(id: string): Promise<T[]> {
-  const result = await dataTableStore.getItem<T[]>(id);
-  return result || [];
+/** 获取数据集字段结构 GET /dataset/getFieldsByDatasetId */
+export async function getFieldsByDatasetId(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.GetFieldsByDatasetIdParams,
+  options?: Record<string, any>,
+) {
+  return request<API.ResponseWrapper & { data?: API.Field[] }>(
+    `/api/dataset/getFieldsByDatasetId`,
+    {
+      method: 'GET',
+      params: {
+        ...params,
+      },
+      ...(options || {}),
+    },
+  );
 }
 
-export async function getDatasetFields(id: string) {
-  return await fieldsTableStore.getItem<Field[]>(id);
+/** 获取数据集数据 POST /dataset/searchData */
+export async function searchData(body: API.SearchDataDto, options?: Record<string, any>) {
+  return request<API.ResponseWrapper & { data?: API.Object[] }>(`/api/dataset/searchData`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
 }

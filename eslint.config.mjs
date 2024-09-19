@@ -4,7 +4,7 @@ const files = [
   'packages/**/*.ts',
   'api/**/*.ts',
   'apps/backend/**/*.ts',
-  'apps/designer/**/*.ts',
+  'apps/designer/**/*.{ts, mts}',
   'apps/designer/**/*.vue',
 ]
 
@@ -19,6 +19,11 @@ export default antfu(
     },
   },
   {
+    languageOptions: {
+      globals: {
+        API: 'readonly',
+      },
+    },
     rules: {
       'no-undef': ['error'],
       'no-console': 'warn',

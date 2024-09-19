@@ -6,7 +6,7 @@ interface Props {
   title: string
   type: 'metric' | 'dimension'
   fields: OriginalField[]
-  dropGroup: string
+  dropGroup?: string
 }
 
 const props = defineProps<Props>();
@@ -51,7 +51,7 @@ function handleMove(event: any) {
     </div>
     <VueDraggable
       :model-value="fields"
-      :group="{ name: dropGroup, pull: 'clone' }"
+      :group="{ name: dropGroup || '', pull: 'clone' }"
       :sort="false"
       class="field-list-container"
       @move="handleMove"

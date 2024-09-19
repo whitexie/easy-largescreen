@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { Dataset } from '@/types/dataset';
 import type { UploadFileInfo } from 'naive-ui';
-import { createDataset } from '@/api';
+import api from '@/api';
 import { ParseExcel, type RawData } from '@yss/dashboard-core';
+import { generateId } from '@yss/utils';
 import { useMessage } from 'naive-ui';
 import { ref, toRaw, watch } from 'vue';
 import { useDataPreview } from '../composables/useDataPreview';
@@ -47,7 +48,17 @@ watch(fileList, async () => {
 });
 
 async function handleSaveDataset() {
-  await createDataset(toRaw(curDataset));
+  const dataset = toRaw(curDataset);
+  const { name } = dataset;
+
+  const fields: API.CreateDatasetDto['fields'] = dataset.fields.map((field) => {
+    return {
+      ...field,
+      fieldCode: generateId(),
+      description: '',
+    };
+  });
+  await api.dataset.createDataset({ name, fields, datasetCode: generateId() });
   message.success('保存成功');
   props?.onChanged?.();
   clearCurDataset();

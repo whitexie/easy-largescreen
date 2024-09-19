@@ -13,6 +13,7 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   (event: 'add', data: { field: OriginalField, index: number }): void
+  (event: 'update', data: { field: Field, newIndex: number }): void
   (event: 'delete', data: Field): void
 }>();
 
@@ -33,6 +34,13 @@ function handleCommand(command: string, data: Field) {
     emits('delete', data);
   }
 }
+
+function handleUpdate(e: SortableEvent) {
+  const { oldIndex, newIndex } = e;
+  if (typeof oldIndex === 'number' && typeof newIndex === 'number') {
+    emits('update', { field: fields.value[oldIndex], newIndex });
+  }
+}
 </script>
 
 <template>
@@ -40,7 +48,7 @@ function handleCommand(command: string, data: Field) {
     <div class="input-field-box-header  pl-2 line-height-18px">
       {{ title }}
     </div>
-    <VueDraggable :model-value="fields" :group="{ name: dropGroup, pull: true }" filter=".empty" :sort="false" class="drop-area p-1 m-1 rounded border-dashed border-gray-200" @add="handleAdd">
+    <VueDraggable :model-value="fields" :group="{ name: dropGroup, pull: true }" filter=".empty" :sort="true" class="drop-area p-1 m-1 rounded border-dashed border-gray-200" @add="handleAdd" @update="handleUpdate">
       <template v-for="field in fields" :key="field.id">
         <DropFieldItem :field="field" @command="handleCommand" />
       </template>

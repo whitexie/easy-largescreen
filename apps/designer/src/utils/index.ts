@@ -1,3 +1,7 @@
+import request from './request';
+
+export { request };
+
 export function generateRandomID() {
   const length = 8;
   const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';

@@ -20,6 +20,7 @@ export enum CalculateType {
 
 export interface OriginalField {
   id: string
+  fieldCode: string
   name: string
   valueType: ValueType
 }

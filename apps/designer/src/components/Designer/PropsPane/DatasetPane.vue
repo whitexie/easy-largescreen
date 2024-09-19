@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import type { OriginalField } from '@/types/charts';
-import type { DatasetList } from '@/types/dataset';
 import type { Ref } from 'vue';
-import { getDatasetFields, getDatasetList } from '@/api';
+import api from '@/api';
 import { useLargeScreenDesigner } from '@/stores/designer';
 import FieldPane from './FieldPane.vue';
 
@@ -20,11 +19,11 @@ const datasetId = computed({
 });
 
 const { dimensionFields, metricFields } = useFields(datasetId);
-const datasetList = reactive<DatasetList[]>([]);
+const datasetList = reactive<API.Dataset[]>([]);
 
 async function initDatasetList() {
-  const result = await getDatasetList();
-  datasetList.push(...result);
+  const result = await api.dataset.getDatasetList();
+  datasetList.push(...result.data);
 }
 
 const datasetListOptions = computed(() => {
@@ -52,10 +51,10 @@ function useFields(id: Ref<string>) {
         return;
       }
 
-      const result = await getDatasetFields(val);
-      if (result) {
+      const result = await api.dataset.getFieldsByDatasetId({ datasetId: val });
+      if (result.error === 0) {
         fields.splice(0, fields.length);
-        fields.push(...result);
+        fields.push(...result.data);
       }
     },
     { immediate: true },

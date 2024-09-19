@@ -5,7 +5,7 @@ import { useChartDesigner } from './composables/useChartDesigner';
 import { useDatasetList, useFields } from './composables/useDatasetList';
 import DropFields from './DropFields.vue';
 
-const { datasetId, state, addField, removeField, requestData } = useChartDesigner();
+const { datasetId, state, addField, removeField, requestData, updateFiledIndex } = useChartDesigner();
 const { datasetList } = useDatasetList();
 const { dimensionFields, metricFields } = useFields(datasetId);
 
@@ -50,6 +50,7 @@ function handleDelete(boxId: BoxId, data: Field) {
           drop-group="123"
           class="bg-white rounded-md py-1"
           @add="(e) => handleAdd(item.id, e)"
+          @update="(e) => updateFiledIndex(item.id, e.field, e.newIndex)"
           @delete="(e) => handleDelete(item.id, e)"
         />
       </div>

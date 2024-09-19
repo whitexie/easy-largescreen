@@ -1,15 +1,14 @@
 import type { OriginalField } from '@/types/charts';
-import type { DatasetList } from '@/types/dataset';
-import { getDatasetFields, getDatasetList } from '@/api';
+import api from '@/api';
 import { computed, onMounted, reactive, type Ref, watch } from 'vue';
 
 export function useDatasetList() {
-  const datasetList = reactive<DatasetList[]>([]);
+  const datasetList = reactive<API.Dataset[]>([]);
 
   async function updateDatasetList() {
     datasetList.splice(0, datasetList.length);
-    const result = await getDatasetList();
-    datasetList.push(...result);
+    const result = await api.dataset.getDatasetList();
+    datasetList.push(...result.data);
   }
 
   onMounted(() => {
@@ -39,10 +38,10 @@ export function useFields(id: Ref<string>) {
         return;
       }
 
-      const result = await getDatasetFields(val);
-      if (result) {
+      const result = await api.dataset.getFieldsByDatasetId({ datasetId: val });
+      if (result.error === 0) {
         fields.splice(0, fields.length);
-        fields.push(...result);
+        fields.push(...result.data);
       }
     },
     { immediate: true },

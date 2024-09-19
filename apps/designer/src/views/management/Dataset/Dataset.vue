@@ -1,20 +1,26 @@
 <script lang="ts" setup name="Dataset">
-import type { DatasetList } from '@/types/dataset';
-import { deleteDataset, getDatasetList } from '@/api';
+import api from '@/api';
 import UploadDataset from './components/UploadDataset.vue';
 
 const { datasetList, updateDatasetList, removeDataset } = useDatasetList();
 
 function useDatasetList() {
-  const datasetList = reactive<DatasetList[]>([]);
+  const datasetList = reactive<API.Dataset[]>([]);
 
   async function updateDatasetList() {
     datasetList.splice(0, datasetList.length);
-    datasetList.push(...await getDatasetList());
+    const result = await api.dataset.getDatasetList();
+
+    if (result.error === 0) {
+      datasetList.push(...result.data);
+    }
   }
 
   async function handleRemoveDataset(id: string) {
-    await deleteDataset(id);
+    if (id) {
+      // TODO remove dataset
+      // await deleteDataset(id);
+    }
     await updateDatasetList();
   }
 
@@ -48,11 +54,7 @@ function useDatasetList() {
         </div>
         <div>
           <span>字段数：</span>
-          <span>{{ dataset.fields }}</span>
-        </div>
-        <div>
-          <span>数据行数：</span>
-          <span>{{ dataset.data }}</span>
+          <span>{{ dataset.fields.length }}</span>
         </div>
 
         <div class="icons absolute right-3 top-3 flex flex-col gap-2 font-size-1.2em">

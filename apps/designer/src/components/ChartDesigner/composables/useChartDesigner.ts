@@ -1,11 +1,22 @@
-import type { OriginalField } from '@/types/charts';
-import { getDatasetFields } from '@/api/dataset';
+import type { BoxId, Field, OriginalField } from '@/types/charts';
+import api from '@/api';
 import { computed, type Ref, ref, watch } from 'vue';
 import { useChartRender } from './useChartRender';
 
 export function useChartDesigner(_datasetId?: string) {
   const { state, datasetId, ...args } = useChartRender({ datasetId: _datasetId || '' });
   const { fields, metricFields, dimensionFields, setDatasetId } = useDatasetStore(datasetId);
+
+  function updateFiledIndex(type: BoxId, field: Field, newIndex: number) {
+    const fields = state.dropBoxSettings[type].fields;
+    const oldIndex = fields.findIndex(item => item.id === field.id);
+    if (oldIndex === -1) {
+      throw new Error('field not found');
+    }
+
+    fields.splice(oldIndex, 1);
+    fields.splice(newIndex, 0, field);
+  }
 
   return {
     state,
@@ -14,6 +25,7 @@ export function useChartDesigner(_datasetId?: string) {
     metricFields,
     dimensionFields,
     setDatasetId,
+    updateFiledIndex,
     ...args,
   };
 }
@@ -33,9 +45,9 @@ export function useDatasetStore(_datasetId: Ref<string>) {
     if (!datasetId.value) {
       return;
     }
-    const res = await getDatasetFields(datasetId.value);
-    if (res) {
-      fields.value = res;
+    const res = await api.dataset.getFieldsByDatasetId({ datasetId: datasetId.value });
+    if (res.error === 0) {
+      fields.value = res.data;
     }
   }
 

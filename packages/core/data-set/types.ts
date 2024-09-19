@@ -1,4 +1,4 @@
-export type CellType = 'number' | 'date' | 'string' | 'null';
+export type CellType = 'number' | 'date' | 'string';
 
 export interface Field {
   id: string

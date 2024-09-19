@@ -1,4 +1,4 @@
-import * as api from '@/api';
+import api from '@/api';
 import { CalculateType, type ChartRederStateOptions, type OriginalField } from '@/types/charts';
 import * as utils from '@yss/utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -154,8 +154,8 @@ describe('useChartRender', () => {
         { 'provinces-1': '广西', 'amount-1': 200 },
       ];
 
-      vi.spyOn(api, 'getAnlysisData')
-        .mockReturnValueOnce(Promise.resolve(expecteData));
+      vi.spyOn(api.dataset, 'searchData')
+        .mockReturnValueOnce(Promise.resolve({ error: 0, data: expecteData, msg: 'success' }));
 
       const data = await requestData();
 
