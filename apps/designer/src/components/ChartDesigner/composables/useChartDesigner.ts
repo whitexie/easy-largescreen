@@ -4,7 +4,7 @@ import { computed, type Ref, ref, watch } from 'vue';
 import { useChartRender } from './useChartRender';
 
 export function useChartDesigner(_datasetId?: string) {
-  const { state, datasetId, ...args } = useChartRender({ datasetId: _datasetId || '' });
+  const { state, datasetId, chartConfig, ...args } = useChartRender({ datasetId: _datasetId || '' });
   const { fields, metricFields, dimensionFields, setDatasetId } = useDatasetStore(datasetId);
 
   function updateFiledIndex(type: BoxId, field: Field, newIndex: number) {
@@ -26,6 +26,7 @@ export function useChartDesigner(_datasetId?: string) {
     dimensionFields,
     setDatasetId,
     updateFiledIndex,
+    chartConfig,
     ...args,
   };
 }

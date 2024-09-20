@@ -1,3 +1,4 @@
+import type { CHART_TYPE } from '@/components/Charts/constants/chart';
 import type { CellType } from '@yss/dashboard-core';
 
 export interface FieldConfigItem {
@@ -8,7 +9,7 @@ export interface FieldConfigItem {
 export type FieldType = 'dimension' | 'metric';
 export type ValueType = CellType;
 
-export type BoxId = keyof ChartRederStateOptions['dropBoxSettings'];
+export type BoxId = keyof ChartRenderState['dropBoxSettings'];
 
 export enum CalculateType {
   SUM = 'sum',
@@ -40,7 +41,18 @@ export interface DropBoxSettings {
   fields?: Field[]
 }
 
-export interface ChartRederStateOptions {
+export interface ChartRenderState {
   datasetId: string
+  chartType: CHART_TYPE
   dropBoxSettings: Record<string, Required<DropBoxSettings>>
+  chartProps: Record<string, unknown>
+}
+
+export type ChartRederStateOptions = Partial<ChartRenderState>;
+
+export interface ChartImplementaion<Props = Record<string, unknown>> {
+  readonly dropBoxSettings: Record<string, DropBoxSettings>
+  readonly props: Props
+  validate: () => { success: boolean, message: string }
+  buildOptions: () => Record<string, any>
 }

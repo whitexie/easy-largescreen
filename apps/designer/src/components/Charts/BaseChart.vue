@@ -2,14 +2,20 @@
 import { useAttrs } from 'vue';
 import { useChart } from './composables/useChart';
 
-const { options } = defineProps<{ options: any }>();
+const { options } = defineProps<{ options: Record<string, any> }>();
 const attrs = useAttrs();
 
 const { containerElement, render } = useChart(options, attrs);
 
-watch(() => options, (val) => {
-  render(val);
-});
+watch(
+  () => options,
+  (val) => {
+    if (typeof val === 'object' && val !== null) {
+      render(val);
+    }
+  },
+  { deep: true, immediate: true },
+);
 </script>
 
 <template>

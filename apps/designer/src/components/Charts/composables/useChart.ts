@@ -7,6 +7,7 @@ export function useChart(options: unknown, $attrs: Record<string, any>) {
 
   function render(options: any) {
     if (chart.value) {
+      // console.log('render', options);
       chart.value.options(options);
       chart.value.render();
     }

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { BoxId, Field, OriginalField } from '@/types/charts';
 import FieldPane from '@/components/Designer/PropsPane/FieldPane.vue';
+import ChartRender from '../Charts/ChartRender.vue';
 import { useChartDesigner } from './composables/useChartDesigner';
 import { useDatasetList, useFields } from './composables/useDatasetList';
 import DropFields from './DropFields.vue';
 
-const { datasetId, state, addField, removeField, requestData, updateFiledIndex } = useChartDesigner();
+const { datasetId, state, addField, removeField, updateFiledIndex, chartConfig, data } = useChartDesigner();
 const { datasetList } = useDatasetList();
 const { dimensionFields, metricFields } = useFields(datasetId);
 
@@ -56,10 +57,7 @@ function handleDelete(boxId: BoxId, data: Field) {
       </div>
 
       <div class="renderer-container h-full flex-1 bg-white rounded-md">
-        <!--  -->
-        <n-button size="small" type="primary" rounded @click="requestData">
-          获取数据
-        </n-button>
+        <ChartRender :chart-config="chartConfig" :data="data" />
       </div>
       <div class="props-pane h-full w-200px border-l-solid border-gray-200 bg-white rounded-md">
         <!--  -->

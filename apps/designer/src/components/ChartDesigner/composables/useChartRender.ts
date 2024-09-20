@@ -1,13 +1,17 @@
-import type { BoxId, ChartRederStateOptions, Field, FieldType, OriginalField } from '@/types/charts';
+import type { BoxId, ChartRederStateOptions, ChartRenderState, DropBoxSettings, Field, FieldType, OriginalField } from '@/types/charts';
 import api from '@/api';
+import { CHART_MAPPING } from '@/components/Charts/constants/chart';
 import { CalculateType } from '@/types/charts';
 import { generateId, hasOwn } from '@yss/utils';
 import { pick } from 'lodash-es';
-import { computed, reactive, unref } from 'vue';
+import { computed, reactive, unref, type WatchHandle } from 'vue';
+
+const CHARTS = Object.values(CHART_MAPPING);
 
 export function useChartRender(options?: Partial<ChartRederStateOptions>) {
-  const state = reactive<ChartRederStateOptions>({
+  const state = reactive<ChartRenderState>({
     datasetId: '',
+    chartType: CHARTS[0].id,
     dropBoxSettings: {
       xAxis: {
         id: 'xAxis',
@@ -22,9 +26,11 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
         fields: [],
       },
     },
+    chartProps: {},
   });
-
   const data = reactive<any[]>([]);
+
+  const watchHandle: WatchHandle | null = null;
 
   const datasetId = computed({
     get() {
@@ -35,13 +41,40 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
     },
   });
 
+  const chartConfig = computed(() => {
+    return unref(state);
+  });
+
+  const listenSource = computed(() => {
+    return Object.values(state.dropBoxSettings);
+  });
+
+  function getChartConfig() {
+    return structuredClone(unref(state));
+  }
+
   function updateState(options: Partial<ChartRederStateOptions>) {
+    if (watchHandle) {
+      watchHandle();
+    }
     const keys = Object.keys(options) as Array<keyof ChartRederStateOptions>;
     keys.forEach((key) => {
       if (hasOwn(state, key) && options[key] !== undefined) {
         (state[key] as any) = options[key];
       }
     });
+
+    if (options.chartType && !hasOwn(options, 'dropBoxSettings')) {
+      if (options.chartType in CHART_MAPPING) {
+        const chartConfig = CHART_MAPPING[options.chartType];
+        const dropBoxSettings = structuredClone(chartConfig.dropBoxSettings);
+        for (const key in dropBoxSettings) {
+          dropBoxSettings[key].fields = [];
+        }
+        state.dropBoxSettings = dropBoxSettings as Record<string, Required<DropBoxSettings>>;
+        state.chartProps = structuredClone(chartConfig.props);
+      }
+    }
   }
 
   function createField(fieldOption: OriginalField, type: FieldType): Field {
@@ -115,12 +148,25 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
     updateState(options);
   }
 
+  watch(
+    () => listenSource.value,
+    () => {
+      // console.log('listenSource changed');
+      requestData();
+    },
+    {
+      deep: true,
+    },
+  );
+
   return {
     state,
     datasetId,
     data,
+    chartConfig,
     addField,
     removeField,
     requestData,
+    getChartConfig,
   };
 }

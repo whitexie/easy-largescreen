@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`useChartRender > 应该正确初始化dropBoxSettings > chartRederStateOptions 只有chartType 时 1`] = `
+{
+  "fieldType": "dimension",
+  "fields": [],
+  "id": "coordinates",
+  "title": "坐标",
+}
+`;

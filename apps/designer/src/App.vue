@@ -20,6 +20,8 @@ const themeOverrides: GlobalThemeOverrides = {
   //   colorTertiaryHover: '#f4f4f5cc',
   // },
 };
+
+// console.log('import.meta.env?.VITE_API_HOST => ', import.meta.env?.VITE_API_HOST);
 </script>
 
 <template>
