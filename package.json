@@ -27,7 +27,7 @@
   },
   "lint-staged": {
     "{apps,packages}/**/*.{ts,tsx,vue,html,css,md,json,yml,yaml}": [
-      "pnpm eslint ."
+      "pnpm eslint . --quiet"
     ]
   },
   "config": {

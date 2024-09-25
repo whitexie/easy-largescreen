@@ -103,6 +103,12 @@ export class DatasetService {
       }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    results.forEach((row) => {
+      metricFields.forEach((metricField) => {
+        row[metricField.id] = Number(row[metricField.id]);
+      });
+    });
+
     return results;
   }
 }
