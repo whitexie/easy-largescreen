@@ -62,7 +62,7 @@ export async function getFieldsByDatasetId(
 
 /** 获取数据集数据 POST /dataset/searchData */
 export async function searchData(body: API.SearchDataDto, options?: Record<string, any>) {
-  return request<API.ResponseWrapper & { data?: API.Object[] }>(`/api/dataset/searchData`, {
+  return request<API.ResponseWrapper & { data?: Record<string, string | number>[] }>(`/api/dataset/searchData`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

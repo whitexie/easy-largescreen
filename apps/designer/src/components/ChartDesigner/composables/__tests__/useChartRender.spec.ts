@@ -13,63 +13,65 @@ describe('useChartRender', () => {
     expect(state.dropBoxSettings).toHaveProperty('yAxis');
   });
 
-  describe('应该正确初始化dropBoxSettings', () => {
-    it('chartRederStateOptions 包含 dropBoxSettings时', () => {
-      const settings: ChartRederStateOptions['dropBoxSettings'] = {
-        xAxis: {
-          id: 'xAxis',
-          title: 'X轴',
-          fieldType: 'dimension',
-          fields: [{
-            name: '日期',
-            valueType: 'date',
-            fieldCode: 'ydqlmbGj',
+  describe('updateState', () => {
+    describe('应该正确初始化dropBoxSettings', () => {
+      it('chartRederStateOptions 包含 dropBoxSettings时', () => {
+        const settings: ChartRederStateOptions['dropBoxSettings'] = {
+          xAxis: {
+            id: 'xAxis',
+            title: 'X轴',
             fieldType: 'dimension',
-            datasetId: 'id-1726113264669dSQYOyWg',
-            id: 'TU2MS9S4',
-            calculateType: CalculateType.COUNT,
-          }],
-        },
-        yAxis: {
-          id: 'yAxis',
-          title: 'Y轴',
-          fieldType: 'metric',
-          fields: [{
-            name: '销售金额',
-            valueType: 'number',
-            fieldCode: 'yAQJDYrC',
+            fields: [{
+              name: '日期',
+              valueType: 'date',
+              fieldCode: 'ydqlmbGj',
+              fieldType: 'dimension',
+              datasetId: 'id-1726113264669dSQYOyWg',
+              id: 'TU2MS9S4',
+              calculateType: CalculateType.COUNT,
+            }],
+          },
+          yAxis: {
+            id: 'yAxis',
+            title: 'Y轴',
             fieldType: 'metric',
-            datasetId: 'id-1726113264669dSQYOyWg',
-            id: '9PB11S17',
-            calculateType: CalculateType.SUM,
-          }],
-        },
-      };
+            fields: [{
+              name: '销售金额',
+              valueType: 'number',
+              fieldCode: 'yAQJDYrC',
+              fieldType: 'metric',
+              datasetId: 'id-1726113264669dSQYOyWg',
+              id: '9PB11S17',
+              calculateType: CalculateType.SUM,
+            }],
+          },
+        };
 
-      const options: Partial<ChartRederStateOptions> = {
-        dropBoxSettings: settings,
-      };
+        const options: Partial<ChartRederStateOptions> = {
+          dropBoxSettings: settings,
+        };
 
-      const { state } = useChartRender(options);
-      expect(state.dropBoxSettings).toEqual(settings);
+        const { state } = useChartRender(options);
+        expect(state.dropBoxSettings).toEqual(settings);
+      });
+
+      it('chartRederStateOptions 只有chartType 时', () => {
+        const settings: ChartRederStateOptions = {
+          chartType: 'map',
+        };
+
+        const { state } = useChartRender(settings);
+
+        expect(state.dropBoxSettings?.coordinates).toMatchSnapshot();
+      });
     });
 
-    it('chartRederStateOptions 只有chartType 时', () => {
-      const settings: ChartRederStateOptions = {
-        chartType: 'map',
-      };
-
-      const { state } = useChartRender(settings);
-
-      expect(state.dropBoxSettings?.coordinates).toMatchSnapshot();
+    it('应该正确更新datasetId', async () => {
+      const { datasetId } = useChartRender();
+      datasetId.value = 'test-dataset';
+      await nextTick();
+      expect(datasetId.value).toBe('test-dataset');
     });
-  });
-
-  it('应该正确更新datasetId', async () => {
-    const { datasetId } = useChartRender();
-    datasetId.value = 'test-dataset';
-    await nextTick();
-    expect(datasetId.value).toBe('test-dataset');
   });
 
   it('应该正确添加度量字段', () => {

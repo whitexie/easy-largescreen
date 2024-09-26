@@ -1,36 +1,25 @@
-import type { BoxId, ChartRederStateOptions, ChartRenderState, DropBoxSettings, Field, FieldType, OriginalField } from '@/types/charts';
+import type { BoxId, ChartImplementaion, ChartRederStateOptions, ChartRenderState, DropBoxSettings, Field, FieldType, OriginalField } from '@/types/charts';
 import api from '@/api';
-import { CHART_MAPPING } from '@/components/Charts/constants/chart';
+import ChartImplementations from '@/components/Charts/chart-implementations';
 import { CalculateType } from '@/types/charts';
 import { generateId, hasOwn } from '@yss/utils';
 import { pick } from 'lodash-es';
-import { computed, reactive, unref, type WatchHandle } from 'vue';
+import { computed, reactive, unref } from 'vue';
 
-const CHARTS = Object.values(CHART_MAPPING);
+const CHARTS = Object.keys(ChartImplementations).map(key => key.replace('Chart', ''));
 
 export function useChartRender(options?: Partial<ChartRederStateOptions>) {
   const state = reactive<ChartRenderState>({
     datasetId: '',
-    chartType: CHARTS[0].id,
-    dropBoxSettings: {
-      xAxis: {
-        id: 'xAxis',
-        title: 'X轴',
-        fieldType: 'dimension',
-        fields: [],
-      },
-      yAxis: {
-        id: 'yAxis',
-        title: 'Y轴',
-        fieldType: 'metric',
-        fields: [],
-      },
-    },
+    chartType: CHARTS[0],
+    dropBoxSettings: {},
     chartProps: {},
   });
-  const data = reactive<any[]>([]);
 
-  const watchHandle: WatchHandle | null = null;
+  let __autoRequestData = true;
+  const data = reactive<Record<string, string | number>[]>([]);
+
+  const shallowChart = shallowRef<ChartImplementaion | null>(null);
 
   const datasetId = computed({
     get() {
@@ -53,27 +42,34 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
     return structuredClone(unref(state));
   }
 
-  function updateState(options: Partial<ChartRederStateOptions>) {
-    if (watchHandle) {
-      watchHandle();
-    }
-    const keys = Object.keys(options) as Array<keyof ChartRederStateOptions>;
+  function updateState(options: ChartRederStateOptions) {
+    const { autoRequestData, ...args } = options;
+    __autoRequestData = typeof autoRequestData === 'boolean' ? autoRequestData : true;
+    const keys = Object.keys(args) as Array<keyof ChartRenderState>;
     keys.forEach((key) => {
-      if (hasOwn(state, key) && options[key] !== undefined) {
-        (state[key] as any) = options[key];
+      if (key in state && args[key] !== undefined) {
+        (state[key] as any) = args[key];
       }
     });
 
-    if (options.chartType && !hasOwn(options, 'dropBoxSettings')) {
-      if (options.chartType in CHART_MAPPING) {
-        const chartConfig = CHART_MAPPING[options.chartType];
-        const dropBoxSettings = structuredClone(chartConfig.dropBoxSettings);
-        for (const key in dropBoxSettings) {
-          dropBoxSettings[key].fields = [];
-        }
-        state.dropBoxSettings = dropBoxSettings as Record<string, Required<DropBoxSettings>>;
-        state.chartProps = structuredClone(chartConfig.props);
+    if (!state.chartType) {
+      state.chartType = CHARTS[0];
+    }
+
+    const chartClassName = `${state.chartType}Chart` as keyof typeof ChartImplementations;
+    if (!(chartClassName in ChartImplementations)) {
+      throw new Error(`chart type is not supported => ${state.chartType}`);
+    }
+    shallowChart.value = new ChartImplementations[chartClassName]();
+
+    if (!hasOwn(args, 'dropBoxSettings')) {
+      const dropBoxSettings = shallowChart.value.getDefaultDropBoxSettings();
+      for (const key in dropBoxSettings) {
+        dropBoxSettings[key].fields = [];
       }
+
+      state.dropBoxSettings = dropBoxSettings as Record<string, Required<DropBoxSettings>>;
+      state.chartProps = shallowChart.value.getDefaultProps();
     }
   }
 
@@ -88,7 +84,14 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
     };
   }
 
-  function addField(boxId: BoxId, fieldOption: OriginalField, index?: number) {
+  /**
+   * 添加字段
+   * @param boxId 盒子id
+   * @param fieldOption 字段配置
+   * @param index 索引
+   * @returns
+   */
+  function addField(boxId: BoxId, fieldOption: OriginalField, index?: number): Field {
     const box = state.dropBoxSettings[boxId];
     const length = box.fields.length;
     const fieldType = box.fieldType;
@@ -144,29 +147,50 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
     return result.data;
   }
 
+  function buildG2Options() {
+    if (!shallowChart.value) {
+      throw new Error('chart is not initialized');
+    }
+
+    const { dropBoxSettings, chartProps: props } = state;
+    shallowChart.value.validate({ dropBoxSettings, props });
+    return shallowChart.value.buildOptions({ dropBoxSettings, data: unref(data) });
+  }
+
   if (options) {
     updateState(options);
   }
 
-  watch(
-    () => listenSource.value,
-    () => {
-      // console.log('listenSource changed');
-      requestData();
-    },
-    {
-      deep: true,
-    },
-  );
+  if (__autoRequestData) {
+    watch(
+      () => listenSource.value,
+      () => {
+        if (!shallowChart.value) {
+          return;
+        }
+        try {
+          const { dropBoxSettings, chartProps: props } = state;
+          shallowChart.value.validate({ dropBoxSettings, props });
+          requestData();
+        }
+        catch (error) {
+          console.log(error);
+        }
+      },
+      { deep: true },
+    );
+  }
 
   return {
     state,
     datasetId,
     data,
     chartConfig,
+    updateState,
     addField,
     removeField,
     requestData,
     getChartConfig,
+    buildG2Options,
   };
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ChartRenderState } from '@/types/charts';
-import { toRaw } from 'vue';
+import { useChartRender } from '../ChartDesigner/composables/useChartRender';
 import BaseChart from './BaseChart.vue';
 
 interface Props {
@@ -12,53 +12,35 @@ const props = withDefaults(
   defineProps<Props>(),
   { data: () => [] },
 );
+
+const errorMessage = ref('');
+const { buildG2Options, updateState } = useChartRender(props.chartConfig);
 const options = ref<Record<string, any>>({});
 
 function buildChartOptions() {
-  const _options = {
-    type: 'interval',
-    data: toRaw(props.data),
-    encode: {
-      x: props.chartConfig.dropBoxSettings.xAxis.fields[0].id,
-      y: props.chartConfig.dropBoxSettings.yAxis.fields[0].id,
-    },
-    axis: {
-      x: {
-        title: props.chartConfig.dropBoxSettings.xAxis.fields[0].name,
-      },
-      y: {
-        title: props.chartConfig.dropBoxSettings.yAxis.fields[0].name,
-      },
-    },
-    tooltip: {
-      items: [
-        {
-          name: props.chartConfig.dropBoxSettings.yAxis.fields[0].name,
-          field: props.chartConfig.dropBoxSettings.yAxis.fields[0].id,
-        },
-      ],
-    },
-  };
-
-  // console.log('_options => ', _options);
-  options.value = _options;
+  try {
+    errorMessage.value = '';
+    options.value = buildG2Options();
+  }
+  catch (error) {
+    errorMessage.value = (error as Error).message;
+  }
 }
 
 watch(
-  () => ({ config: props.chartConfig, data: props.data }),
-  () => {
-    // console.log('buildChartOptions');
+  props.chartConfig,
+  (val) => {
+    updateState(val);
     buildChartOptions();
   },
-  {
-    deep: true,
-  },
+  { deep: true },
 );
 </script>
 
 <template>
-  <div class="w-full h-full">
-    <BaseChart :options="options" />
+  <div class="w-full h-full flex items-center justify-center">
+    <BaseChart v-if="!errorMessage" :options="options" />
+    <n-empty v-else :description="errorMessage" />
   </div>
 </template>
 

@@ -30,18 +30,22 @@ function handleDelete(boxId: BoxId, data: Field) {
 <template>
   <div class="w-full h-full bg-gray-200 p-1">
     <div class="header h-40px border-b-solid bg-white rounded-md border-gray-200 flex items-center justify-between px-2">
-      <n-select v-model:value="datasetId" class="w-150px" size="small" :options="datasetListOptions" />
+      <div class="flex gap-1 items-center">
+        <n-select v-model:value="datasetId" class="w-150px" size="small" :options="datasetListOptions" />
+        <!-- <div class="i-eos-icons:bubble-loading w-1em h-1em" /> -->
+      </div>
+
       <n-button type="primary" size="small" round>
         预览
       </n-button>
     </div>
     <div class="main-content flex gap-1">
-      <div class="h-full w-120px border-r-solid bg-white rounded-md border-gray-200 px-1">
+      <div class="field-pane-container h-full border-r-solid bg-white rounded-md border-gray-200 px-1 flex-shrink-0">
         <FieldPane drop-group="123" class="field-pane" title="维度" type="dimension" :fields="dimensionFields" />
         <FieldPane drop-group="123" class="field-pane" title="度量" type="metric" :fields="metricFields" />
       </div>
 
-      <div class="input-fields w-160px h-full border-r-solid border-gray-200">
+      <div class="input-fields-container  h-full border-r-solid border-gray-200 flex-shrink-0">
         <DropFields
           v-for="item in state.dropBoxSettings"
           :key="item.id"
@@ -56,10 +60,11 @@ function handleDelete(boxId: BoxId, data: Field) {
         />
       </div>
 
-      <div class="renderer-container h-full flex-1 bg-white rounded-md">
-        <ChartRender :chart-config="chartConfig" :data="data" />
+      <div class="renderer-container h-full flex-1 bg-white rounded-md flex items-center justify-center">
+        <ChartRender v-if="chartConfig.datasetId" :chart-config="chartConfig" :data="data" />
+        <n-empty v-else description="请先选择数据集" />
       </div>
-      <div class="props-pane h-full w-200px border-l-solid border-gray-200 bg-white rounded-md">
+      <div class="props-pane-container h-full border-l-solid border-gray-200 bg-white rounded-md flex-shrink-0">
         <!--  -->
       </div>
     </div>
@@ -68,11 +73,32 @@ function handleDelete(boxId: BoxId, data: Field) {
 
 <style scoped>
 .main-content {
+  --field-pane-width: 120px;
+  --input-fields-width: 160px;
+  --props-pane-width: 200px;
+
   margin-top: 4px;
   height: calc(100% - 40px - 4px);
 
+  .field-pane-container {
+    width: var(--field-pane-width);
+  }
+
+  .input-fields-container {
+    width: var(--input-fields-width);
+  }
+
   .field-pane {
     max-height: 50%;
+  }
+
+  .renderer-container {
+    max-width: calc(100% - var(--field-pane-width) - var(--input-fields-width) - var(--props-pane-width));
+    overflow: hidden;
+  }
+
+  .props-pane-container {
+    width: var(--props-pane-width);
   }
 }
 </style>

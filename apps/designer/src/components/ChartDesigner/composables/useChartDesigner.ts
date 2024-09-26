@@ -1,11 +1,8 @@
-import type { BoxId, Field, OriginalField } from '@/types/charts';
-import api from '@/api';
-import { computed, type Ref, ref, watch } from 'vue';
+import type { BoxId, Field } from '@/types/charts';
 import { useChartRender } from './useChartRender';
 
 export function useChartDesigner(_datasetId?: string) {
-  const { state, datasetId, chartConfig, ...args } = useChartRender({ datasetId: _datasetId || '' });
-  const { fields, metricFields, dimensionFields, setDatasetId } = useDatasetStore(datasetId);
+  const { state, datasetId, chartConfig, ...args } = useChartRender({ datasetId: _datasetId || '', autoRequestData: false });
 
   function updateFiledIndex(type: BoxId, field: Field, newIndex: number) {
     const fields = state.dropBoxSettings[type].fields;
@@ -20,48 +17,9 @@ export function useChartDesigner(_datasetId?: string) {
 
   return {
     state,
-    fields,
     datasetId,
-    metricFields,
-    dimensionFields,
-    setDatasetId,
     updateFiledIndex,
     chartConfig,
     ...args,
-  };
-}
-
-export function useDatasetStore(_datasetId: Ref<string>) {
-  const datasetId = _datasetId || ref('');
-  const fields = ref<OriginalField[]>([]);
-
-  const metricFields = computed(() => fields.value.filter(field => field.valueType === 'number'));
-  const dimensionFields = computed(() => fields.value.filter(field => field.valueType !== 'number'));
-
-  function setDatasetId(id: string) {
-    datasetId.value = id;
-  }
-
-  async function init() {
-    if (!datasetId.value) {
-      return;
-    }
-    const res = await api.dataset.getFieldsByDatasetId({ datasetId: datasetId.value });
-    if (res.error === 0) {
-      fields.value = res.data;
-    }
-  }
-
-  watch(datasetId, () => {
-    init();
-  }, { immediate: true });
-
-  return {
-    fields,
-    datasetId,
-    metricFields,
-    dimensionFields,
-    init,
-    setDatasetId,
   };
 }

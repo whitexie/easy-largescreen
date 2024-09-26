@@ -83,11 +83,14 @@ export class ParseExcel {
     const maxCol = utils.decode_col(range[1].replace(/\d+/, ''));
 
     for (let i = 0; i <= maxCol; i++) {
+      const valueAddress = `${utils.encode_col(i)}2`;
+      const valueType = getCellType(sheet[valueAddress].t);
+      if (!valueType) {
+        continue;
+      }
       const id = generateRandomString(8, 'y');
       const nameAddress = `${utils.encode_col(i)}1`;
-      const valueAddress = `${utils.encode_col(i)}2`;
       const name = sheet[nameAddress].v;
-      const valueType = getCellType(sheet[valueAddress].t);
 
       // 将id作为表头
       sheet[nameAddress].v = id;
@@ -105,13 +108,12 @@ const CellTypeMap = {
   n: 'number',
   d: 'date',
   s: 'string',
-  z: 'null',
 } as const;
 
-function getCellType(t: string): CellType {
+function getCellType(t: string): CellType | null {
   if (Object.keys(CellTypeMap).includes(t)) {
     return CellTypeMap[t as keyof typeof CellTypeMap];
   }
 
-  return 'null';
+  return null;
 }

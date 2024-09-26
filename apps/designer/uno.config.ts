@@ -9,7 +9,7 @@ export default defineConfig({
       //   'display': 'inline-block',
       //   'vertical-align': 'middle',
       // },
-      cdn: 'https://cdn.skypack.dev/',
+      // cdn: 'https://cdn.skypack.dev/',
     }),
   ],
   transformers: [

@@ -48,11 +48,25 @@ export interface ChartRenderState {
   chartProps: Record<string, unknown>
 }
 
-export type ChartRederStateOptions = Partial<ChartRenderState>;
+export type ChartRederStateOptions = Partial<ChartRenderState> & {
+  autoRequestData?: boolean
+};
+
+export interface BuildOptionsParams {
+  dropBoxSettings: Record<string, Required<DropBoxSettings>>
+  data: Record<string, string | number>[]
+}
+
+export interface ValidateParams<T = Record<string, unknown>> {
+  dropBoxSettings: Record<string, Required<DropBoxSettings>>
+  props: T
+}
 
 export interface ChartImplementaion<Props = Record<string, unknown>> {
   readonly dropBoxSettings: Record<string, DropBoxSettings>
   readonly props: Props
-  validate: () => { success: boolean, message: string }
-  buildOptions: () => Record<string, any>
+  getDefaultDropBoxSettings: () => Record<string, DropBoxSettings>
+  getDefaultProps: () => Props
+  validate: (params: ValidateParams<Props>) => void
+  buildOptions: (params: BuildOptionsParams) => Record<string, any>
 }

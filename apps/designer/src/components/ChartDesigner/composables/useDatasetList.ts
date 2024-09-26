@@ -38,6 +38,8 @@ export function useFields(id: Ref<string>) {
         return;
       }
 
+      console.log('useFields id changed', val);
+
       const result = await api.dataset.getFieldsByDatasetId({ datasetId: val });
       if (result.error === 0) {
         fields.splice(0, fields.length);
