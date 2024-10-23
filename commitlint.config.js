@@ -55,7 +55,7 @@ export default {
       { value: 'chore', name: '其他:     🛠️  对构建过程或辅助工具和库的更改（不影响源文件、测试用例）', emoji: ':hammer:' },
     ],
     useEmoji: true,
-    emojiAlign: 'left',
+    emojiAlign: 'center',
     useAI: false,
     aiNumber: 1,
     themeColorCode: '',
