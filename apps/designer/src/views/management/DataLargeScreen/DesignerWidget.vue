@@ -102,13 +102,13 @@ onMounted(() => {
       <!-- 右 -->
       <div
         :class="commonClass"
-        class="cursor-ew-resize top-50% right-0 mr--2px  border-r-2 border-r-solid"
+        class="cursor-ew-resize top-50% translate-y-[-50%] right-0 mr--2px border-r-2 border-r-solid"
         @mousedown.stop="handleResize(1, 0)"
       />
       <!-- 左 -->
       <div
         :class="commonClass"
-        class="cursor-ew-resize top-50% left-0 ml--2px border-l-2 border-l-solid"
+        class="cursor-ew-resize top-50% translate-y-[-50%] left-0 ml--2px border-l-2 border-l-solid"
         @mousedown.stop="handleResize(-1, 0)"
       />
       <!-- 右下 -->

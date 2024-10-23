@@ -66,10 +66,10 @@ watch(
 </script>
 
 <template>
-  <div v-show="horizontalVisible" class="auxiliary-line absolute z-10 horizontal w-5px" :style="horizontalStyle">
+  <div v-show="horizontalVisible" class="auxiliary-line absolute z-10 horizontal w-5px translate-x-50%" :style="horizontalStyle">
     <span class="distance-text inline-block absolute left-10px text-xs translate-y--100% top-50% px-1 text-white">{{ widgetMargins.horizontalLength }}</span>
   </div>
-  <div v-show="verticalVisible" class="auxiliary-line absolute z-10 vertical h-5px" :style="verticalStyle">
+  <div v-show="verticalVisible" class="auxiliary-line absolute z-10 vertical h-5px translate-y-[-50%]" :style="verticalStyle">
     <span class="distance-text inline-block absolute top-10px text-xs translate-x--100% left-50% px-1 text-white">{{ widgetMargins.verticalLength }}</span>
   </div>
 </template>
