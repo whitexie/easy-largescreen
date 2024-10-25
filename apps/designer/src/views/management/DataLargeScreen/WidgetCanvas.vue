@@ -59,18 +59,19 @@ function handleDragOver(e: DragEvent) {
 }
 
 function handleDrop(e: DragEvent) {
-  // console.log('[handleDrop] => ', e);
-  // console.log('[dataTransfer.getData] =>', e.dataTransfer?.getData('text/plain'));
   const menuItem = JSON.parse(e.dataTransfer?.getData('text/plain') || '{}') as MenuItem;
   const widgetConfig = getMenuConfig(menuItem.id);
 
-  const { layerX, layerY } = e;
-  const x = layerX - widgetConfig.size[0] / 2;
-  const y = layerY - widgetConfig.size[1] / 2;
+  const { offsetY, offsetX } = e;
+  const scale = designerStore.temporaryState.scale / 100;
+  const width = widgetConfig.size[0] / scale;
+  const height = widgetConfig.size[1] / scale;
+  const x = offsetX - width / 2;
+  const y = offsetY - height / 2;
 
   const option: AddWidgetOption = {
     location: [x, y],
-    size: [...widgetConfig.size],
+    size: [width, height],
   };
 
   const widget = designerStore.addWidget(menuItem, option);
