@@ -15,6 +15,15 @@ export default defineConfig({
   transformers: [
     transformerVariantGroup(),
   ],
+  safelist: [
+    'i-mingcute:align-left-line',
+    'i-mingcute:align-center-line',
+    'i-mingcute:align-right-line',
+    'i-mingcute:align-justify-line',
+    'i-line-md:arrow-close-up',
+    'i-line-md:arrow-align-middle',
+    'i-line-md:arrow-close-down',
+  ],
   rules: [
     [/^w-(calc\[.*\])/, ([, d]) => {
       return { width: d.replace('[', '(').replace(']', ')').replace('+', ' + ').replace('-', ' - ') };

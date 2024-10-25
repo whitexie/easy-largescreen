@@ -1,3 +1,5 @@
+type TextAlign = 'left' | 'center' | 'right' | 'justify';
+
 export const MenuConfig = {
   id: 'text',
   name: '文本',
@@ -8,8 +10,13 @@ export const MenuConfig = {
 export const Props = {
   content: '',
   style: {
-    color: '',
+    color: '#333333',
     fontSize: 14,
+    fontStyle: '',
+    textDecorationLine: '',
+    textAlign: 'left' as TextAlign,
+    fontWeight: 'normal',
+    verticalAlign: 'top',
   },
 };
 
