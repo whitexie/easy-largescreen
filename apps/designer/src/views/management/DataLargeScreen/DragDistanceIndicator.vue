@@ -33,6 +33,9 @@ function calculateMargins() {
   widgetMargins.bottom = bottom;
   widgetMargins.verticalLength = (left > right ? right : left) - widgetW / 2;
   widgetMargins.horizontalLength = (top > bottom ? bottom : top) - widgetH / 2;
+
+  widgetMargins.verticalLength = Number(widgetMargins.verticalLength.toFixed(0));
+  widgetMargins.horizontalLength = Number(widgetMargins.horizontalLength.toFixed(0));
 }
 
 const horizontalStyle = computed(() => {
