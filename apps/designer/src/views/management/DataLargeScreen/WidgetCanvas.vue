@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { AddWidgetOption, DataLargeScreenField, MenuItem } from '@/types/dataLargeScreen';
 import { useMenus } from '@/components/Designer/Menus/useMenus';
-import { useSpacebarDraggable } from '@/composables/useSpacebarDraggable';
+import { useSpaceDraggable } from '@/composables/useSpaceDraggable';
 import { useLargeScreenDesigner } from '@/stores/designer';
 import { storeToRefs } from 'pinia';
 import DesignerWidget from './DesignerWidget.vue';
@@ -11,7 +11,7 @@ import { useDraggable } from './useDraggable';
 const designerStore = useLargeScreenDesigner();
 
 const { getMenuConfig } = useMenus();
-const { canvasRef, offsetStyle, cursorStyle, handleMouseDown } = useSpacebarDraggable(storeToRefs(designerStore).canvasRef);
+const { canvasRef, offsetStyle, cursorStyle, handleMouseDown } = useSpaceDraggable(storeToRefs(designerStore).canvasRef);
 
 const canvasStyle = computed(() => {
   const { pageConfig: { width, height } } = designerStore.state;

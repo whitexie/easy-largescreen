@@ -1,6 +1,6 @@
 import type { Ref } from 'vue';
 
-export function useSpacebarDraggable(elRef?: Ref<HTMLElement | null>) {
+export function useSpaceDraggable(elRef?: Ref<HTMLElement | null>) {
   const canvasRef = elRef || ref<HTMLElement | null>(null);
   const isDragging = ref(false);
   const spacePressed = ref(false);
@@ -19,7 +19,6 @@ export function useSpacebarDraggable(elRef?: Ref<HTMLElement | null>) {
       return 'default';
     }
   });
-
   const offsetStyle = computed(() => {
     return {
       left: `${offset.x}px`,
@@ -38,13 +37,13 @@ export function useSpacebarDraggable(elRef?: Ref<HTMLElement | null>) {
     const canvasEl = canvasRef.value as HTMLElement;
     offset.x = canvasEl.offsetLeft + dx;
     offset.y = canvasEl.offsetTop + dy;
-  };
+  }
 
   function handleMouseUp() {
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
     isDragging.value = false;
-  };
+  }
 
   function handleMouseDown(e: MouseEvent) {
     if (spacePressed.value) {
@@ -54,7 +53,7 @@ export function useSpacebarDraggable(elRef?: Ref<HTMLElement | null>) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
     }
-  };
+  }
 
   function handleKeyDown(e: KeyboardEvent) {
     if (e.code === 'Space') {
@@ -85,16 +84,6 @@ export function useSpacebarDraggable(elRef?: Ref<HTMLElement | null>) {
     offset.y = canvas.offsetTop;
   }
 
-  function setOffset(_offset: { x?: number, y?: number }) {
-    if (_offset.x) {
-      offset.x = _offset.x;
-    }
-
-    if (_offset.y) {
-      offset.y = _offset.y;
-    }
-  }
-
   onMounted(() => {
     initOffset();
     document.addEventListener('keydown', handleKeyDown);
@@ -113,7 +102,6 @@ export function useSpacebarDraggable(elRef?: Ref<HTMLElement | null>) {
     canvasRef,
     cursorStyle,
     offsetStyle,
-    setOffset,
     handleMouseDown,
   };
 }

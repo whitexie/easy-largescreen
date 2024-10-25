@@ -24,6 +24,7 @@ declare module 'vue' {
     NColorPicker: typeof import('naive-ui')['NColorPicker']
     NDivider: typeof import('naive-ui')['NDivider']
     NDropdown: typeof import('naive-ui')['NDropdown']
+    NEmpty: typeof import('naive-ui')['NEmpty']
     NInput: typeof import('naive-ui')['NInput']
     NInputNumber: typeof import('naive-ui')['NInputNumber']
     NSelect: typeof import('naive-ui')['NSelect']
