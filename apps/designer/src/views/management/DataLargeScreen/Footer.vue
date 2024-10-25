@@ -3,8 +3,14 @@ import { useLargeScreenDesigner } from '@/stores/designer';
 
 const designerStore = useLargeScreenDesigner();
 
+const scaleOptions = [50, 100, 150, 200].map(key => ({ key, label: `${key}%` }));
+
 function formatTooltip(v: number) {
   return `${v}%`;
+}
+
+function onSelectScale(key: number) {
+  designerStore.temporaryState.scale = key;
 }
 </script>
 
@@ -12,14 +18,11 @@ function formatTooltip(v: number) {
   <div class="flex justify-between absolute bottom-0 right-0 w-full h-36px bg-white px-3">
     <div />
     <div class="right flex h-full">
-      <n-tooltip placement="top" trigger="hover" :delay="300">
-        <template #trigger>
-          <div class="self-center text-xs cursor-pointer">
-            {{ designerStore.temporaryState.scale }}%
-          </div>
-        </template>
-        <span class="text-xs">缩放比例</span>
-      </n-tooltip>
+      <n-dropdown trigger="click" placement="top" size="small" :options="scaleOptions" @select="onSelectScale">
+        <div class="self-center text-xs cursor-pointer">
+          {{ designerStore.temporaryState.scale }}%
+        </div>
+      </n-dropdown>
 
       <n-divider vertical style="height: 100%" />
 
