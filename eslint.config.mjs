@@ -6,6 +6,7 @@ const files = [
   'apps/backend/**/*.ts',
   'apps/designer/**/*.{ts, mts}',
   'apps/designer/**/*.vue',
+  'docs/**/*.md',
 ]
 
 export default antfu(

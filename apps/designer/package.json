@@ -10,7 +10,7 @@
     "test:unit": "vitest",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit --project ./tsconfig.json",
-    "openapi": "npx tsx ./scripts/openapi/openapi.config.ts && eslint ./src/api/ --fix"
+    "openapi": "npx tsx ./scripts/openapi/openapi.config.ts"
   },
   "dependencies": {
     "@antv/g2": "^5.2.5",

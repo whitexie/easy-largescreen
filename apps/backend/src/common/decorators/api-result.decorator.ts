@@ -13,7 +13,6 @@ export function ApiResult<TModel extends Type<any>>({
   status,
 }: {
   type?: TModel | TModel[]
-  isPage?: boolean
   status?: HttpStatus
 }) {
   let prop: Record<string, any> = { type: 'null', default: null };

@@ -1,13 +1,13 @@
-type offsetX = number;
-type offsetY = number;
-type Width = number;
-type Height = number;
+export interface WidgetSize {
+  width: number
+  height: number
+}
 
 export interface MenuBaseConfig {
   id: string
   name: string
   icon: string
-  size: [Width, Height]
+  size: WidgetSize
 }
 
 export interface WidgetModule {
@@ -19,17 +19,26 @@ export interface Widget {
   id: string
   name: string
   icon: string
-  size?: [Width, Height]
+  size?: {
+    width: number
+    height: number
+  }
   menuConfig: MenuBaseConfig
   props: Record<string, any>
 }
 
-export interface DataLargeScreenField<T = unknown> {
+export interface DataLargeScreenField<T = Record<string, any>> {
   id: string
   name: string
   component: string
-  size: [Width, Height]
-  location: [offsetX, offsetY]
+  size: {
+    width: number
+    height: number
+  }
+  location: {
+    x: number
+    y: number
+  }
   isLock: boolean
   menuConfig: MenuBaseConfig
   props: T
@@ -44,4 +53,4 @@ export interface MenuItem {
   icon: string
 }
 
-export type AddWidgetOption = Partial<Pick<DataLargeScreenField, 'id' | 'name' | 'size' | 'location'>>;
+export type AddWidgetOption = Partial<Pick<DataLargeScreenField, 'id' | 'name' | 'size' | 'location' | 'props'>>;

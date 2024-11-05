@@ -7,7 +7,10 @@ import { ResponseWrapper } from 'src/common/models/response.model';
 export class TransformInterceptor<T> implements NestInterceptor<T, ResponseWrapper<T>> {
   intercept(context: ExecutionContext, next: CallHandler): Observable<ResponseWrapper<T>> {
     return next.handle().pipe(
-      map(data => new ResponseWrapper(0, data ?? null, 'ok')),
+      map((data) => {
+        // console.log('TransformInterceptor => ', data instanceof ResponseWrapper);
+        return data instanceof ResponseWrapper ? data : new ResponseWrapper(0, data ?? null, 'ok');
+      }),
     );
   }
 }

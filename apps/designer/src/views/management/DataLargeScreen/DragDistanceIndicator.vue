@@ -20,8 +20,8 @@ function calculateMargins() {
   if (!widget) {
     return;
   }
-  const [widgetX, widgetY] = widget.location;
-  const [widgetW, widgetH] = widget.size;
+  const { x: widgetX, y: widgetY } = widget.location;
+  const { width: widgetW, height: widgetH } = widget.size;
   const left = widgetX + widgetW / 2;
   const top = widgetY + widgetH / 2;
   const right = designerStore.state.pageConfig.width - widgetX - widgetW / 2;

@@ -28,7 +28,7 @@ async function handleClick(item: MenuItem) {
 
 function handleDragStart(e: DragEvent, item: MenuItem) {
   const config = getMenuConfig(item.id);
-  const [width = 100, height = 50] = config.size;
+  const { width = 100, height = 50 } = config.size;
   placeholderElementSize.width = width;
   placeholderElementSize.height = height;
   e.dataTransfer?.setData('text/plain', JSON.stringify(item));

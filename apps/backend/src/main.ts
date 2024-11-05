@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { HttpException, HttpStatus, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -12,8 +12,15 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
-    whitelist: false,
-    forbidNonWhitelisted: true,
+    whitelist: true,
+    forbidNonWhitelisted: false,
+    exceptionFactory: (errors) => {
+      return new HttpException({
+        code: 400,
+        message: errors.map(err => Object.values(err.constraints)).flat(),
+        data: null,
+      }, HttpStatus.OK);
+    },
     transformOptions: {
       enableImplicitConversion: true,
       exposeUnsetFields: false,

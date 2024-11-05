@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, Generated, OneToMany } from 'typeorm';
-import { BaseEntity } from './base.entity';
+import { BaseEntity } from '../../common/entities/base.entity';
 import { Field } from './field.entity';
 
 @Entity({ comment: '数据集' })

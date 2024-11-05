@@ -59,7 +59,7 @@ export function useMenus() {
   }
 
   function getMenuConfig(id: keyof typeof MENU_CONFIG_MAPPING) {
-    return MENU_CONFIG_MAPPING[id];
+    return structuredClone(MENU_CONFIG_MAPPING[id]) || {};
   }
 
   return {

@@ -1,9 +1,6 @@
-import type { AddWidgetOption, DataLargeScreenField, MenuItem } from '@/types/dataLargeScreen';
-import { useMenus } from '@/components/Designer/Menus/useMenus';
-import { generateRandomString } from '@yss/utils';
+import api from '@/api';
 import { defineStore } from 'pinia';
-
-const { getMenuConfig, getWidgetProps } = useMenus();
+import { useLargeScreenRender } from './composables/useLargeScreenRender';
 
 interface PageConfig {
   background: {
@@ -18,11 +15,11 @@ interface LargeScreenDesigner {
   id: string
   name: string
   pageConfig: PageConfig
-  useDatsetIds: string[]
+  useDatasetIds: string[]
 }
 
-export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
-  const state = reactive<LargeScreenDesigner>({
+function getDefaultState(): LargeScreenDesigner {
+  return {
     id: '',
     name: '',
     pageConfig: {
@@ -33,30 +30,40 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
       width: 1920,
       height: 1080,
     },
-    useDatsetIds: [],
-  });
+    useDatasetIds: [],
+  };
+}
 
-  const canvasRef = ref<HTMLDivElement | null>(null);
-
-  const { widgets, widgetMap, addWidget, removeWidget } = useWidgets();
-  // const { setPosition, position, handleMouseDown } = useDraggable();
-
-  /**
-   * 临时的状态，仅在设计器中使用
-   */
-  const temporaryState = reactive({
-    currentDatsetId: '',
+function getDefaultTemporaryState() {
+  return {
+    currentDatasetId: '',
     currentWidgetId: '',
     scale: 100,
     showDataset: true,
-  });
+  };
+}
+
+export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
+  const { state, canvasRef, widgetMap, clearWidgets, getConfig, ...rest } = useLargeScreenRender();
+
+  /** 临时的状态，仅在本地使用，数据不入库 */
+  const temporaryState = reactive(getDefaultTemporaryState());
 
   const currentWidget = computed(() => {
-    if (temporaryState.currentWidgetId) {
-      return widgetMap[temporaryState.currentWidgetId];
-    }
-    return null;
+    return widgetMap.get(temporaryState.currentWidgetId) || null;
   });
+
+  async function saveLargeScreen() {
+    const { data, error, msg } = await api.largescreen.create(getConfig());
+
+    if (error) {
+      window.$message.error(msg);
+      return;
+    }
+
+    state.id = data.id;
+    window.$message.success('保存成功');
+  }
 
   function setCurrentWidget(id: string) {
     temporaryState.currentWidgetId = id;
@@ -78,61 +85,37 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     return { x: margin, y };
   }
 
+  async function resetStore() {
+    Object.assign(state, getDefaultState());
+    Object.assign(temporaryState, getDefaultTemporaryState());
+    clearWidgets();
+  }
+
   function updateCurrentWidgetLocation({ x, y }: { x: number, y: number }) {
     if (!currentWidget.value) {
       return;
     }
-    currentWidget.value.location[0] = x;
-    currentWidget.value.location[1] = y;
-  }
-
-  return { state, temporaryState, canvasRef, widgets, widgetMap, currentWidget, setCurrentWidget, addWidget, removeWidget, handleBestFitScale, updateCurrentWidgetLocation };
-});
-
-export function useWidgets() {
-  const widgets = reactive<DataLargeScreenField[]>([]);
-  const widgetMap = reactive<Record<string, DataLargeScreenField>>({});
-
-  function addWidget(menuItem: MenuItem, options?: AddWidgetOption): DataLargeScreenField {
-    const id = generateRandomString(8, 'w');
-
-    const menuConfig = getMenuConfig(menuItem.id);
-    const props = getWidgetProps(menuItem.id);
-    const { id: component, name } = menuItem;
-    const { size = [300, 200] } = menuConfig;
-
-    const widget: DataLargeScreenField = {
-      id,
-      name,
-      component,
-      size,
-      isLock: false,
-      location: [0, 0],
-      props: structuredClone(props),
-      menuConfig,
-      _el: null,
-      ...options,
-    };
-
-    widgets.push(widget);
-
-    widgetMap[id] = widget;
-
-    return widget;
-  }
-
-  function removeWidget(id: string) {
-    delete widgetMap[id];
-    widgets.splice(widgets.findIndex(item => item.id === id), 1);
+    currentWidget.value.location.x = x;
+    currentWidget.value.location.y = y;
   }
 
   return {
-    widgets,
+    state,
+    temporaryState,
+    canvasRef,
+    currentWidget,
     widgetMap,
-    addWidget,
-    removeWidget,
+    clearWidgets,
+    getConfig,
+    setCurrentWidget,
+    handleBestFitScale,
+    updateCurrentWidgetLocation,
+    saveLargeScreen,
+    resetStore,
+    ...rest,
   };
-}
+});
+
 function calculateBestFitScale(containerElement: HTMLElement, canvasElement: HTMLElement, margin: number = 0) {
   // 获取容器和画布的宽度和高度
   const containerWidth = containerElement.offsetWidth;

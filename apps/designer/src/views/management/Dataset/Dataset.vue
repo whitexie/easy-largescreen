@@ -44,7 +44,7 @@ function useDatasetList() {
       <div
         v-for="dataset in datasetList"
         :key="dataset.id"
-        class="rounded-lg bg-gray-100 p-3 relative flex flex-col gap-2"
+        class="rounded-lg bg-gray-100 p-3 relative flex flex-col gap-2 h-20"
       >
         <div>
           <span>名称：</span>
@@ -52,10 +52,10 @@ function useDatasetList() {
             {{ dataset.name }}
           </NEllipsis>
         </div>
-        <div>
-          <span>字段数：</span>
-          <span>{{ dataset.fields.length }}</span>
-        </div>
+        <!--        <div> -->
+        <!--          <span>字段数：</span> -->
+        <!--          <span>{{ dataset.fields.length }}</span> -->
+        <!--        </div> -->
 
         <div class="icons absolute right-3 top-3 flex flex-col gap-2 font-size-1.2em">
           <NPopconfirm

@@ -8,7 +8,6 @@ const modules = import.meta.glob(`@/dataLargeScreenFields/*/Pane.vue`, { eager: 
 for (const path in modules) {
   const match = path.match(reg);
   const key = match ? match[1] : '';
-  // console.log(key, (modules[path] as any).default);
   if (modules[path]) {
     WIDGET_PANE_MAPPING[key] = (modules[path] as any).default;
   }
@@ -19,11 +18,12 @@ export function useWidgetPane() {
 
   const widget = computed(() => {
     const id = designerStore.temporaryState.currentWidgetId;
-    if (id === '' || !Object.keys(designerStore.widgetMap).includes(id)) {
+    if (id === '' || !designerStore.widgetMap.has(id)) {
       return null;
     }
+    const widget = designerStore.widgetMap.get(id);
 
-    return designerStore.widgetMap[id];
+    return widget;
   });
 
   const widgetPane = computed(() => {

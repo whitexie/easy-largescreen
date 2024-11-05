@@ -2,6 +2,7 @@
 import Layers from '@/components/Designer/Layers/index.vue';
 import Pane from '@/components/Designer/PropsPane/Pane.vue';
 import { useLargeScreenDesigner } from '@/stores/designer';
+import { useMessage } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { provide } from 'vue';
 import DesignerHeader from './DesignerHeader.vue';
@@ -9,9 +10,26 @@ import Footer from './Footer.vue';
 import { CANVAS_ELEMENT_KEY } from './provideKey';
 import WidgetCanvas from './WidgetCanvas.vue';
 
+const props = defineProps<{
+  id: string
+}>();
+
 const designerStore = useLargeScreenDesigner();
+const message = useMessage();
+
+window.$message = message;
 
 provide(CANVAS_ELEMENT_KEY, storeToRefs(designerStore).canvasRef);
+
+onMounted(() => {
+  if (props.id && props.id !== 'new') {
+    designerStore.initConfig(props.id);
+  }
+});
+
+onUnmounted(() => {
+  designerStore.resetStore();
+});
 </script>
 
 <template>

@@ -44,8 +44,8 @@ function handleClickWidget(widget: DataLargeScreenField) {
 
 function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) {
   designerStore.setCurrentWidget(widget.id);
-  const { location: [x, y] } = widget;
-  initPosition({ x, y });
+  const { location } = widget;
+  initPosition(location);
   handleDragEvent(event);
 }
 
@@ -64,14 +64,14 @@ function handleDrop(e: DragEvent) {
 
   const { offsetY, offsetX } = e;
   const scale = designerStore.temporaryState.scale / 100;
-  const width = widgetConfig.size[0] / scale;
-  const height = widgetConfig.size[1] / scale;
+  const width = widgetConfig.size.width / scale;
+  const height = widgetConfig.size.height / scale;
   const x = offsetX - width / 2;
   const y = offsetY - height / 2;
 
   const option: AddWidgetOption = {
-    location: [x, y],
-    size: [width, height],
+    location: { x, y },
+    size: { width, height },
   };
 
   const widget = designerStore.addWidget(menuItem, option);
@@ -82,7 +82,9 @@ function handleDrop(e: DragEvent) {
 
 <template>
   <div
-    ref="canvasRef" class="large-screen-canvas absolute bg-white transform-origin-top-left " :style="canvasStyle"
+    ref="canvasRef"
+    class="large-screen-canvas absolute bg-white transform-origin-top-left "
+    :style="canvasStyle"
     @click.stop="handleClickCanvas" @mousedown="handleMouseDown" @dragover="handleDragOver" @drop="handleDrop"
   >
     <template v-for="item in designerStore.widgets" :key="item.id">

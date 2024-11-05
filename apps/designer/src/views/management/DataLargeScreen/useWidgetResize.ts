@@ -75,10 +75,10 @@ export function useWidgetResize() {
       }
 
       // 更新组件状态
-      activeWidget.size[0] = newWidth / scaleRadio;
-      activeWidget.size[1] = newHeight / scaleRadio;
-      activeWidget.location[0] = newLeft / scaleRadio;
-      activeWidget.location[1] = newTop / scaleRadio;
+      activeWidget.size.width = newWidth / scaleRadio;
+      activeWidget.size.height = newHeight / scaleRadio;
+      activeWidget.location.x = newLeft / scaleRadio;
+      activeWidget.location.y = newTop / scaleRadio;
 
       // 在操作完成后，重置frameId以便于下一次重新请求
       frameId = null;

@@ -3,7 +3,8 @@
 1. 生成迁移文件
 
 ```bash
-pnpm run migration:generate ./migrations/all
+pnpm build;
+pnpm run migration:generate
 ```
 
 2. 执行迁移

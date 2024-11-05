@@ -25,3 +25,13 @@ coverage
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# vitepress cache
+cache
+dist
+
+# .Idea
+.idea
+
+# http-debug
+http-debug

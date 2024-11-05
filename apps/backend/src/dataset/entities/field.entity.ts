@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
-import { BaseEntity } from './base.entity';
+import { BaseEntity } from '../../common/entities/base.entity';
 import { Dataset } from './dataset.entity';
 
 export enum ValueType {

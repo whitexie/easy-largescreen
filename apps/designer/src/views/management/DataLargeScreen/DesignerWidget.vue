@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
-import TextConfig from '@/dataLargeScreenFields/Text';
 import { useLargeScreenDesigner } from '@/stores/designer';
+import WidgetRender from '@/views/render/WidgetRender.vue';
 import { inject, type Ref } from 'vue';
 import { CANVAS_ELEMENT_KEY } from './provideKey';
 import { useWidgetResize } from './useWidgetResize';
 
 interface Props {
-  // TODO 类型约束
-  widget: DataLargeScreenField<any>
+  widget: DataLargeScreenField
 }
 
 const props = defineProps<Props>();
@@ -23,24 +22,13 @@ const { handleActiveResize } = useWidgetResize();
 
 const commonClass = 'graphicbox-resize absolute z-10 w-10px h-10px  border-amber';
 
-const componentMap = { text: TextConfig.Render } as const;
-
 const layoutStyle = computed(() => {
-  const { size, location } = props.widget;
+  const { size: { width, height }, location: { x, y } } = props.widget;
   return {
-    width: `${size[0]}px`,
-    height: `${size[1]}px`,
-    transform: `translate(${location[0]}px, ${location[1]}px)`,
+    width: `${width}px`,
+    height: `${height}px`,
+    transform: `translate(${x}px, ${y}px)`,
   };
-});
-
-const RenderComponent = computed(() => {
-  const component = props.widget.component.toLowerCase();
-  if (Object.keys(componentMap).includes(component)) {
-    return componentMap[component as keyof typeof componentMap];
-  }
-
-  return '';
 });
 
 const activeWidget = computed(() => designerStore.temporaryState.currentWidgetId === props.widget.id);
@@ -119,7 +107,7 @@ onMounted(() => {
       />
     </template>
     <div class="w-full h-full overflow-hidden">
-      <component :is="RenderComponent" :widget="widget" />
+      <WidgetRender :widget="widget" :hidden-layout="true" />
     </div>
   </div>
 </template>

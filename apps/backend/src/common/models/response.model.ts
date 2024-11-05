@@ -16,3 +16,7 @@ export class ResponseWrapper<T = Record<string, any> | any[]> {
     this.msg = message;
   }
 }
+
+export function sendResponse(code: number, message: string) {
+  return new ResponseWrapper(code, null, message);
+}

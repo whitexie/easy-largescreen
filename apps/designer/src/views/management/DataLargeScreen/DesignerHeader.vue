@@ -15,8 +15,8 @@ function handleBack() {
 <template>
   <div class="px-2">
     <div class="border-b-1px gap-2 flex items-center justify-between border-gray-200 border-b-solid h-50px">
-      <div class="start flex items-center gap-1 cursor-pointer" @click="handleBack">
-        <Icon class="" icon="ion:arrow-back" />
+      <div class="start flex items-center gap-1 cursor-pointer">
+        <Icon class="" icon="ion:arrow-back" @click="handleBack" />
         <n-input v-model:value="designerStore.state.name" placeholder="大屏名称" class="w-160px!" />
       </div>
       <div class="center flex-1 h-full">
@@ -25,7 +25,7 @@ function handleBack() {
       <div class="end">
         <div class="flex items-center gap-2">
           <n-button>预览</n-button>
-          <n-button type="primary">
+          <n-button type="primary" @click.stop="designerStore.saveLargeScreen">
             保存
           </n-button>
         </div>

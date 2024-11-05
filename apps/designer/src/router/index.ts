@@ -45,6 +45,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/Demo.vue'),
   },
   {
+    path: '/render/:id',
+    name: 'Render',
+    props: true,
+    component: () => import('@/views/render/Render.vue'),
+  },
+  {
     path: '/management',
     name: 'Management',
     component: () => import('@/views/management/index.vue'),
@@ -53,9 +59,10 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: '/largescreen/designer',
+    path: '/largescreen/designer/:id',
     name: 'DataLargeScreenDesigner',
     component: () => import('@/views/management/DataLargeScreen/Designer.vue'),
+    props: true,
     meta: {
       title: '大屏设计',
     },

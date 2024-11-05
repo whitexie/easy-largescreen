@@ -4,7 +4,7 @@ export const MenuConfig = {
   id: 'text',
   name: '文本',
   icon: 'fluent:draw-text-24-regular',
-  size: [200, 40],
+  size: { width: 200, height: 40 },
 };
 
 export const Props = {
