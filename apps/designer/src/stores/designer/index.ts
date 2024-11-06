@@ -85,7 +85,7 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     return { x: margin, y };
   }
 
-  async function resetStore() {
+  async function $reset() {
     Object.assign(state, getDefaultState());
     Object.assign(temporaryState, getDefaultTemporaryState());
     clearWidgets();
@@ -111,7 +111,7 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     handleBestFitScale,
     updateCurrentWidgetLocation,
     saveLargeScreen,
-    resetStore,
+    $reset,
     ...rest,
   };
 });

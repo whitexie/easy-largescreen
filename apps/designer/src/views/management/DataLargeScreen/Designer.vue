@@ -28,7 +28,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  designerStore.resetStore();
+  designerStore.$reset();
 });
 </script>
 

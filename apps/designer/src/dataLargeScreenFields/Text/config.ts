@@ -1,6 +1,8 @@
+import type { MenuBaseConfig } from '@/types/dataLargeScreen';
+
 type TextAlign = 'left' | 'center' | 'right' | 'justify';
 
-export const MenuConfig = {
+export const MenuConfig: MenuBaseConfig = {
   id: 'text',
   name: '文本',
   icon: 'fluent:draw-text-24-regular',

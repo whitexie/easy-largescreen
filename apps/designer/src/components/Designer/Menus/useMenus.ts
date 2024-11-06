@@ -55,7 +55,7 @@ const MENUS = reactive<MenuItem[]>([
 
 export function useMenus() {
   function getWidgetProps(id: keyof typeof WIDGET_PROPS_MAPPING) {
-    return WIDGET_PROPS_MAPPING[id];
+    return structuredClone(WIDGET_PROPS_MAPPING[id]);
   }
 
   function getMenuConfig(id: keyof typeof MENU_CONFIG_MAPPING) {

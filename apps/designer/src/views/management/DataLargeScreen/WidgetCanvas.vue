@@ -54,28 +54,34 @@ function handleClickCanvas() {
 }
 
 function handleDragOver(e: DragEvent) {
-  // console.log('[handleDragEnter] => ', e);
   e.preventDefault();
 }
 
 function handleDrop(e: DragEvent) {
+  if (!canvasRef.value?.contains(e.target as Node)) {
+    return;
+  }
+
   const menuItem = JSON.parse(e.dataTransfer?.getData('text/plain') || '{}') as MenuItem;
   const widgetConfig = getMenuConfig(menuItem.id);
 
-  const { offsetY, offsetX } = e;
+  const canvasRect = canvasRef.value.getBoundingClientRect();
+  const x = e.clientX - canvasRect.left;
+  const y = e.clientY - canvasRect.top;
+
   const scale = designerStore.temporaryState.scale / 100;
   const width = widgetConfig.size.width / scale;
   const height = widgetConfig.size.height / scale;
-  const x = offsetX - width / 2;
-  const y = offsetY - height / 2;
 
   const option: AddWidgetOption = {
-    location: { x, y },
+    location: {
+      x: x / scale - width / 2,
+      y: y / scale - height / 2,
+    },
     size: { width, height },
   };
 
   const widget = designerStore.addWidget(menuItem, option);
-
   designerStore.setCurrentWidget(widget.id);
 }
 </script>
