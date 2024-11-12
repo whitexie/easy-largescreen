@@ -11,7 +11,7 @@ import { useDraggable } from './useDraggable';
 const designerStore = useLargeScreenDesigner();
 
 const { getMenuConfig } = useMenus();
-const { canvasRef, offsetStyle, cursorStyle, handleMouseDown } = useSpaceDraggable(storeToRefs(designerStore).canvasRef);
+const { canvasRef, offsetStyle, cursorStyle, handleMouseDown, spacePressed } = useSpaceDraggable(storeToRefs(designerStore).canvasRef);
 
 const canvasStyle = computed(() => {
   const { pageConfig: { width, height } } = designerStore.state;
@@ -39,10 +39,15 @@ watch(
 );
 
 function handleClickWidget(widget: DataLargeScreenField) {
-  designerStore.setCurrentWidget(widget.id);
+  if (!spacePressed.value) {
+    designerStore.setCurrentWidget(widget.id);
+  }
 }
 
 function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) {
+  if (spacePressed.value) {
+    return;
+  }
   designerStore.setCurrentWidget(widget.id);
   const { location } = widget;
   initPosition(location);
