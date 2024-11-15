@@ -96,13 +96,22 @@ function handleDrop(e: DragEvent) {
     ref="canvasRef"
     class="large-screen-canvas absolute bg-white transform-origin-top-left "
     :style="canvasStyle"
-    @click.stop="handleClickCanvas" @mousedown="handleMouseDown" @dragover="handleDragOver" @drop="handleDrop"
+    @click.stop="handleClickCanvas" @dragover="handleDragOver" @drop="handleDrop"
   >
     <template v-for="item in designerStore.widgets" :key="item.id">
       <DesignerWidget :widget="item" @mousedown="handleWidgetMouseDown" @click-widget="handleClickWidget" />
     </template>
     <DragDistanceIndicator :widget="designerStore.currentWidget" :is-dragging="isDragging" />
   </div>
+  <div v-show="spacePressed" class="mask absolute transform-origin-top-left" :style="canvasStyle" @mousedown="handleMouseDown" />
 </template>
 
-<style scoped></style>
+<style scoped>
+.large-screen-canvas {
+  --grid-size: 20px;
+  --line-color: rgba(60, 10, 30, 0.2);
+  background-image: linear-gradient(90deg, var(--line-color) 3%, transparent 0),
+    linear-gradient(1turn, var(--line-color) 3%, transparent 0);
+  background-size: var(--grid-size) var(--grid-size);
+}
+</style>

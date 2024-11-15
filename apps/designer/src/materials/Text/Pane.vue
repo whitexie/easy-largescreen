@@ -32,7 +32,6 @@ function setStyle(type: 'underline' | 'line-through') {
   else {
     textStyle.value.textDecorationLine = [textStyle.value.textDecorationLine, type].join(' ');
   }
-  // console.log('after setStyle => ', textStyle.value);
 }
 </script>
 

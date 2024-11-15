@@ -17,7 +17,7 @@ export const Props = {
     fontStyle: '',
     textDecorationLine: '',
     textAlign: 'left' as TextAlign,
-    fontWeight: 'normal',
+    fontWeight: '',
     verticalAlign: 'top',
   },
 };

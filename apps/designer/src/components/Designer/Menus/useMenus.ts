@@ -1,16 +1,6 @@
-import type { MenuBaseConfig, MenuItem, WidgetModule } from '@/types/dataLargeScreen';
-
-const WIDGET_PROPS_MAPPING: Record<string, any> = {};
-const MENU_CONFIG_MAPPING: Record<string, MenuBaseConfig> = {};
-const modules = import.meta.glob('@/dataLargeScreenFields/*/config.ts', { eager: true });
-
-for (const key in modules) {
-  const name = getWidgetName(key);
-  const module = modules[key] as WidgetModule;
-  const { Props, MenuConfig } = module;
-  MENU_CONFIG_MAPPING[name] = MenuConfig;
-  WIDGET_PROPS_MAPPING[name] = Props;
-}
+import type { MenuBaseConfig, MenuItem } from '@/types/dataLargeScreen';
+import { getMaterial } from '@/materials/base';
+import { pick } from 'lodash-es';
 
 const MENUS = reactive<MenuItem[]>([
   {
@@ -54,12 +44,22 @@ const MENUS = reactive<MenuItem[]>([
 ]);
 
 export function useMenus() {
-  function getWidgetProps(id: keyof typeof WIDGET_PROPS_MAPPING) {
-    return structuredClone(WIDGET_PROPS_MAPPING[id]);
+  function getWidgetProps(id: string) {
+    const material = getMaterial(id);
+    if (material) {
+      return structuredClone(material.props);
+    }
+
+    throw new Error(`Widget ${id} not found`);
   }
 
-  function getMenuConfig(id: keyof typeof MENU_CONFIG_MAPPING) {
-    return structuredClone(MENU_CONFIG_MAPPING[id]) || {};
+  function getMenuConfig(id: string): MenuBaseConfig {
+    const material = getMaterial(id);
+    if (material) {
+      return structuredClone(pick(material, ['id', 'name', 'icon', 'size']));
+    }
+
+    throw new Error(`Widget ${id} not found`);
   }
 
   return {
@@ -67,14 +67,4 @@ export function useMenus() {
     getWidgetProps,
     getMenuConfig,
   };
-}
-
-function getWidgetName(path: string) {
-  const regex = /\/([^/]+)\/config\.ts$/;
-  const matches = path.match(regex);
-  if (!matches) {
-    return '';
-  }
-
-  return matches[1].toLowerCase();
 }

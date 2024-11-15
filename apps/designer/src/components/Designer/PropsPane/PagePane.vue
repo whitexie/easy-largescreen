@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useLargeScreenDesigner } from '@/stores/designer';
 
-defineProps<{ showDataset: boolean }>();
 const designerStore = useLargeScreenDesigner();
 </script>
 

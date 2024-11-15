@@ -33,17 +33,19 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <DesignerHeader />
-  <main class="h-calc[100%-50px] w-full relative grid grid-cols-3 canvas-warpper bg-#f2f2f2">
-    <Layers />
-    <div class="relative">
-      <div class="bg-#f2f2f2 overflow-auto relative w-full flex-1 p-7.5  h-calc[100%-36px]">
-        <WidgetCanvas />
+  <div class="w-full h-full overflow-hidden">
+    <DesignerHeader />
+    <main class="h-calc[100%-50px] w-full relative grid grid-cols-3 canvas-warpper bg-#f2f2f2">
+      <Layers />
+      <div class="relative">
+        <div class="bg-#f2f2f2 overflow-auto relative w-full flex-1 p-7.5  h-calc[100%-36px]">
+          <WidgetCanvas />
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
-    <Pane />
-  </main>
+      <Pane />
+    </main>
+  </div>
 </template>
 
 <style lang="less" scoped>
@@ -51,11 +53,5 @@ onUnmounted(() => {
   display: grid;
   gap: 1px;
   grid-template-columns: max-content 1fr max-content;
-}
-.large-screen-canvas {
-  --line-color: rgba(60, 10, 30, 0.2);
-  background-image: linear-gradient(90deg, var(--line-color) 3%, transparent 0),
-    linear-gradient(1turn, var(--line-color) 3%, transparent 0);
-  background-size: 20px 20px;
 }
 </style>

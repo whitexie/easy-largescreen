@@ -18,7 +18,6 @@ const modelValue = defineModel('modelValue');
 
 const currentValueIcon = computed(() => {
   const item = props.options.find(item => item.value === modelValue.value);
-  // console.log('currentValueIcon item => ', item);
   return item ? item.icon : props.options[0].icon;
 });
 
@@ -51,7 +50,7 @@ function handleClick(item: OptionItem) {
 </script>
 
 <template>
-  <div class="dropdown relative text-16px">
+  <div class="dropdown relative text-14px">
     <div
       ref="triggerRef" :class="{ 'bg-#e0e0e0': showPane }" class="cursor-pointer flex items-center p-1 px-2"
       @click="onShowPane"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
-import TextConfig from '@/dataLargeScreenFields/Text';
+import { getMaterial } from '@/materials/base';
 
 interface Props {
   widget: DataLargeScreenField
@@ -9,15 +9,12 @@ interface Props {
 
 const props = defineProps<Props>();
 
-// TODO: 组件注册
-const componentMap = { text: TextConfig.Render } as const;
-
 const RenderComponent = computed(() => {
-  const component = props.widget.component.toLowerCase();
-  if (Object.keys(componentMap).includes(component)) {
-    return componentMap[component as keyof typeof componentMap];
+  const component = props.widget.component;
+  const material = getMaterial(component);
+  if (material) {
+    return material.renderComponent;
   }
-
   return '';
 });
 
