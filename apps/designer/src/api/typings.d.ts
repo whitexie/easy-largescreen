@@ -181,6 +181,13 @@ declare namespace API {
 
   interface String {}
 
+  interface UploadTokenDto {
+    /** 上传凭证 */
+    token: string
+    /** token 过期时间 */
+    expiresTime: number
+  }
+
   interface Widget {
     /** id */
     id: string

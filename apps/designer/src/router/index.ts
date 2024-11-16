@@ -40,11 +40,6 @@ const routes: RouteRecordRaw[] = [
     redirect: '/management',
   },
   {
-    path: '/demo',
-    name: 'Demo',
-    component: () => import('@/views/Demo.vue'),
-  },
-  {
     path: '/render/:id',
     name: 'Render',
     props: true,
