@@ -19,7 +19,7 @@ declare namespace API {
 
   interface CreateFieldDto {
     /** 所属表 */
-    datasetCode: string
+    datasetCode?: string
     /** 字段code */
     fieldCode: string
     /** 字段名称 */

@@ -1,29 +1,30 @@
-import { createRouter, createWebHistory, type RouteRecordRaw, type RouteRecordSingleView } from 'vue-router';
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
+import 'vue-router';
 
-interface ManagementRouteRecordRaw extends RouteRecordSingleView {
-  name: string
-  meta: {
+declare module 'vue-router' {
+  interface RouteMeta {
     title: string
   }
 }
 
-const managementRoutes: ManagementRouteRecordRaw[] = [
+const managementRoutes: RouteRecordRaw[] = [
   {
     path: '',
     name: 'Dashboard',
-    component: () => import('@/views/management/Dashboard.vue'),
-    meta: {
-      title: '仪表盘',
-    },
+    redirect: { name: 'DataLargeScreen' },
+    // component: () => import('@/views/management/Dashboard.vue'),
+    // meta: {
+    //   title: '仪表盘',
+    // },
   },
-  {
-    path: 'data-set',
-    name: 'Dataset',
-    component: () => import('@/views/management/Dataset/Dataset.vue'),
-    meta: {
-      title: '数据集',
-    },
-  },
+  // {
+  //   path: 'data-set',
+  //   name: 'Dataset',
+  //   component: () => import('@/views/management/Dataset/Dataset.vue'),
+  //   meta: {
+  //     title: '数据集',
+  //   },
+  // },
   {
     path: 'largescreen',
     name: 'DataLargeScreen',

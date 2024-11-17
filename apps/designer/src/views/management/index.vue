@@ -6,16 +6,16 @@ const route = useRoute();
 const router = useRouter();
 const activeId = ref('');
 const menus = [
-  {
-    name: 'Dashboard',
-    text: '仪表盘',
-    icon: 'i-simple-line-icons:support',
-  },
-  {
-    name: 'Dataset',
-    text: '数据集',
-    icon: 'i-simple-icons:microsoftexcel',
-  },
+  // {
+  //   name: 'Dashboard',
+  //   text: '仪表盘',
+  //   icon: 'i-simple-line-icons:support',
+  // },
+  // {
+  //   name: 'Dataset',
+  //   text: '数据集',
+  //   icon: 'i-simple-icons:microsoftexcel',
+  // },
   {
     name: 'DataLargeScreen',
     text: '数据大屏',
