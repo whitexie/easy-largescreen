@@ -4,7 +4,7 @@ import ChartImplementations from '@/components/Charts/chart-implementations';
 import { CalculateType } from '@/types/charts';
 import { generateId, hasOwn } from '@yss/utils';
 import { pick } from 'lodash-es';
-import { computed, reactive, unref } from 'vue';
+import { computed, reactive, toRaw } from 'vue';
 
 const CHARTS = Object.keys(ChartImplementations).map(key => key.replace('Chart', ''));
 
@@ -31,7 +31,7 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
   });
 
   const chartConfig = computed(() => {
-    return unref(state);
+    return state;
   });
 
   const listenSource = computed(() => {
@@ -39,11 +39,11 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
   });
 
   function getChartConfig() {
-    return structuredClone(unref(state));
+    return structuredClone(toRaw(state));
   }
 
   function updateState(options: ChartRederStateOptions) {
-    const { autoRequestData, ...args } = options;
+    const { autoRequestData, ...args } = JSON.parse(JSON.stringify(options));
     __autoRequestData = typeof autoRequestData === 'boolean' ? autoRequestData : true;
     const keys = Object.keys(args) as Array<keyof ChartRenderState>;
     keys.forEach((key) => {
@@ -119,10 +119,10 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
     Object.values(state.dropBoxSettings).forEach((box) => {
       box.fields.forEach((field) => {
         if (field.fieldType === 'dimension') {
-          dimensionFields.push(unref(field));
+          dimensionFields.push(toRaw(field));
         }
         else {
-          metricFields.push(unref(field));
+          metricFields.push(toRaw(field));
         }
       });
     });
@@ -154,7 +154,7 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
 
     const { dropBoxSettings, chartProps: props } = state;
     shallowChart.value.validate({ dropBoxSettings, props });
-    return shallowChart.value.buildOptions({ dropBoxSettings, data: unref(data) });
+    return shallowChart.value.buildOptions({ dropBoxSettings, data: toRaw(data) });
   }
 
   if (options) {
@@ -177,7 +177,7 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
           console.log(error);
         }
       },
-      { deep: true },
+      { deep: true, immediate: true },
     );
   }
 

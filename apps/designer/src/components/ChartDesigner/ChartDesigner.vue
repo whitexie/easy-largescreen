@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import type { BoxId, Field, OriginalField } from '@/types/charts';
+import type { BoxId, ChartRenderState, Field, OriginalField } from '@/types/charts';
 import FieldPane from '@/components/Designer/PropsPane/FieldPane.vue';
 import ChartRender from '../Charts/ChartRender.vue';
 import { useChartDesigner } from './composables/useChartDesigner';
 import { useDatasetList, useFields } from './composables/useDatasetList';
 import DropFields from './DropFields.vue';
 
-const { datasetId, state, addField, removeField, updateFiledIndex, chartConfig, data } = useChartDesigner();
+const props = defineProps<{
+  chartConfig: Partial<ChartRenderState>
+}>();
+
+const emit = defineEmits<{
+  (e: 'save', value: ChartRenderState): void
+}>();
+const { datasetId, state, addField, removeField, updateFiledIndex, chartConfig, data, getChartConfig } = useChartDesigner(props.chartConfig);
 const { datasetList } = useDatasetList();
 const { dimensionFields, metricFields } = useFields(datasetId);
 
@@ -25,6 +32,10 @@ function handleAdd(boxId: BoxId, data: { field: OriginalField, index: number }) 
 function handleDelete(boxId: BoxId, data: Field) {
   removeField(boxId, data.id);
 }
+
+function handleSave() {
+  emit('save', getChartConfig());
+}
 </script>
 
 <template>
@@ -35,8 +46,8 @@ function handleDelete(boxId: BoxId, data: Field) {
         <!-- <div class="i-eos-icons:bubble-loading w-1em h-1em" /> -->
       </div>
 
-      <n-button type="primary" size="small" round>
-        预览
+      <n-button type="primary" size="small" round @click="handleSave">
+        保存
       </n-button>
     </div>
     <div class="main-content flex gap-1">

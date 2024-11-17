@@ -1,8 +1,8 @@
-import type { BoxId, Field } from '@/types/charts';
+import type { BoxId, ChartRenderState, Field } from '@/types/charts';
 import { useChartRender } from './useChartRender';
 
-export function useChartDesigner(_datasetId?: string) {
-  const { state, datasetId, chartConfig, ...args } = useChartRender({ datasetId: _datasetId || '', autoRequestData: false });
+export function useChartDesigner(options: Partial<ChartRenderState>) {
+  const { state, datasetId, chartConfig, ...args } = useChartRender({ ...options, autoRequestData: false });
 
   function updateFiledIndex(type: BoxId, field: Field, newIndex: number) {
     const fields = state.dropBoxSettings[type].fields;

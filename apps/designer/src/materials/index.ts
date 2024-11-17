@@ -1,1 +1,2 @@
 import './Text';
+import './Chart';

@@ -54,3 +54,7 @@ export interface MenuItem {
 }
 
 export type AddWidgetOption = Partial<Pick<DataLargeScreenField, 'id' | 'name' | 'size' | 'location' | 'props'>>;
+
+export interface MaterialProps<T extends Record<string, any> = Record<string, any>> {
+  widget: DataLargeScreenField<T>
+}

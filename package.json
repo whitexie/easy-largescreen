@@ -9,6 +9,8 @@
   "scripts": {
     "designer:dev": "pnpm -F designer dev",
     "designer:type-check": "pnpm -F designer type-check",
+    "docs:dev": "pnpm -F docs docs:dev",
+    "docs:build": "pnpm -F docs docs:build",
     "commit": "git-cz",
     "prepare": "husky"
   },

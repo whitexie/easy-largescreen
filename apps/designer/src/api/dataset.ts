@@ -1,6 +1,6 @@
 /**
  * 该文件为 @umijs/openapi 插件自动生成，请勿随意修改。如需修改请通过配置 openapi.config.ts 进行定制化。
- * */
+ */
 
 import { request } from '@/utils';
 
@@ -62,7 +62,7 @@ export async function getFieldsByDatasetId(
 
 /** 获取数据集数据 POST /dataset/searchData */
 export async function searchData(body: API.SearchDataDto, options?: Record<string, any>) {
-  return request<API.ResponseWrapper & { data?: API.Object[] }>(`/api/dataset/searchData`, {
+  return request<API.ResponseWrapper & { data?: Record<string, string | number>[] }>(`/api/dataset/searchData`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

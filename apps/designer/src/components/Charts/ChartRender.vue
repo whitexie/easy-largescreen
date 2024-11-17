@@ -28,12 +28,12 @@ function buildChartOptions() {
 }
 
 watch(
-  props.chartConfig,
+  () => props.chartConfig,
   (val) => {
     updateState(val);
     buildChartOptions();
   },
-  { deep: true },
+  { deep: true, immediate: true },
 );
 </script>
 

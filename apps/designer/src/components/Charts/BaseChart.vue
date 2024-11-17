@@ -1,11 +1,19 @@
 <script setup lang="ts">
+import { useElementSize } from '@vueuse/core';
 import { useAttrs } from 'vue';
 import { useChart } from './composables/useChart';
 
 const { options } = defineProps<{ options: Record<string, any> }>();
 const attrs = useAttrs();
 
-const { containerElement, render } = useChart(options, attrs);
+const { containerElement, render, forceFit } = useChart(options, attrs);
+const size = useElementSize(containerElement);
+
+watch(
+  () => size,
+  () => forceFit(),
+  { deep: true },
+);
 
 watch(
   () => options,
@@ -19,7 +27,7 @@ watch(
 </script>
 
 <template>
-  <div ref="containerElement" class="w-full h-full" />
+  <div ref="containerElement" class="base-chart w-full h-full" />
 </template>
 
 <style>

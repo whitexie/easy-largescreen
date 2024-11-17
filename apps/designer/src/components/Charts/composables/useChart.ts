@@ -13,6 +13,10 @@ export function useChart(options: unknown, $attrs: Record<string, any>) {
     }
   }
 
+  function forceFit() {
+    chart.value?.forceFit();
+  }
+
   function bindEvents() {
     Object.keys($attrs).filter(key => key.startsWith('on')).forEach((key) => {
       const eventName = key.slice(2).toLowerCase();
@@ -45,6 +49,7 @@ export function useChart(options: unknown, $attrs: Record<string, any>) {
   return {
     chart,
     containerElement,
+    forceFit,
     render,
   };
 }
