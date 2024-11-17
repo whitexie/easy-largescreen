@@ -10,6 +10,8 @@ export function useWidgetResize() {
   let scaleRadio = 1;
   let frameId: number | null = null;
 
+  const isResizing = ref(false);
+
   function handleActiveResize(widget: DataLargeScreenField, canvasEl: HTMLElement | null, horizontal: -1 | 0 | 1, vertical: -1 | 0 | 1, scale: number) {
     activeWidget = widget;
     horizontalDirection = horizontal;
@@ -40,6 +42,7 @@ export function useWidgetResize() {
   }
 
   function handleMouseMove(event: MouseEvent) {
+    isResizing.value = true;
     // 使用requestAnimationFrame包裹实际的逻辑处理
     // 这确保了每次屏幕刷新前只执行一次，减少不必要的计算和DOM操作
     if (frameId !== null) {
@@ -93,6 +96,10 @@ export function useWidgetResize() {
       frameId = null;
     }
 
+    setTimeout(() => {
+      isResizing.value = false;
+    }, 200);
+
     removeEventListener();
   }
 
@@ -107,5 +114,6 @@ export function useWidgetResize() {
 
   return {
     handleActiveResize,
+    isResizing,
   };
 }

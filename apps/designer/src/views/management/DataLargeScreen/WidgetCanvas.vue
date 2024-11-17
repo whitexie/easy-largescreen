@@ -7,11 +7,13 @@ import { storeToRefs } from 'pinia';
 import DesignerWidget from './DesignerWidget.vue';
 import DragDistanceIndicator from './DragDistanceIndicator.vue';
 import { useDraggable } from './useDraggable';
+import { useWidgetResize } from './useWidgetResize';
 
 const designerStore = useLargeScreenDesigner();
 
 const { getMenuConfig } = useMenus();
 const { canvasRef, offsetStyle, cursorStyle, handleMouseDown, spacePressed } = useSpaceDraggable(storeToRefs(designerStore).canvasRef);
+const { handleActiveResize, isResizing } = useWidgetResize();
 
 const canvasStyle = computed(() => {
   const { pageConfig: { width, height } } = designerStore.state;
@@ -55,6 +57,9 @@ function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) 
 }
 
 function handleClickCanvas() {
+  if (isDragging.value || isResizing.value) {
+    return;
+  }
   designerStore.setCurrentWidget('');
 }
 
@@ -62,7 +67,15 @@ function handleDragOver(e: DragEvent) {
   e.preventDefault();
 }
 
+function handleResize(horizontal: -1 | 0 | 1, vertical: -1 | 0 | 1) {
+  const scale = designerStore.temporaryState.scale / 100;
+  handleActiveResize(designerStore.currentWidget!, canvasRef.value, horizontal, vertical, scale);
+}
+
 function handleDrop(e: DragEvent) {
+  if (isDragging.value) {
+    return;
+  }
   if (!canvasRef.value?.contains(e.target as Node)) {
     return;
   }
@@ -99,7 +112,7 @@ function handleDrop(e: DragEvent) {
     @click.stop="handleClickCanvas" @dragover="handleDragOver" @drop="handleDrop"
   >
     <template v-for="item in designerStore.widgets" :key="item.id">
-      <DesignerWidget :widget="item" @mousedown="handleWidgetMouseDown" @click-widget="handleClickWidget" />
+      <DesignerWidget :widget="item" @mousedown="handleWidgetMouseDown" @click-widget="handleClickWidget" @resize="handleResize" />
     </template>
     <DragDistanceIndicator :widget="designerStore.currentWidget" :is-dragging="isDragging" />
   </div>

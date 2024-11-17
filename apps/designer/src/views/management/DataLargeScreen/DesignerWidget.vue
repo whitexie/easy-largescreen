@@ -2,9 +2,6 @@
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
 import { useLargeScreenDesigner } from '@/stores/designer';
 import WidgetRender from '@/views/render/WidgetRender.vue';
-import { inject, type Ref } from 'vue';
-import { CANVAS_ELEMENT_KEY } from './provideKey';
-import { useWidgetResize } from './useWidgetResize';
 
 interface Props {
   widget: DataLargeScreenField
@@ -14,24 +11,24 @@ const props = defineProps<Props>();
 const emits = defineEmits<{
   clickWidget: [DataLargeScreenField]
   mousedown: [MouseEvent, DataLargeScreenField]
+  resize: [ -1 | 0 | 1, -1 | 0 | 1]
 }>();
-const canvasRef = inject<Ref<HTMLElement | null>>(CANVAS_ELEMENT_KEY, ref(null));
 const widgetRef = ref<HTMLDivElement | null>(null);
 const designerStore = useLargeScreenDesigner();
-const { handleActiveResize } = useWidgetResize();
 
-const commonClass = 'graphicbox-resize absolute z-10 w-10px h-10px  border-amber';
+const commonClass = 'graphicbox-resize select-none absolute z-10 w-10px h-10px  border-amber';
 
+const activeWidget = computed(() => designerStore.temporaryState.currentWidgetId === props.widget.id);
 const layoutStyle = computed(() => {
   const { size: { width, height }, location: { x, y } } = props.widget;
+  const zIndex = activeWidget.value ? 60001 : '';
   return {
+    zIndex,
     width: `${width}px`,
     height: `${height}px`,
     transform: `translate(${x}px, ${y}px)`,
   };
 });
-
-const activeWidget = computed(() => designerStore.temporaryState.currentWidgetId === props.widget.id);
 
 function handleClickWidget() {
   emits('clickWidget', props.widget);
@@ -42,8 +39,7 @@ function handleMouseDown(event: MouseEvent) {
 }
 
 function handleResize(horizontal: -1 | 0 | 1, vertical: -1 | 0 | 1) {
-  const scale = designerStore.temporaryState.scale / 100;
-  handleActiveResize(props.widget, canvasRef.value, horizontal, vertical, scale);
+  emits('resize', horizontal, vertical);
 }
 
 onMounted(() => {
@@ -56,7 +52,6 @@ onMounted(() => {
 <template>
   <div ref="widgetRef" class="border absolute top-0 left-0 border-gray-400 cursor-pointer" :style="layoutStyle" @mousedown="handleMouseDown" @click.stop="handleClickWidget">
     <template v-if="activeWidget">
-      <div class="mask absolute top-0 left-0 bottom-0 right-0 z-60001" />
       <!-- 左上 -->
       <div
         :class="commonClass"
@@ -106,14 +101,9 @@ onMounted(() => {
         @mousedown.stop="handleResize(1, 1)"
       />
     </template>
-    <div class="w-full h-full overflow-hidden">
+    <div class="w-full h-full overflow-hidden relative">
       <WidgetRender :widget="widget" :hidden-layout="true" />
     </div>
+    <div class="mask absolute top-0 left-0 bottom-0 right-0 z-60001" />
   </div>
 </template>
-
-<style scoped>
-.mask {
-  pointer-events: none;
-}
-</style>

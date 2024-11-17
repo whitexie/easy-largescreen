@@ -22,14 +22,13 @@ export function useDraggable(option: Options) {
     startOffsetPosition.x = (event.clientX - position.value.x * option.value.scale);
     startOffsetPosition.y = (event.clientY - position.value.y * option.value.scale);
 
-    document.addEventListener('mousemove', handleMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mouseup', handleMouseUp);
   }
 
   function handleMove(event: MouseEvent) {
     isDragging.value = true;
     event.stopPropagation();
-    // console.log('handleMove');
 
     const x = event.clientX - startOffsetPosition.x;
     const y = event.clientY - startOffsetPosition.y;
@@ -37,9 +36,11 @@ export function useDraggable(option: Options) {
   }
 
   function handleMouseUp() {
-    isDragging.value = false;
-    document.removeEventListener('mousemove', handleMove);
-    document.removeEventListener('mouseup', handleMouseUp);
+    window.removeEventListener('mousemove', handleMove);
+    window.removeEventListener('mouseup', handleMouseUp);
+    setTimeout(() => {
+      isDragging.value = false;
+    }, 300);
   }
 
   return {
