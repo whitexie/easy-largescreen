@@ -253,6 +253,9 @@ importers:
       vite:
         specifier: ^5.1.6
         version: 5.2.8(@types/node@20.14.9)(less@4.2.0)(sugarss@2.0.0)(terser@5.31.6)
+      vite-bundle-analyzer:
+        specifier: ^0.13.1
+        version: 0.13.1
       vite-plugin-vue-devtools:
         specifier: ^7.0.18
         version: 7.0.26(rollup@4.22.4)(vite@5.2.8(@types/node@20.14.9)(less@4.2.0)(sugarss@2.0.0)(terser@5.31.6))(vue@3.5.4(typescript@4.9.5))
@@ -8235,6 +8238,9 @@ packages:
 
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
+
+  vite-bundle-analyzer@0.13.1:
+    resolution: {integrity: sha512-471KXy0cq8L9voQnkLwintkDewhUDxSOUfUq5qgCXalORVmMt4W5JbcLVR6ybEHG6K83afs9/pD7LAlnJYS4mQ==}
 
   vite-hot-client@0.2.3:
     resolution: {integrity: sha512-rOGAV7rUlUHX89fP2p2v0A2WWvV3QMX2UYq0fRqsWSvFvev4atHWqjwGoKaZT1VTKyLGk533ecu3eyd0o59CAg==}
@@ -18364,6 +18370,8 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
+
+  vite-bundle-analyzer@0.13.1: {}
 
   vite-hot-client@0.2.3(vite@5.2.8(@types/node@20.14.9)(less@4.2.0)(sugarss@2.0.0)(terser@5.31.6)):
     dependencies:

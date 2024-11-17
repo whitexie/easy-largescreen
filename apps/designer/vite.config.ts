@@ -7,7 +7,7 @@ import AutoImport from 'unplugin-auto-import/vite';
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 import Comonents from 'unplugin-vue-components/vite';
 import { defineConfig, loadEnv } from 'vite';
-import VueDevTools from 'vite-plugin-vue-devtools';
+import { analyzer } from 'vite-bundle-analyzer';
 
 const env = loadEnv('', process.cwd());
 
@@ -16,13 +16,14 @@ export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
-    VueDevTools(),
     UnoCSS('./uno.config.ts'),
     AutoImport({
       imports: ['vue'],
       dts: './src/auto-imports.d.ts',
       vueTemplate: true,
     }),
+
+    analyzer(),
 
     Comonents({
       resolvers: [NaiveUiResolver()],

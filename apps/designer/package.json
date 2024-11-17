@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "run -p type-check \"build-only {@}\" --",
+    "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
@@ -48,6 +48,7 @@
     "unplugin-auto-import": "0.17.4",
     "unplugin-vue-components": "^0.26.0",
     "vite": "^5.1.6",
+    "vite-bundle-analyzer": "^0.13.1",
     "vite-plugin-vue-devtools": "^7.0.18",
     "vitest": "^1.4.0",
     "vue-tsc": "^2.0.6"
