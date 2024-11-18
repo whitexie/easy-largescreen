@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script lang="ts" name="Text" setup>
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
 import type { TextProps } from './config';
 

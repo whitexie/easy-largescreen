@@ -1,4 +1,8 @@
-import type { Component } from 'vue';
+import { firstUpperCase } from '@/utils';
+import { createComponentMap } from '@/utils/component';
+
+const RenderComponentModules = createComponentMap(import.meta.glob('../*/Render.vue'));
+const PaneComponentModules = createComponentMap(import.meta.glob('../*/Pane.vue'));
 
 export const MATERIAL_MAPPING = new Map<string, MaterialItem>();
 
@@ -7,8 +11,6 @@ interface MaterialItem<T extends Record<string, any> = Record<string, any>> {
   name: string
   icon: string
   size: { width: number, height: number }
-  renderComponent: Component
-  paneComponent: Component
   props: T
 }
 
@@ -24,4 +26,12 @@ export function registerMaterial<T extends Record<string, any>>(option: Material
 
 export function getMaterial(id: string) {
   return MATERIAL_MAPPING.get(id);
+}
+
+export function getRenderComponent(id: string) {
+  return RenderComponentModules[firstUpperCase(id)];
+}
+
+export function getPaneComponent(id: string) {
+  return PaneComponentModules[firstUpperCase(id)];
 }

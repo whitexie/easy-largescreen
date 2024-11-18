@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
-import { getMaterial } from '@/materials/base';
+import { getRenderComponent } from '@/materials/base';
 
 interface Props {
   widget: DataLargeScreenField
@@ -11,11 +11,7 @@ const props = defineProps<Props>();
 
 const RenderComponent = computed(() => {
   const component = props.widget.component;
-  const material = getMaterial(component);
-  if (material) {
-    return material.renderComponent;
-  }
-  return '';
+  return getRenderComponent(component);
 });
 
 const layoutStyle = computed(() => {

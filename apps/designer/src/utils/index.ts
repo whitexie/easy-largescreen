@@ -15,3 +15,7 @@ export function generateRandomID() {
   // 使用当前时间戳和随机数生成唯一ID
   return `id-${Date.now()}${id}`;
 }
+
+export function firstUpperCase(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

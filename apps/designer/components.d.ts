@@ -16,6 +16,7 @@ declare module 'vue' {
     FieldPane: typeof import('./src/components/Designer/PropsPane/FieldPane.vue')['default']
     LayerItem: typeof import('./src/components/Designer/Layers/LayerItem.vue')['default']
     Layers: typeof import('./src/components/Designer/Layers/index.vue')['default']
+    Loading: typeof import('./src/components/Loading/index.vue')['default']
     ManagementLayout: typeof import('./src/components/Layout/ManagementLayout.vue')['default']
     Menus: typeof import('./src/components/Designer/Menus/Menus.vue')['default']
     NButton: typeof import('naive-ui')['NButton']

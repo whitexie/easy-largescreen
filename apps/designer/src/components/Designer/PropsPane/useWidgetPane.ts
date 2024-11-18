@@ -1,4 +1,4 @@
-import { getMaterial } from '@/materials/base';
+import { getPaneComponent } from '@/materials/base';
 import { useLargeScreenDesigner } from '@/stores/designer';
 
 export function useWidgetPane() {
@@ -19,7 +19,7 @@ export function useWidgetPane() {
       return '';
     }
     const key = widget.value.component;
-    return getMaterial(key)!.paneComponent;
+    return getPaneComponent(key);
   });
 
   return {

@@ -1,14 +1,10 @@
 <script lang="ts" setup>
-import Layers from '@/components/Designer/Layers/index.vue';
-import Pane from '@/components/Designer/PropsPane/Pane.vue';
 import { useLargeScreenDesigner } from '@/stores/designer';
+import { loadAsyncComponent } from '@/utils/component';
 import { useMessage } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { provide } from 'vue';
-import DesignerHeader from './DesignerHeader.vue';
-import Footer from './Footer.vue';
 import { CANVAS_ELEMENT_KEY } from './provideKey';
-import WidgetCanvas from './WidgetCanvas.vue';
 
 const props = defineProps<{
   id: string
@@ -16,6 +12,13 @@ const props = defineProps<{
 
 const designerStore = useLargeScreenDesigner();
 const message = useMessage();
+
+// ---- async component----
+const DesignerHeader = loadAsyncComponent(() => import('./DesignerHeader.vue'));
+const Footer = loadAsyncComponent(() => import('./Footer.vue'));
+const WidgetCanvas = loadAsyncComponent(() => import('./WidgetCanvas.vue'));
+const Layers = loadAsyncComponent(() => import('@/components/Designer/Layers/index.vue'));
+const Pane = loadAsyncComponent(() => import('@/components/Designer/PropsPane/Pane.vue'));
 
 window.$message = message;
 

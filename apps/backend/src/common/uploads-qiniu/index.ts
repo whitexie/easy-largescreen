@@ -9,8 +9,6 @@ const options = {
   expires: Number(QINIU_EXPIRES) || 7200,
 };
 
-console.log('options => ', options);
-
 const putPolicy = new qiniu.rs.PutPolicy(options);
 
 export function getUploadToken() {

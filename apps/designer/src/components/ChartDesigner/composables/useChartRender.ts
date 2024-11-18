@@ -89,7 +89,6 @@ export function useChartRender(options?: Partial<ChartRederStateOptions>) {
    * @param boxId 盒子id
    * @param fieldOption 字段配置
    * @param index 索引
-   * @returns
    */
   function addField(boxId: BoxId, fieldOption: OriginalField, index?: number): Field {
     const box = state.dropBoxSettings[boxId];

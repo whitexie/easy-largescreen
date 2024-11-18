@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script lang="ts" name="Chart" setup>
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
 import ChartRender from '@/components/Charts/ChartRender.vue';
 
