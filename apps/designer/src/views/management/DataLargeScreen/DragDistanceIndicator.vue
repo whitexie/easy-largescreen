@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
 import { useLargeScreenDesigner } from '@/stores/designer';
+import { useThemeVars } from 'naive-ui';
 
 interface Props {
   isDragging: boolean
@@ -11,8 +12,11 @@ const props = withDefaults(defineProps<Props>(), {
   isDragging: false,
 });
 
+const themeVars = useThemeVars();
 const designerStore = useLargeScreenDesigner();
 const widgetMargins = reactive({ top: 0, left: 0, right: 0, bottom: 0, horizontalLength: 0, verticalLength: 0 });
+
+const primaryColor = computed(() => themeVars.value.primaryColor);
 
 function calculateMargins() {
   const { widget } = props;
@@ -79,7 +83,7 @@ watch(
 
 <style lang="less" scoped>
 .auxiliary-line {
-  --line-color: #18a058;
+  --line-color: v-bind(primaryColor);
   --line-width: 5px;
   --dashed-line-length: 10px;
   --direction: bottom;

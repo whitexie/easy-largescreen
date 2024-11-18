@@ -24,7 +24,9 @@ function handleBack() {
       </div>
       <div class="end">
         <div class="flex items-center gap-2">
-          <n-button>预览</n-button>
+          <n-button type="info">
+            预览
+          </n-button>
           <n-button type="primary" @click.stop="designerStore.saveLargeScreen">
             保存
           </n-button>

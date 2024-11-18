@@ -9,7 +9,7 @@ declare module 'vue-router' {
 
 const managementRoutes: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: '',
     redirect: { name: 'DataLargeScreen' },
   },
   {

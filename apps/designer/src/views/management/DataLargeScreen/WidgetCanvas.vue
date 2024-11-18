@@ -47,7 +47,7 @@ function handleClickWidget(widget: DataLargeScreenField) {
 }
 
 function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) {
-  if (spacePressed.value) {
+  if (spacePressed.value || designerStore.currentWidget?.isLock) {
     return;
   }
   designerStore.setCurrentWidget(widget.id);
