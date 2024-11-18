@@ -9,22 +9,9 @@ declare module 'vue-router' {
 
 const managementRoutes: RouteRecordRaw[] = [
   {
-    path: '',
-    name: 'Dashboard',
+    path: '/',
     redirect: { name: 'DataLargeScreen' },
-    // component: () => import('@/views/management/Dashboard.vue'),
-    // meta: {
-    //   title: '仪表盘',
-    // },
   },
-  // {
-  //   path: 'data-set',
-  //   name: 'Dataset',
-  //   component: () => import('@/views/management/Dataset/Dataset.vue'),
-  //   meta: {
-  //     title: '数据集',
-  //   },
-  // },
   {
     path: 'largescreen',
     name: 'DataLargeScreen',

@@ -5,6 +5,8 @@ apps/backend/dist
 
 # env
 *.env
+!apps/designer/.env
+*.local
 
 npm-debug.log*
 pnpm-debug.log*

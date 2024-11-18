@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit --project ./tsconfig.json",
+    "type-check": "vue-tsc --build --force",
     "openapi": "npx tsx ./scripts/openapi/openapi.config.ts"
   },
   "dependencies": {
@@ -19,7 +19,6 @@
     "@yss/dashboard-core": "workspace:*",
     "@yss/utils": "workspace:*",
     "axios": "^1.7.7",
-    "localforage": "^1.10.0",
     "lodash-es": "^4.17.21",
     "pinia": "^2.1.7",
     "qiniu-js": "3.4.2",
@@ -49,6 +48,7 @@
     "unplugin-vue-components": "^0.26.0",
     "vite": "^5.1.6",
     "vite-bundle-analyzer": "^0.13.1",
+    "vite-plugin-compression": "^0.5.1",
     "vite-plugin-vue-devtools": "^7.0.18",
     "vitest": "^1.4.0",
     "vue-tsc": "^2.0.6"

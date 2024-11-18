@@ -1,10 +1,12 @@
 <script name="TextPane" lang="ts" setup>
 import type { ChartRenderState } from '@/types/charts';
 import type { MaterialProps } from '@/types/dataLargeScreen';
-import ChartDesigner from '@/components/ChartDesigner/ChartDesigner.vue';
+import { loadAsyncComponent } from '@/utils/component';
 import { nextTick } from 'vue';
 
 const props = defineProps<MaterialProps>();
+
+const ChartDesigner = loadAsyncComponent(() => import('@/components/ChartDesigner/ChartDesigner.vue'));
 
 const showDesigner = ref(false);
 

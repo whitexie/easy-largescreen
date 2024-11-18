@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BoxId, ChartRenderState, Field, OriginalField } from '@/types/charts';
 import FieldPane from '@/components/Designer/PropsPane/FieldPane.vue';
-import ChartRender from '../Charts/ChartRender.vue';
+import { loadAsyncComponent } from '@/utils/component';
 import { useChartDesigner } from './composables/useChartDesigner';
 import { useDatasetList, useFields } from './composables/useDatasetList';
 import DropFields from './DropFields.vue';
@@ -16,6 +16,8 @@ const emit = defineEmits<{
 const { datasetId, state, addField, removeField, updateFiledIndex, chartConfig, data, getChartConfig } = useChartDesigner(props.chartConfig);
 const { datasetList } = useDatasetList();
 const { dimensionFields, metricFields } = useFields(datasetId);
+
+const ChartRender = loadAsyncComponent(() => import('@/components/Charts/ChartRender.vue'));
 
 const datasetListOptions = computed(() => {
   return datasetList.map((item) => {
