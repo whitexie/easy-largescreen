@@ -21,12 +21,15 @@ const plugins = [
     dts: './src/auto-imports.d.ts',
     vueTemplate: true,
   }),
-  analyzer(),
   Comonents({
     resolvers: [NaiveUiResolver()],
   }),
   viteCompression(),
 ];
+
+if (process.env.NODE_ENV === 'local') {
+  plugins.push(analyzer());
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
