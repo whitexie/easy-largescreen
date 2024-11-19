@@ -40,5 +40,6 @@ declare module 'vue' {
     Pane: typeof import('./src/components/Designer/PropsPane/Pane.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Upload: typeof import('./src/components/Upload/index.vue')['default']
   }
 }

@@ -1,22 +1,8 @@
 <script lang="ts" setup>
-import type { UploadCustomRequestOptions } from 'naive-ui';
+import Upload from '@/components/Upload/index.vue';
 import { useLargeScreenDesigner } from '@/stores/designer';
-import { uploadFile } from '@/utils';
 
 const designerStore = useLargeScreenDesigner();
-
-async function customRequest(options: UploadCustomRequestOptions) {
-  const { file } = options;
-  if (file.file) {
-    designerStore.state.pageConfig.background.image = await uploadFile(file.file);
-  }
-}
-
-const fileList = computed(() => {
-  const { image } = designerStore.state.pageConfig.background;
-
-  return image ? [{ id: image, url: image, status: 'finished', thumbnailUrl: image }] : [];
-});
 </script>
 
 <template>
@@ -51,13 +37,14 @@ const fileList = computed(() => {
         </div>
         <div class="p-2 px-1 flex gap-1 items-center mt-2">
           <span class="shrink-0">图片</span>
-          <n-upload
+          <!-- <n-upload
             :default-file-list="fileList"
             :custom-request="customRequest"
             :max="1"
             accept="image/jpg,image/jpeg,image/png"
             list-type="image-card"
-          />
+          /> -->
+          <Upload v-model="designerStore.state.pageConfig.background.image" accept="image/jpg,image/jpeg,image/png" />
         </div>
       </n-collapse-item>
     </n-collapse>
