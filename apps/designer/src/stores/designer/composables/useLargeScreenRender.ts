@@ -28,9 +28,15 @@ export function useLargeScreenRender() {
     return {
       width: `${width}px`,
       height: `${height}px`,
-      // backgroundColor: color,
-      // backgroundImage: image,
-      // backgroundSize: 'cover',
+    };
+  });
+
+  const canvasBackgroundStyle = computed(() => {
+    const { pageConfig: { background: { color, image } } } = state;
+    return {
+      backgroundColor: color,
+      backgroundImage: `url(${image})`,
+      backgroundSize: 'cover',
     };
   });
 
@@ -46,17 +52,39 @@ export function useLargeScreenRender() {
     return id ? { ...config, id } : config;
   }
 
-  async function initConfig(id: string) {
+  function __assignState(data: Partial<API.LargeScreenDetailDto>) {
+    if (data.id) {
+      state.id = data.id;
+    }
+    if (data.name) {
+      state.name = data.name;
+    }
+    if (data.pageConfig) {
+      state.pageConfig = data.pageConfig;
+    }
+    if (data.widgets) {
+      data.widgets.forEach((item) => {
+        addWidgetById(item.component, item);
+      });
+    }
+  }
+
+  async function initConfigById(id: string) {
     const { error, data } = await api.largescreen.detail({ id });
     if (error) {
       return;
     }
-    state.id = data.id;
-    state.name = data.name;
-    state.pageConfig = data.pageConfig;
-    data.widgets.forEach((item) => {
-      addWidgetById(item.component, item);
-    });
+
+    __assignState(data);
+  }
+
+  async function initConfig(option: string | Partial<API.LargeScreenDetailDto>) {
+    if (typeof option === 'string') {
+      await initConfigById(option);
+    }
+    else {
+      __assignState(option);
+    }
   }
 
   return {
@@ -65,6 +93,7 @@ export function useLargeScreenRender() {
     widgets,
     widgetMap,
     canvasStyle,
+    canvasBackgroundStyle,
     getConfig,
     initConfig,
     addWidget,

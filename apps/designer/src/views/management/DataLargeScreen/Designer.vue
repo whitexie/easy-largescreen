@@ -12,6 +12,7 @@ const props = defineProps<{
 
 const designerStore = useLargeScreenDesigner();
 const message = useMessage();
+const drawerVisible = ref(false);
 
 // ---- async component----
 const DesignerHeader = loadAsyncComponent(() => import('./DesignerHeader.vue'));
@@ -19,6 +20,7 @@ const Footer = loadAsyncComponent(() => import('./Footer.vue'));
 const WidgetCanvas = loadAsyncComponent(() => import('./WidgetCanvas.vue'));
 const Layers = loadAsyncComponent(() => import('@/components/Designer/Layers/index.vue'));
 const Pane = loadAsyncComponent(() => import('@/components/Designer/PropsPane/Pane.vue'));
+const Render = loadAsyncComponent(() => import('@/views/render/Render.vue'));
 
 window.$message = message;
 
@@ -37,7 +39,7 @@ onUnmounted(() => {
 
 <template>
   <div class="w-full h-full overflow-hidden">
-    <DesignerHeader />
+    <DesignerHeader @preview="drawerVisible = true" />
     <main class="h-calc[100%-50px] w-full relative grid grid-cols-3 canvas-warpper bg-#f2f2f2">
       <Layers />
       <div class="relative">
@@ -48,6 +50,11 @@ onUnmounted(() => {
       </div>
       <Pane />
     </main>
+    <n-drawer v-model:show="drawerVisible" height="95vh" placement="bottom">
+      <n-drawer-content title="预览" closable :scrollbar-props="{ 'content-class': ' w-full h-full' }">
+        <Render :config="designerStore.getConfig()" />
+      </n-drawer-content>
+    </n-drawer>
   </div>
 </template>
 

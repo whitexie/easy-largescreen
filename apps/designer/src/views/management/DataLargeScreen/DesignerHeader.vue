@@ -4,11 +4,19 @@ import { useLargeScreenDesigner } from '@/stores/designer';
 import { Icon } from '@iconify/vue/dist/iconify.js';
 import { useRouter } from 'vue-router';
 
+const emits = defineEmits<{
+  (e: 'preview'): void
+}>();
+
 const designerStore = useLargeScreenDesigner();
 const router = useRouter();
 
 function handleBack() {
   router.back();
+}
+
+function handlePreview() {
+  emits('preview');
 }
 </script>
 
@@ -24,7 +32,7 @@ function handleBack() {
       </div>
       <div class="end">
         <div class="flex items-center gap-2">
-          <n-button type="info">
+          <n-button type="info" @click="handlePreview">
             预览
           </n-button>
           <n-button type="primary" @click.stop="designerStore.saveLargeScreen">

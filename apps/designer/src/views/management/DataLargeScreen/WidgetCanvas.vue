@@ -16,11 +16,11 @@ const { canvasRef, offsetStyle, cursorStyle, handleMouseDown, spacePressed } = u
 const { handleActiveResize, isResizing } = useWidgetResize();
 
 const canvasStyle = computed(() => {
-  const { pageConfig: { width, height } } = designerStore.state;
+  const { canvasBackgroundStyle, canvasStyle } = designerStore;
   const { scale } = designerStore.temporaryState;
   return {
-    width: `${width}px`,
-    height: `${height}px`,
+    ...canvasBackgroundStyle,
+    ...canvasStyle,
     cursor: cursorStyle.value,
     ...offsetStyle.value,
     transform: `scale(${scale / 100})`,
@@ -126,5 +126,6 @@ function handleDrop(e: DragEvent) {
   background-image: linear-gradient(90deg, var(--line-color) 3%, transparent 0),
     linear-gradient(1turn, var(--line-color) 3%, transparent 0);
   background-size: var(--grid-size) var(--grid-size);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px 0px;
 }
 </style>

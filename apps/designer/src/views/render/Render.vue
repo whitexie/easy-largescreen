@@ -4,7 +4,8 @@ import { useLargeScreenRender } from '@/stores/designer/composables/useLargeScre
 import WidgetRender from './WidgetRender.vue';
 
 const props = defineProps<{
-  id: string
+  id?: string
+  config?: Omit<API.LargeScreenDetailDto, 'id' | 'isRelease'>
 }>();
 
 const scale = ref(1);
@@ -20,14 +21,10 @@ const canvasRef = computed({
 });
 
 const canvasStyle = computed(() => {
-  const { pageConfig: { width, height, background: { color, image } } } = largeScreenRender.state;
-
+  const { canvasBackgroundStyle, canvasStyle } = largeScreenRender;
   return {
-    width: `${width}px`,
-    height: `${height}px`,
-    backgroundColor: color,
-    backgroundImage: image,
-    backgroundSize: 'cover',
+    ...canvasBackgroundStyle.value,
+    ...canvasStyle.value,
     transform: `translate(-50%, -50%) scale(${scale.value})`,
   };
 });
@@ -43,7 +40,7 @@ function handleWindowResize() {
 }
 
 onMounted(async () => {
-  await largeScreenRender.initConfig(props.id);
+  await largeScreenRender.initConfig(props.id || props.config || {});
   onWindowResize(handleWindowResize);
   handleWindowResize();
 });
