@@ -44,6 +44,8 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: env.VITE_API_HOST || 'http://127.0.0.1:3000',
+        secure: false,
+        changeOrigin: true,
         rewrite: (path: string) => path.replace(/^\/api/, ''),
       },
     },
