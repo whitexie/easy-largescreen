@@ -25,12 +25,12 @@ function setItalic() {
   textStyle.value.fontStyle = textStyle.value.fontStyle ? '' : 'italic';
 }
 function setStyle(type: 'underline' | 'line-through') {
-  // console.log('before setStyle => ', textStyle.value);
-  if (textStyle.value.textDecorationLine.includes(type)) {
-    textStyle.value.textDecorationLine = textStyle.value.textDecorationLine.replace(type, '').trim();
+  const { textDecorationLine } = textStyle.value;
+  if (textDecorationLine.includes(type)) {
+    textStyle.value.textDecorationLine = textDecorationLine.replace(type, '').trim();
   }
   else {
-    textStyle.value.textDecorationLine = [textStyle.value.textDecorationLine, type].join(' ');
+    textStyle.value.textDecorationLine = [textDecorationLine, type].join(' ');
   }
 }
 </script>
@@ -53,8 +53,8 @@ function setStyle(type: 'underline' | 'line-through') {
             </n-color-picker>
             <n-select v-model:value="textStyle.fontSize" size="small" class="w-80px" :options="fontSizeOptions" />
           </div>
-          <div class="flex items-center justify-between gap-1 mt-2 border-solid py-1 px-1 pl-2 border-color-#e8e8f0">
-            <div class="w-60px">
+          <div class="flex items-center justify-between gap-1 mt-2 border-solid py-1 px-1 pl-2 border-color-#e8e8f0 border-width-1px">
+            <div class="w-60px text-#333333">
               样式
             </div>
             <div class="flex flex-1 items-center justify-around gap-2">
@@ -66,8 +66,8 @@ function setStyle(type: 'underline' | 'line-through') {
             </div>
           </div>
 
-          <div class="flex items-center justify-between gap-1 mt-2 border-solid py-1 px-1 pl-2 border-color-#e8e8f0">
-            <div class="w-60px">
+          <div class="flex items-center justify-between gap-1 mt-2 border-solid py-1 px-1 pl-2 border-color-#e8e8f0 border-width-1px">
+            <div class="w-60px text-#333333">
               对齐
             </div>
             <div class="flex flex-1 items-center justify-around gap-2">

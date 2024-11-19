@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { NPopover } from 'naive-ui';
 import { useTemplateRef } from 'vue';
 
 interface OptionItem {
@@ -10,58 +11,27 @@ interface Props {
   options: OptionItem[]
 }
 const props = defineProps<Props>();
-const showPane = ref(false);
-const panePosition = reactive({ top: 0, left: 0 });
-const triggerRef = useTemplateRef<HTMLDivElement>('triggerRef');
-
 const modelValue = defineModel('modelValue');
+const popoverRef = useTemplateRef<typeof NPopover>('popoverRef');
 
 const currentValueIcon = computed(() => {
   const item = props.options.find(item => item.value === modelValue.value);
   return item ? item.icon : props.options[0].icon;
 });
 
-const panePositionStyle = computed(() => {
-  const { left, top } = panePosition;
-  return {
-    left: `${left}px`,
-    top: `${top}px`,
-  };
-});
-
-function onShowPane() {
-  if (!triggerRef.value) {
-    return;
-  }
-  showPane.value = true;
-  const { left, top, height } = triggerRef.value.getBoundingClientRect();
-  panePosition.left = left;
-  panePosition.top = top + height + 5;
-}
-
-function onHiddenPane() {
-  showPane.value = false;
-}
-
 function handleClick(item: OptionItem) {
   modelValue.value = item.value;
-  showPane.value = false;
+  popoverRef.value?.setShow(false);
 }
 </script>
 
 <template>
-  <div class="dropdown relative text-14px">
-    <div
-      ref="triggerRef" :class="{ 'bg-#e0e0e0': showPane }" class="cursor-pointer flex items-center p-1 px-2"
-      @click="onShowPane"
-    >
-      <div :class="currentValueIcon" class="w-1em h-1em" />
-      <div class="i-akar-icons:triangle-down-fill w-1em h-1em" />
-    </div>
-    <Teleport v-if="showPane" to="body">
-      <div class="mask absolute left-0 top-0 w-full h-full z-1023" @click="onHiddenPane" />
-      <div class="pane absolute z-1024 flex items-center gap-1 bg-white shadow p-1" :style="panePositionStyle">
-        <!--  -->
+  <div class="dropdown relative text-14px font-bold">
+    <n-popover ref="popoverRef" trigger="click" :raw="true" placement="bottom">
+      <template #trigger>
+        <div :class="currentValueIcon" class="w-1em h-1em cursor-pointer color-black" />
+      </template>
+      <div class="flex items-center gap-1 bg-white shadow p-1">
         <div
           v-for="item in options" :key="item.value"
           class="wrap p-1 hover:(bg-#e0e0e0) flex justify-center items-center"
@@ -72,6 +42,6 @@ function handleClick(item: OptionItem) {
           />
         </div>
       </div>
-    </Teleport>
+    </n-popover>
   </div>
 </template>
