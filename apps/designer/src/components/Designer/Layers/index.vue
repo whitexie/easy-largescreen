@@ -16,6 +16,15 @@ const layersClass = computed(() => {
 
 const designerStore = useLargeScreenDesigner();
 
+const widgets = computed({
+  get() {
+    return designerStore.widgets.map(item => item).reverse();
+  },
+  set(value) {
+    designerStore.widgets.splice(0, designerStore.widgets.length, ...value.reverse());
+  },
+});
+
 function handleClick() {
   isExpand.value = !isExpand.value;
 }
@@ -35,8 +44,8 @@ function handleClickLayerItem(item: DataLargeScreenField) {
       <div :class="icon" class="size-1.6em cursor-pointer shrink-0" @click="handleClick" />
     </div>
     <div>
-      <VueDraggable v-model="designerStore.widgets" group="people" :animation="200" item-key="id" handle=".cursor-move">
-        <div v-for="item in designerStore.widgets" :key="item.id">
+      <VueDraggable v-model="widgets" group="people" :animation="200" item-key="id" handle=".cursor-move">
+        <div v-for="item in widgets" :key="item.id">
           <LayerItem
             :item="item" :is-expand="isExpand"
             :is-selected="designerStore.temporaryState.currentWidgetId === item.id" @click="handleClickLayerItem"
