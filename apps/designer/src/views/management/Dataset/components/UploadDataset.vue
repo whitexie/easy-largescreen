@@ -2,7 +2,7 @@
 import type { Dataset } from '@/types/dataset';
 import type { UploadFileInfo } from 'naive-ui';
 import api from '@/api';
-import { ParseExcel, type RawData } from '@yss/dashboard-core';
+import { ParseExcel, type RawData } from '@yss/utils';
 import { generateId } from '@yss/utils';
 import { useMessage } from 'naive-ui';
 import { ref, toRaw, watch } from 'vue';
@@ -35,7 +35,7 @@ watch(fileList, async () => {
   await parse.init(file as File);
   try {
     const fields = parse.getFieldsMate();
-    const data = parse.getData<RawData>(undefined, { header: undefined });
+    const data = parse.getData<RawData>();
 
     curDataset.name = name;
     curDataset.data = data;

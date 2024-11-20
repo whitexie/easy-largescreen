@@ -17,7 +17,6 @@
     "@antv/g2": "^5.2.5",
     "@unocss/reset": "^0.59.0",
     "@vueuse/core": "^11.2.0",
-    "@yss/dashboard-core": "workspace:*",
     "@yss/utils": "workspace:*",
     "axios": "^1.7.7",
     "lodash-es": "^4.17.21",

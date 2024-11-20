@@ -1,5 +1,5 @@
 import type { CHART_TYPE } from '@/components/Charts/constants/chart';
-import type { CellType } from '@yss/dashboard-core';
+import type { CellType } from '@yss/utils';
 
 export interface FieldConfigItem {
   name: string

@@ -13,6 +13,14 @@ const managementRoutes: RouteRecordRaw[] = [
     name: 'Management',
     redirect: { name: 'DataLargeScreen' },
   },
+  // {
+  //   path: 'dataset',
+  //   name: 'Dataset',
+  //   component: () => import('@/views/management/Dataset/Dataset.vue'),
+  //   meta: {
+  //     title: '数据集',
+  //   },
+  // },
   {
     path: 'largescreen',
     name: 'DataLargeScreen',

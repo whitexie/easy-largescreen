@@ -1,4 +1,4 @@
-import type { Field, RawData } from '@yss/dashboard-core';
+import type { Field, RawData } from '@yss/utils';
 
 export interface Dataset {
   name: string

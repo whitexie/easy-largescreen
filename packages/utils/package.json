@@ -5,11 +5,13 @@
   "author": "",
   "license": "ISC",
   "keywords": [],
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
     "test:unit": "vitest ."
   },
   "dependencies": {
+    "dayjs": "^1.11.10",
+    "exceljs": "^4.4.0",
     "nanoid": "^5.0.7"
   }
 }
