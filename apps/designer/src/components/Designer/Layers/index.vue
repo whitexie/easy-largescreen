@@ -30,7 +30,7 @@ function handleClick() {
 }
 
 function handleClickLayerItem(item: DataLargeScreenField) {
-  designerStore.setCurrentWidget(item.id);
+  designerStore.setCurrentWidget(item);
 }
 </script>
 
@@ -48,7 +48,7 @@ function handleClickLayerItem(item: DataLargeScreenField) {
         <div v-for="item in widgets" :key="item.id">
           <LayerItem
             :item="item" :is-expand="isExpand"
-            :is-selected="designerStore.temporaryState.currentWidgetId === item.id" @click="handleClickLayerItem"
+            :is-selected="designerStore.currentWidgetId === item.id" @click="handleClickLayerItem"
           />
         </div>
       </VueDraggable>

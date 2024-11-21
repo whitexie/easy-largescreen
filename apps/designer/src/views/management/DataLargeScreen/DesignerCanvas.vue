@@ -21,12 +21,12 @@ const { offsetStyle, cursorStyle, handleMouseDown, spacePressed } = useSpaceDrag
 const { handleActiveResize, isResizing } = useWidgetResize();
 
 // 组件移动
-const draggableOption = computed(() => ({ scale: designerStore.temporaryState.scale / 100 }));
+const draggableOption = computed(() => ({ scale: designerStore.scale / 100 }));
 const { handleMouseDown: startMove, initPosition, position, isDragging } = useDraggable(draggableOption);
 
 const canvasStyle = computed(() => {
   const { canvasBackgroundStyle, canvasStyle } = designerStore;
-  const { scale } = designerStore.temporaryState;
+  const { scale } = designerStore;
   return {
     ...canvasBackgroundStyle,
     ...canvasStyle,
@@ -49,7 +49,7 @@ watch(
 
 function handleClickWidget(widget: DataLargeScreenField) {
   if (!spacePressed.value) {
-    designerStore.setCurrentWidget(widget.id);
+    designerStore.setCurrentWidget(widget);
   }
 }
 
@@ -57,7 +57,7 @@ function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) 
   if (spacePressed.value || designerStore.currentWidget?.isLock) {
     return;
   }
-  designerStore.setCurrentWidget(widget.id);
+  designerStore.setCurrentWidget(widget);
   const { location } = widget;
   initPosition(location);
   startMove(event);
@@ -67,7 +67,7 @@ function handleClickCanvas() {
   if (isDragging.value || isResizing.value) {
     return;
   }
-  designerStore.setCurrentWidget('');
+  designerStore.setCurrentWidget(null);
 }
 
 function handleDragOver(e: DragEvent) {
@@ -75,7 +75,7 @@ function handleDragOver(e: DragEvent) {
 }
 
 function handleResize(horizontal: -1 | 0 | 1, vertical: -1 | 0 | 1) {
-  const scale = designerStore.temporaryState.scale / 100;
+  const scale = designerStore.scale / 100;
   handleActiveResize(designerStore.currentWidget!, canvasRef.value, horizontal, vertical, scale);
 }
 
@@ -94,7 +94,7 @@ function handleDrop(e: DragEvent) {
   const x = e.clientX - canvasRect.left;
   const y = e.clientY - canvasRect.top;
 
-  const scale = designerStore.temporaryState.scale / 100;
+  const scale = designerStore.scale / 100;
   const width = widgetConfig.size.width / scale;
   const height = widgetConfig.size.height / scale;
 
@@ -107,7 +107,7 @@ function handleDrop(e: DragEvent) {
   };
 
   const widget = designerStore.addWidget(menuItem, option);
-  designerStore.setCurrentWidget(widget.id);
+  designerStore.setCurrentWidget(widget);
 }
 </script>
 

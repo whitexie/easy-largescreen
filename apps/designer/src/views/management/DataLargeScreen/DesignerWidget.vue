@@ -18,10 +18,10 @@ const widgetRef = ref<HTMLDivElement | null>(null);
 const designerStore = useLargeScreenDesigner();
 const themeVars = useThemeVars();
 
-const commonClass = 'graphicbox-resize select-none absolute z-10 w-10px h-10px  border-amber';
+const commonClass = 'graphicbox-resize select-none  absolute z-10 w-10px h-10px  border-amber';
 
 const primaryColor = computed(() => themeVars.value.primaryColor);
-const activeWidget = computed(() => designerStore.temporaryState.currentWidgetId === props.widget.id);
+const activeWidget = computed(() => designerStore.currentWidgetId === props.widget.id);
 const layoutStyle = computed(() => {
   const { size: { width, height }, location: { x, y } } = props.widget;
   const zIndex = activeWidget.value ? 60001 : '';

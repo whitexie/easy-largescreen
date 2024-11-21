@@ -1,6 +1,7 @@
 import api from '@/api';
 import { defineStore } from 'pinia';
 import { useLargeScreenRender } from './composables/useLargeScreenRender';
+import { useSelectWidgets } from './composables/useSelectWidgets';
 
 interface PageConfig {
   background: {
@@ -34,24 +35,13 @@ function getDefaultState(): LargeScreenDesigner {
   };
 }
 
-function getDefaultTemporaryState() {
-  return {
-    currentDatasetId: '',
-    currentWidgetId: '',
-    scale: 100,
-    showDataset: true,
-  };
-}
-
 export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
   const { state, canvasRef, widgetMap, clearWidgets, getConfig, ...rest } = useLargeScreenRender();
 
   /** 临时的状态，仅在本地使用，数据不入库 */
-  const temporaryState = reactive(getDefaultTemporaryState());
-
-  const currentWidget = computed(() => {
-    return widgetMap.get(temporaryState.currentWidgetId) || null;
-  });
+  const { currentWidgetId, currentWidget, setCurrentWidget, clearSelectedWidgets } = useSelectWidgets();
+  const currentDatasetId = ref('');
+  const scale = ref(100);
 
   async function saveLargeScreen() {
     const { data, error, msg } = await api.largescreen.create(getConfig());
@@ -65,10 +55,6 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     window.$message.success('保存成功');
   }
 
-  function setCurrentWidget(id: string) {
-    temporaryState.currentWidgetId = id;
-  }
-
   function handleBestFitScale() {
     if (!canvasRef.value) {
       return;
@@ -77,17 +63,19 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     const margin = 30;
     const containerElement = canvasRef.value.parentElement as HTMLElement;
     const canvasElement = canvasRef.value;
-    temporaryState.scale = calculateBestFitScale(containerElement, canvasElement, margin);
+    scale.value = calculateBestFitScale(containerElement, canvasElement, margin);
     const { offsetHeight } = canvasElement;
     const { offsetHeight: containerHeight } = containerElement;
-    const y = (containerHeight - offsetHeight * temporaryState.scale / 100) / 2;
+    const y = (containerHeight - offsetHeight * scale.value / 100) / 2;
 
     return { x: margin, y };
   }
 
   async function $reset() {
+    clearSelectedWidgets();
     Object.assign(state, getDefaultState());
-    Object.assign(temporaryState, getDefaultTemporaryState());
+    scale.value = 100;
+    currentDatasetId.value = '';
     clearWidgets();
   }
 
@@ -101,10 +89,12 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
 
   return {
     state,
-    temporaryState,
     canvasRef,
     currentWidget,
     widgetMap,
+    scale,
+    currentWidgetId,
+    currentDatasetId,
     clearWidgets,
     getConfig,
     setCurrentWidget,
