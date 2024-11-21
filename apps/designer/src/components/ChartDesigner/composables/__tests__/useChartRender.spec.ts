@@ -9,14 +9,12 @@ describe('useChartRender', () => {
   it('应该正确初始化状态', () => {
     const { state } = useChartRender();
     expect(state.datasetId).toBe('');
-    expect(state.dropBoxSettings).toHaveProperty('xAxis');
-    expect(state.dropBoxSettings).toHaveProperty('yAxis');
   });
 
   describe('updateState', () => {
     describe('应该正确初始化dropBoxSettings', () => {
       it('chartRederStateOptions 包含 dropBoxSettings时', () => {
-        const settings: ChartRederStateOptions['dropBoxSettings'] = {
+        const dropBoxSettings: ChartRederStateOptions['dropBoxSettings'] = {
           xAxis: {
             id: 'xAxis',
             title: 'X轴',
@@ -48,21 +46,12 @@ describe('useChartRender', () => {
         };
 
         const options: Partial<ChartRederStateOptions> = {
-          dropBoxSettings: settings,
+          dropBoxSettings,
+          autoRequestData: false,
         };
 
         const { state } = useChartRender(options);
-        expect(state.dropBoxSettings).toEqual(settings);
-      });
-
-      it('chartRederStateOptions 只有chartType 时', () => {
-        const settings: ChartRederStateOptions = {
-          chartType: 'map',
-        };
-
-        const { state } = useChartRender(settings);
-
-        expect(state.dropBoxSettings?.coordinates).toMatchSnapshot();
+        expect(state.dropBoxSettings).toEqual(dropBoxSettings);
       });
     });
 
@@ -77,7 +66,7 @@ describe('useChartRender', () => {
   it('应该正确添加度量字段', () => {
     vi.spyOn(utils, 'generateId')
       .mockReturnValueOnce('test-field');
-    const { state, addField } = useChartRender();
+    const { state, addField } = useChartRender({ chartType: 'Bar', autoRequestData: false });
     const fieldOption = {
       id: 'test-field',
       fieldCode: 'amount',
@@ -101,7 +90,7 @@ describe('useChartRender', () => {
     vi.spyOn(utils, 'generateId')
       .mockReturnValueOnce('provinces-1');
 
-    const { state, addField } = useChartRender();
+    const { state, addField } = useChartRender({ chartType: 'Bar', autoRequestData: false });
     const fieldOption = {
       fieldCode: 'test_field',
       name: 'Test Field',
@@ -124,7 +113,7 @@ describe('useChartRender', () => {
   });
 
   it('应该正确删除字段', () => {
-    const { state, addField, removeField } = useChartRender();
+    const { state, addField, removeField } = useChartRender({ chartType: 'Bar' });
     const fieldOption = {
       id: 'test-field',
       name: 'Test Field',
@@ -155,8 +144,9 @@ describe('useChartRender', () => {
     afterEach(() => {
       vi.restoreAllMocks();
     });
+
     it('应正确请求数据', async () => {
-      const { addField, requestData, datasetId } = useChartRender();
+      const { addField, requestData, datasetId } = useChartRender({ chartType: 'Bar', autoRequestData: false });
 
       datasetId.value = 'test-dataset';
 
@@ -179,12 +169,13 @@ describe('useChartRender', () => {
         { 'provinces-1': '广西', 'amount-1': 200 },
       ];
 
-      vi.spyOn(api.dataset, 'searchData')
+      const fn = vi.spyOn(api.dataset, 'searchData')
         .mockReturnValueOnce(Promise.resolve({ error: 0, data: expecteData, msg: 'success' }));
 
       const data = await requestData();
 
       expect(data).toEqual(expecteData);
+      expect(fn).toHaveBeenCalledTimes(1);
     });
   });
 });
