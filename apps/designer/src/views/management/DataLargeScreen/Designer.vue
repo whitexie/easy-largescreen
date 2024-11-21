@@ -4,6 +4,8 @@ import { loadAsyncComponent } from '@/utils/component';
 import { useMessage } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { provide } from 'vue';
+import BoxSelection from './components/BoxSelection.vue';
+import { useBoxSelection } from './composables/useBoxSelection';
 import { CANVAS_ELEMENT_KEY } from './provideKey';
 
 const props = defineProps<{
@@ -13,11 +15,13 @@ const props = defineProps<{
 const designerStore = useLargeScreenDesigner();
 const message = useMessage();
 const drawerVisible = ref(false);
+const canvasContainer = ref<HTMLElement | null>(null);
+const { boxSelectionRect, isBrushing } = useBoxSelection(canvasContainer);
 
 // ---- async component----
 const DesignerHeader = loadAsyncComponent(() => import('./DesignerHeader.vue'));
 const Footer = loadAsyncComponent(() => import('./Footer.vue'));
-const WidgetCanvas = loadAsyncComponent(() => import('./WidgetCanvas.vue'));
+const DesignerCanvas = loadAsyncComponent(() => import('./DesignerCanvas.vue'));
 const Layers = loadAsyncComponent(() => import('@/components/Designer/Layers/index.vue'));
 const Pane = loadAsyncComponent(() => import('@/components/Designer/PropsPane/Pane.vue'));
 const Render = loadAsyncComponent(() => import('@/views/render/Render.vue'));
@@ -43,8 +47,12 @@ onUnmounted(() => {
     <main class="h-calc[100%-50px] w-full relative grid grid-cols-3 canvas-warpper bg-#f2f2f2">
       <Layers />
       <div class="relative">
-        <div class="bg-#f2f2f2 overflow-auto relative w-full flex-1 p-7.5  h-calc[100%-36px]">
-          <WidgetCanvas />
+        <div
+          ref="canvasContainer"
+          class="relative bg-#f2f2f2 overflow-auto relative w-full flex-1 h-calc[100%-36px]"
+        >
+          <DesignerCanvas />
+          <BoxSelection :is-brushing="isBrushing" :box-selection-rect="boxSelectionRect" />
         </div>
         <Footer />
       </div>

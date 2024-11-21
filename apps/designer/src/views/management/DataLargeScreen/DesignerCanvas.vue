@@ -11,10 +11,18 @@ import { useDraggable } from './useDraggable';
 import { useWidgetResize } from './useWidgetResize';
 
 const designerStore = useLargeScreenDesigner();
-
 const { getMenuConfig } = useMenus();
-const { canvasRef, offsetStyle, cursorStyle, handleMouseDown, spacePressed } = useSpaceDraggable(storeToRefs(designerStore).canvasRef);
+
+// 画布拖拽
+const { canvasRef } = storeToRefs(designerStore);
+const { offsetStyle, cursorStyle, handleMouseDown, spacePressed } = useSpaceDraggable(canvasRef);
+
+// 组件缩放
 const { handleActiveResize, isResizing } = useWidgetResize();
+
+// 组件移动
+const draggableOption = computed(() => ({ scale: designerStore.temporaryState.scale / 100 }));
+const { handleMouseDown: startMove, initPosition, position, isDragging } = useDraggable(draggableOption);
 
 const canvasStyle = computed(() => {
   const { canvasBackgroundStyle, canvasStyle } = designerStore;
@@ -27,22 +35,12 @@ const canvasStyle = computed(() => {
     transform: `scale(${scale / 100})`,
   };
 });
-
 const canvasMaskStyle = computed(() => {
   return {
     ...omit(canvasStyle.value, ['cursor', 'backgroundColor', 'backgroundImage']),
     cursor: 'move',
   };
 });
-
-const draggableOption = computed(() => {
-  const { temporaryState: { scale } } = designerStore;
-  return {
-    scale: scale / 100,
-  };
-});
-
-const { handleMouseDown: handleDragEvent, initPosition, position, isDragging } = useDraggable(draggableOption);
 
 watch(
   position.value,
@@ -62,7 +60,7 @@ function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) 
   designerStore.setCurrentWidget(widget.id);
   const { location } = widget;
   initPosition(location);
-  handleDragEvent(event);
+  startMove(event);
 }
 
 function handleClickCanvas() {
@@ -118,14 +116,16 @@ function handleDrop(e: DragEvent) {
     ref="canvasRef"
     class="large-screen-canvas absolute bg-white transform-origin-top-left "
     :style="canvasStyle"
-    @click.stop="handleClickCanvas" @dragover="handleDragOver" @drop="handleDrop"
+    @click.stop="handleClickCanvas"
+    @dragover="handleDragOver"
+    @drop="handleDrop"
   >
     <template v-for="item in designerStore.widgets" :key="item.id">
-      <DesignerWidget :widget="item" @mousedown="handleWidgetMouseDown" @click-widget="handleClickWidget" @resize="handleResize" />
+      <DesignerWidget :widget="item" @mousedown.stop="handleWidgetMouseDown" @click-widget="handleClickWidget" @resize="handleResize" />
     </template>
     <DragDistanceIndicator :widget="designerStore.currentWidget" :is-dragging="isDragging" />
   </div>
-  <div v-show="spacePressed" class="mask absolute transform-origin-top-left" :style="canvasMaskStyle" @mousedown="handleMouseDown" />
+  <div v-show="spacePressed" class="mask absolute transform-origin-top-left" :style="canvasMaskStyle" @mousedown.stop="handleMouseDown" />
 </template>
 
 <style scoped>
@@ -136,5 +136,11 @@ function handleDrop(e: DragEvent) {
     linear-gradient(1turn, var(--line-color) 3%, transparent 0);
   background-size: var(--grid-size) var(--grid-size);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 4px 0px;
+}
+
+.brush-area {
+  pointer-events: none; /* 确保不干扰其他事件 */
+  background-color: rgba(52, 152, 251, 0.24);
+  border: 1px solid #103ffa50;
 }
 </style>
