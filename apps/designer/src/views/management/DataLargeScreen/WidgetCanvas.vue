@@ -3,6 +3,7 @@ import type { AddWidgetOption, DataLargeScreenField, MenuItem } from '@/types/da
 import { useMenus } from '@/components/Designer/Menus/useMenus';
 import { useSpaceDraggable } from '@/composables/useSpaceDraggable';
 import { useLargeScreenDesigner } from '@/stores/designer';
+import { omit } from 'lodash-es';
 import { storeToRefs } from 'pinia';
 import DesignerWidget from './DesignerWidget.vue';
 import DragDistanceIndicator from './DragDistanceIndicator.vue';
@@ -26,6 +27,14 @@ const canvasStyle = computed(() => {
     transform: `scale(${scale / 100})`,
   };
 });
+
+const canvasMaskStyle = computed(() => {
+  return {
+    ...omit(canvasStyle.value, ['cursor', 'backgroundColor', 'backgroundImage']),
+    cursor: 'move',
+  };
+});
+
 const draggableOption = computed(() => {
   const { temporaryState: { scale } } = designerStore;
   return {
@@ -116,7 +125,7 @@ function handleDrop(e: DragEvent) {
     </template>
     <DragDistanceIndicator :widget="designerStore.currentWidget" :is-dragging="isDragging" />
   </div>
-  <div v-show="spacePressed" class="mask absolute transform-origin-top-left" :style="canvasStyle" @mousedown="handleMouseDown" />
+  <div v-show="spacePressed" class="mask absolute transform-origin-top-left" :style="canvasMaskStyle" @mousedown="handleMouseDown" />
 </template>
 
 <style scoped>

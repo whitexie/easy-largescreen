@@ -53,7 +53,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="widgetRef" :class="{ 'active-widget': activeWidget }" class="border absolute top-0 left-0 border-gray-400 cursor-pointer" :style="layoutStyle" @mousedown="handleMouseDown" @click.stop="handleClickWidget">
+  <div ref="widgetRef" :class="{ 'active-widget': activeWidget, 'cursor-not-allowed': widget.isLock }" class="border absolute top-0 left-0 border-gray-400 cursor-pointer" :style="layoutStyle" @mousedown="handleMouseDown" @click.stop="handleClickWidget">
     <template v-if="activeWidget && !widget.isLock">
       <!-- 左上 -->
       <div
