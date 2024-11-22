@@ -5,10 +5,10 @@ import { useSpaceDraggable } from '@/composables/useSpaceDraggable';
 import { useLargeScreenDesigner } from '@/stores/designer';
 import { omit } from 'lodash-es';
 import { storeToRefs } from 'pinia';
+import { useDraggable } from '../composables/useDraggable';
+import { useWidgetResize } from '../composables/useWidgetResize';
 import DesignerWidget from './DesignerWidget.vue';
 import DragDistanceIndicator from './DragDistanceIndicator.vue';
-import { useDraggable } from './useDraggable';
-import { useWidgetResize } from './useWidgetResize';
 
 const designerStore = useLargeScreenDesigner();
 const { getMenuConfig } = useMenus();

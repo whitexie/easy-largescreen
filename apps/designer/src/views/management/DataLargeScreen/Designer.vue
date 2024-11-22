@@ -5,12 +5,10 @@ import { useMessage } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { provide } from 'vue';
 import BoxSelection from './components/BoxSelection.vue';
+import { CANVAS_ELEMENT_KEY } from './composables/provideKey';
 import { useBoxSelection } from './composables/useBoxSelection';
-import { CANVAS_ELEMENT_KEY } from './provideKey';
 
-const props = defineProps<{
-  id: string
-}>();
+const props = defineProps<{ id: string }>();
 
 const designerStore = useLargeScreenDesigner();
 const message = useMessage();
@@ -19,13 +17,12 @@ const canvasContainer = ref<HTMLElement | null>(null);
 const { boxSelectionRect, isBrushing } = useBoxSelection(canvasContainer);
 
 // ---- async component----
-const DesignerHeader = loadAsyncComponent(() => import('./DesignerHeader.vue'));
-const Footer = loadAsyncComponent(() => import('./Footer.vue'));
-const DesignerCanvas = loadAsyncComponent(() => import('./DesignerCanvas.vue'));
+const DesignerHeader = loadAsyncComponent(() => import('./components/DesignerHeader.vue'));
+const Footer = loadAsyncComponent(() => import('./components/Footer.vue'));
+const DesignerCanvas = loadAsyncComponent(() => import('./components/DesignerCanvas.vue'));
 const Layers = loadAsyncComponent(() => import('@/components/Designer/Layers/index.vue'));
 const Pane = loadAsyncComponent(() => import('@/components/Designer/PropsPane/Pane.vue'));
 const Render = loadAsyncComponent(() => import('@/views/render/Render.vue'));
-
 window.$message = message;
 
 provide(CANVAS_ELEMENT_KEY, storeToRefs(designerStore).canvasRef);

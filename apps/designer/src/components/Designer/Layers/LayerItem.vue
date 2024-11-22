@@ -8,14 +8,17 @@ const props = defineProps<{
   isSelected: boolean
 }>();
 
-const emits = defineEmits(['click']);
+const emits = defineEmits<{
+  (e: 'click', data: { item: DataLargeScreenField, event: Event }): void
+}>();
 
 function getLockStateIcon(item: DataLargeScreenField) {
   return item.isLock ? 'solar:lock-linear' : 'solar:lock-broken';
 }
 
-function handleClickItem() {
-  emits('click', props.item);
+function handleClickItem(event: Event) {
+  const { item } = props;
+  emits('click', { item, event });
 }
 </script>
 

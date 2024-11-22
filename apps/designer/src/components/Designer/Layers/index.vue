@@ -29,8 +29,9 @@ function handleClick() {
   isExpand.value = !isExpand.value;
 }
 
-function handleClickLayerItem(item: DataLargeScreenField) {
-  designerStore.setCurrentWidget(item);
+function handleClickLayerItem(data: { item: DataLargeScreenField, event: Event }) {
+  const { item, event } = data;
+  designerStore.setCurrentWidget(item, event as PointerEvent);
 }
 </script>
 
@@ -48,7 +49,8 @@ function handleClickLayerItem(item: DataLargeScreenField) {
         <div v-for="item in widgets" :key="item.id">
           <LayerItem
             :item="item" :is-expand="isExpand"
-            :is-selected="designerStore.currentWidgetId === item.id" @click="handleClickLayerItem"
+            :is-selected="designerStore.isSelectedWidget(item)"
+            @click="handleClickLayerItem"
           />
         </div>
       </VueDraggable>
