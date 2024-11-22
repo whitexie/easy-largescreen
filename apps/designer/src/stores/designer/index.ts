@@ -39,7 +39,7 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
   const { state, canvasRef, widgetMap, clearWidgets, getConfig, ...rest } = useLargeScreenRender();
 
   /** 临时的状态，仅在本地使用，数据不入库 */
-  const { currentWidgetId, currentWidget, setCurrentWidget, clearSelectedWidgets, ...SelectWidgetRest } = useSelectWidgets(rest.widgets);
+  const { currentWidgetId, currentWidget, setCurrentWidget, resetSelectedWidgets, ...SelectWidgetRest } = useSelectWidgets(rest.widgets);
   const currentDatasetId = ref('');
   const scale = ref(100);
 
@@ -72,7 +72,7 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
   }
 
   async function $reset() {
-    clearSelectedWidgets();
+    resetSelectedWidgets();
     Object.assign(state, getDefaultState());
     scale.value = 100;
     currentDatasetId.value = '';

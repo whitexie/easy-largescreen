@@ -25,8 +25,8 @@ const draggableOption = computed(() => ({ scale: designerStore.scale / 100 }));
 const { handleMouseDown: startMove, initPosition, position, isDragging } = useDraggable(draggableOption);
 
 const canvasStyle = computed(() => {
-  const { canvasBackgroundStyle, canvasStyle } = designerStore;
-  const { scale } = designerStore;
+  const { canvasBackgroundStyle, canvasStyle, scale } = designerStore;
+
   return {
     ...canvasBackgroundStyle,
     ...canvasStyle,
@@ -48,16 +48,19 @@ watch(
 );
 
 function handleClickWidget(widget: DataLargeScreenField) {
-  if (!spacePressed.value) {
-    designerStore.setCurrentWidget(widget);
+  if (spacePressed.value || designerStore.currentWidget === widget) {
+    return;
   }
+  designerStore.setCurrentWidget(widget);
 }
 
 function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) {
   if (spacePressed.value || designerStore.currentWidget?.isLock) {
     return;
   }
-  designerStore.setCurrentWidget(widget);
+  if (designerStore.currentWidget !== widget) {
+    designerStore.setCurrentWidget(widget);
+  }
   const { location } = widget;
   initPosition(location);
   startMove(event);
