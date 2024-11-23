@@ -6,7 +6,7 @@ import '@/materials/index';
 
 describe('useSelectWidgets', () => {
   describe('setCurrentWidget', () => {
-    it('当widget参数为空时应清空选中组件列表', () => {
+    it('当widget参数为null时应清空选中组件列表', () => {
       const { setCurrentWidget, selectedWidgets } = useSelectWidgets([]);
       setCurrentWidget(null);
       expect(selectedWidgets).toHaveLength(0);
@@ -78,18 +78,6 @@ describe('useSelectWidgets', () => {
       });
     });
 
-    it('按住Meta(mac的command)键选中第二个组件时应同时选中两个组件', () => {
-      const { widgets, addWidgetById } = useWidgets();
-      const { setCurrentWidget, selectedWidgets, currentWidgetId } = useSelectWidgets(widgets);
-
-      const [widget1, widget2] = ['1', '2'].map(id => addWidgetById('text', { id }));
-
-      setCurrentWidget(widget1);
-      setCurrentWidget(widget2, { metaKey: true });
-      expect(selectedWidgets).toHaveLength(2);
-      expect(currentWidgetId.value).toBe(widget2.id);
-    });
-
     it('按住Shift键选择第三个组件时应该选中中间所有组件', () => {
       const { widgets, addWidgetById } = useWidgets();
       const { setCurrentWidget, selectedWidgets, currentWidgetId } = useSelectWidgets(widgets);
@@ -132,6 +120,35 @@ describe('useSelectWidgets', () => {
 
       // 断言
       expect(selectedWidgets).toHaveLength(4);
+      expect(currentWidgetId.value).toBe(widget4.id);
+    });
+
+    it('按住Shift键选中4个组件后, 再选中第一个组件时, 选中组件只有第一个组件', () => {
+      const { widgets, addWidgetById } = useWidgets();
+      const { setCurrentWidget, selectedWidgets, currentWidgetId } = useSelectWidgets(widgets);
+
+      const [widget1,,, widget4] = ['1', '2', '3', '4'].map(id => addWidgetById('text', { id }));
+
+      setCurrentWidget(widget1, { shiftKey: true });
+      setCurrentWidget(widget4, { shiftKey: true });
+      setCurrentWidget(widget1);
+
+      expect(selectedWidgets).toHaveLength(1);
+      expect(currentWidgetId.value).toBe(widget1.id);
+    });
+
+    it('按住Shift键选中4个组件后, 再按住Ctrl键选中第一个组件时, 已选中组件包含第二、三、四个', () => {
+      const { widgets, addWidgetById } = useWidgets();
+      const { setCurrentWidget, selectedWidgets, currentWidgetId } = useSelectWidgets(widgets);
+
+      const [widget1, widget2, widget3, widget4] = ['1', '2', '3', '4'].map(id => addWidgetById('text', { id }));
+
+      setCurrentWidget(widget1, { shiftKey: true });
+      setCurrentWidget(widget4, { shiftKey: true });
+      setCurrentWidget(widget1, { ctrlKey: true });
+
+      expect(selectedWidgets).toHaveLength(3);
+      expect(selectedWidgets).toEqual([widget2, widget3, widget4]);
       expect(currentWidgetId.value).toBe(widget4.id);
     });
   });

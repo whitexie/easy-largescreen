@@ -1,4 +1,5 @@
 import api from '@/api';
+import { useBoxSelection } from '@/views/management/DataLargeScreen/composables/useBoxSelection';
 import { defineStore } from 'pinia';
 import { useLargeScreenRender } from './composables/useLargeScreenRender';
 import { useSelectWidgets } from './composables/useSelectWidgets';
@@ -19,27 +20,28 @@ interface LargeScreenDesigner {
   useDatasetIds: string[]
 }
 
-function getDefaultState(): LargeScreenDesigner {
-  return {
-    id: '',
-    name: '',
-    pageConfig: {
-      background: {
-        color: '',
-        image: '',
-      },
-      width: 1920,
-      height: 1080,
+const DEFAULT_STATE: LargeScreenDesigner = {
+  id: '',
+  name: '',
+  pageConfig: {
+    background: {
+      color: '',
+      image: '',
     },
-    useDatasetIds: [],
-  };
-}
+    width: 1920,
+    height: 1080,
+  },
+  useDatasetIds: [],
+};
 
 export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
   const { state, canvasRef, widgetMap, clearWidgets, getConfig, ...rest } = useLargeScreenRender();
 
   /** 临时的状态，仅在本地使用，数据不入库 */
+  const canvasContainerRef = ref<HTMLDivElement | null>(null);
   const { currentWidgetId, currentWidget, setCurrentWidget, resetSelectedWidgets, ...SelectWidgetRest } = useSelectWidgets(rest.widgets);
+  const boxSelection = useBoxSelection(canvasContainerRef);
+
   const currentDatasetId = ref('');
   const scale = ref(100);
 
@@ -73,7 +75,7 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
 
   async function $reset() {
     resetSelectedWidgets();
-    Object.assign(state, getDefaultState());
+    Object.assign(state, structuredClone(DEFAULT_STATE));
     scale.value = 100;
     currentDatasetId.value = '';
     clearWidgets();
@@ -95,6 +97,7 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     scale,
     currentWidgetId,
     currentDatasetId,
+    canvasContainerRef,
     clearWidgets,
     getConfig,
     setCurrentWidget,
@@ -104,6 +107,7 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     $reset,
     ...rest,
     ...SelectWidgetRest,
+    ...boxSelection,
   };
 });
 

@@ -9,12 +9,13 @@ import { useDraggable } from '../composables/useDraggable';
 import { useWidgetResize } from '../composables/useWidgetResize';
 import DesignerWidget from './DesignerWidget.vue';
 import DragDistanceIndicator from './DragDistanceIndicator.vue';
+import SelectedWidgetsBounding from './SelectedWidgetsBounding.vue';
 
 const designerStore = useLargeScreenDesigner();
 const { getMenuConfig } = useMenus();
 
 // 画布拖拽
-const { canvasRef } = storeToRefs(designerStore);
+const { canvasRef, isBrushing } = storeToRefs(designerStore);
 const { offsetStyle, cursorStyle, handleMouseDown, spacePressed } = useSpaceDraggable(canvasRef);
 
 // 组件缩放
@@ -47,11 +48,11 @@ watch(
   val => designerStore.updateCurrentWidgetLocation(val),
 );
 
-function handleClickWidget(widget: DataLargeScreenField) {
+function handleClickWidget(event: Event, widget: DataLargeScreenField) {
   if (spacePressed.value || designerStore.currentWidget === widget) {
     return;
   }
-  designerStore.setCurrentWidget(widget);
+  designerStore.setCurrentWidget(widget, event as PointerEvent);
 }
 
 function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) {
@@ -59,7 +60,7 @@ function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) 
     return;
   }
   if (designerStore.currentWidget !== widget) {
-    designerStore.setCurrentWidget(widget);
+    designerStore.setCurrentWidget(widget, event as PointerEvent);
   }
   const { location } = widget;
   initPosition(location);
@@ -67,7 +68,7 @@ function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) 
 }
 
 function handleClickCanvas() {
-  if (isDragging.value || isResizing.value) {
+  if (isDragging.value || isResizing.value || isBrushing.value) {
     return;
   }
   designerStore.setCurrentWidget(null);
@@ -126,6 +127,7 @@ function handleDrop(e: DragEvent) {
     <template v-for="item in designerStore.widgets" :key="item.id">
       <DesignerWidget :widget="item" @mousedown.stop="handleWidgetMouseDown" @click-widget="handleClickWidget" @resize="handleResize" />
     </template>
+    <SelectedWidgetsBounding />
     <DragDistanceIndicator :widget="designerStore.currentWidget" :is-dragging="isDragging" />
   </div>
   <div v-show="spacePressed" class="mask absolute transform-origin-top-left" :style="canvasMaskStyle" @mousedown.stop="handleMouseDown" />

@@ -31,9 +31,8 @@ export function useBoxSelection(targetRef: Ref<HTMLElement | null>) {
   }
 
   function updateBrush(event: MouseEvent) {
-    if (!isBrushing.value) {
-      return;
-    }
+    isBrushing.value = true;
+
     const { clientX, clientY } = event;
     const { left, top } = targetRef.value!.getBoundingClientRect();
 
@@ -44,9 +43,11 @@ export function useBoxSelection(targetRef: Ref<HTMLElement | null>) {
   }
 
   function endBrush() {
-    isBrushing.value = false;
     window.removeEventListener('mousemove', updateBrush);
     window.removeEventListener('mouseup', endBrush);
+    setTimeout(() => {
+      isBrushing.value = false;
+    }, 100);
   }
 
   onMounted(() => {
@@ -55,6 +56,8 @@ export function useBoxSelection(targetRef: Ref<HTMLElement | null>) {
 
   onBeforeUnmount(() => {
     targetRef.value?.removeEventListener('mousedown', startBrush);
+    window.removeEventListener('mousemove', updateBrush);
+    window.removeEventListener('mouseup', endBrush);
   });
 
   return {

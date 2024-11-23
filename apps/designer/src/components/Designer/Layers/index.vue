@@ -1,11 +1,15 @@
 <script name="Layers" lang="ts" setup>
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
 import { useLargeScreenDesigner } from '@/stores/designer';
+import { useThemeVars } from 'naive-ui';
 import { VueDraggable } from 'vue-draggable-plus';
 import LayerItem from './LayerItem.vue';
 
 const isExpand = ref(false);
+const theme = useThemeVars();
 
+const bgColor = computed(() => theme.value.infoColor);
+const primaryColor = computed(() => theme.value.primaryColor);
 const icon = computed(() => isExpand.value
   ? 'i-fluent:panel-right-expand-16-filled'
   : ['i-fluent:panel-right-contract-16-filled', 'm-auto'],
@@ -56,8 +60,8 @@ function handleClickLayerItem(data: { item: DataLargeScreenField, event: Event }
 
 <style lang="less" scoped>
 .layers {
-  --primary-color: #18a058;
-  --primary-color-hover: #18a05810;
+  --primary-color: v-bind(primaryColor);
+  --primary-color-hover: v-bind(bgColor);
   transition: width 0.3s;
 }
 

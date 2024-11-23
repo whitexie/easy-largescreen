@@ -5,7 +5,7 @@ type TextAlign = 'left' | 'center' | 'right' | 'justify';
 export const MenuConfig: MenuBaseConfig = {
   id: 'text',
   name: '文本',
-  icon: 'fluent:draw-text-24-regular',
+  icon: 'i-fluent:draw-text-24-regular',
   size: { width: 200, height: 40 },
 };
 
