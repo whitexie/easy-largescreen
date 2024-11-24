@@ -10,7 +10,7 @@ function formatTooltip(v: number) {
 }
 
 function onSelectScale(key: number) {
-  designerStore.temporaryState.scale = key;
+  designerStore.scale = key;
 }
 </script>
 
@@ -20,13 +20,13 @@ function onSelectScale(key: number) {
     <div class="right flex h-full">
       <n-dropdown trigger="click" placement="top" size="small" :options="scaleOptions" @select="onSelectScale">
         <div class="self-center text-xs cursor-pointer">
-          {{ designerStore.temporaryState.scale }}%
+          {{ designerStore.scale }}%
         </div>
       </n-dropdown>
 
       <n-divider vertical style="height: 100%" />
 
-      <n-slider v-model:value="designerStore.temporaryState.scale" :min="10" :max="500" :step="1" :marks="{ 100: '' }" :format-tooltip="formatTooltip" class="bg-white" style="width: 160px;" />
+      <n-slider v-model:value="designerStore.scale" :min="10" :max="500" :step="1" :marks="{ 100: '' }" :format-tooltip="formatTooltip" class="bg-white" style="width: 160px;" />
       <n-divider vertical style="height: 100%" />
       <n-tooltip placement="top" trigger="hover" :delay="300">
         <template #trigger>

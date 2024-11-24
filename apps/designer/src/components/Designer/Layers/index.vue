@@ -1,18 +1,21 @@
 <script name="Layers" lang="ts" setup>
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
 import { useLargeScreenDesigner } from '@/stores/designer';
+import { useThemeVars } from 'naive-ui';
 import { VueDraggable } from 'vue-draggable-plus';
 import LayerItem from './LayerItem.vue';
 
 const isExpand = ref(false);
+const theme = useThemeVars();
 
-const icon = computed(() => {
-  return isExpand.value ? 'i-fluent:panel-right-expand-16-filled' : ['i-fluent:panel-right-contract-16-filled', 'm-auto'];
-});
+const bgColor = computed(() => theme.value.infoColor);
+const primaryColor = computed(() => theme.value.primaryColor);
+const icon = computed(() => isExpand.value
+  ? 'i-fluent:panel-right-expand-16-filled'
+  : ['i-fluent:panel-right-contract-16-filled', 'm-auto'],
+);
 
-const layersClass = computed(() => {
-  return isExpand.value ? ['w-200px'] : ['w-40px'];
-});
+const layersClass = computed(() => isExpand.value ? ['w-200px'] : ['w-40px']);
 
 const designerStore = useLargeScreenDesigner();
 
@@ -25,12 +28,9 @@ const widgets = computed({
   },
 });
 
-function handleClick() {
-  isExpand.value = !isExpand.value;
-}
-
-function handleClickLayerItem(item: DataLargeScreenField) {
-  designerStore.setCurrentWidget(item.id);
+function handleClickLayerItem(data: { item: DataLargeScreenField, event: Event }) {
+  const { item, event } = data;
+  designerStore.setCurrentWidget(item, event as PointerEvent);
 }
 </script>
 
@@ -41,14 +41,16 @@ function handleClickLayerItem(item: DataLargeScreenField) {
       class="title flex items-center select-none justify-between h-40px border-b border-gray-200 border-b-solid"
     >
       <span v-show="isExpand" class="pl-3 whitespace-nowrap flex-1 text-center">页面图层</span>
-      <div :class="icon" class="size-1.6em cursor-pointer shrink-0" @click="handleClick" />
+      <div :class="icon" class="size-1.6em cursor-pointer shrink-0" @click="isExpand = !isExpand" />
     </div>
     <div>
       <VueDraggable v-model="widgets" group="people" :animation="200" item-key="id" handle=".cursor-move">
         <div v-for="item in widgets" :key="item.id">
           <LayerItem
-            :item="item" :is-expand="isExpand"
-            :is-selected="designerStore.temporaryState.currentWidgetId === item.id" @click="handleClickLayerItem"
+            :item="item"
+            :is-expand="isExpand"
+            :is-selected="designerStore.isSelectedWidget(item)"
+            @click="handleClickLayerItem"
           />
         </div>
       </VueDraggable>
@@ -58,8 +60,8 @@ function handleClickLayerItem(item: DataLargeScreenField) {
 
 <style lang="less" scoped>
 .layers {
-  --primary-color: #18a058;
-  --primary-color-hover: #18a05810;
+  --primary-color: v-bind(primaryColor);
+  --primary-color-hover: v-bind(bgColor);
   transition: width 0.3s;
 }
 

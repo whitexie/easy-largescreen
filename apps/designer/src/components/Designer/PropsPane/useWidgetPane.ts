@@ -5,7 +5,7 @@ export function useWidgetPane() {
   const designerStore = useLargeScreenDesigner();
 
   const widget = computed(() => {
-    const id = designerStore.temporaryState.currentWidgetId;
+    const id = designerStore.currentWidgetId;
     if (id === '' || !designerStore.widgetMap.has(id)) {
       return null;
     }

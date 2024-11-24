@@ -23,7 +23,7 @@ const placeholderElementStyle = computed(() => {
 async function handleClick(item: MenuItem) {
   const wgt = designerStore.addWidget(item);
   await nextTick();
-  designerStore.setCurrentWidget(wgt.id);
+  designerStore.setCurrentWidget(wgt);
 }
 
 function handleDragStart(e: DragEvent, item: MenuItem) {

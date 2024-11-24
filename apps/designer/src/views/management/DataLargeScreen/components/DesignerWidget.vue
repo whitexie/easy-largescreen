@@ -10,18 +10,19 @@ interface Props {
 
 const props = defineProps<Props>();
 const emits = defineEmits<{
-  clickWidget: [DataLargeScreenField]
-  mousedown: [MouseEvent, DataLargeScreenField]
-  resize: [ -1 | 0 | 1, -1 | 0 | 1]
+  (e: 'clickWidget', event: Event, widget: DataLargeScreenField): void
+  (e: 'mousedown', event: MouseEvent, widget: DataLargeScreenField): void
+  (e: 'resize', horizontal: -1 | 0 | 1, vertical: -1 | 0 | 1): void
 }>();
 const widgetRef = ref<HTMLDivElement | null>(null);
 const designerStore = useLargeScreenDesigner();
 const themeVars = useThemeVars();
 
-const commonClass = 'graphicbox-resize select-none absolute z-10 w-10px h-10px  border-amber';
+const commonClass = 'graphicbox-resize select-none  absolute z-10 w-10px h-10px';
 
+const primaryHoverColor = computed(() => `${themeVars.value.primaryColor}20`);
 const primaryColor = computed(() => themeVars.value.primaryColor);
-const activeWidget = computed(() => designerStore.temporaryState.currentWidgetId === props.widget.id);
+const activeWidget = computed(() => designerStore.selectedWidgetIdSet.has(props.widget.id));
 const layoutStyle = computed(() => {
   const { size: { width, height }, location: { x, y } } = props.widget;
   const zIndex = activeWidget.value ? 60001 : '';
@@ -33,8 +34,8 @@ const layoutStyle = computed(() => {
   };
 });
 
-function handleClickWidget() {
-  emits('clickWidget', props.widget);
+function handleClickWidget(event: Event) {
+  emits('clickWidget', event, props.widget);
 }
 
 function handleMouseDown(event: MouseEvent) {
@@ -53,8 +54,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="widgetRef" :class="{ 'active-widget': activeWidget, 'cursor-not-allowed': widget.isLock }" class="border absolute top-0 left-0 border-gray-400 cursor-pointer" :style="layoutStyle" @mousedown="handleMouseDown" @click.stop="handleClickWidget">
-    <template v-if="activeWidget && !widget.isLock">
+  <div ref="widgetRef" :class="{ 'active-widget': activeWidget, 'cursor-not-allowed': widget.isLock }" class="designer-widget absolute top-0 left-0 border-gray-400 cursor-pointer" :style="layoutStyle" @mousedown="handleMouseDown" @click.stop="handleClickWidget">
+    <template v-if="activeWidget && !widget.isLock && designerStore.selectedWidgets.length === 1">
       <!-- 左上 -->
       <div
         :class="commonClass"
@@ -107,23 +108,25 @@ onMounted(() => {
     <div class="w-full h-full overflow-hidden relative">
       <WidgetRender :widget="widget" :hidden-layout="true" />
     </div>
-    <div class="mask absolute top-0 left-0 bottom-0 right-0 z-60001">
-      <div class="hidden hover:(bg-black) opacity-70 select-none justify-center w-full h-full items-center">
-        已锁定，无法移动或修改尺寸
-      </div>
-    </div>
+    <div class="mask absolute top-0 left-0 bottom-0 right-0 z-60001" />
   </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
+.designer-widget {
+  &:hover,
+  &.active-widget {
+    border: 1px solid v-bind(primaryColor);
+    box-shadow: 0 0 8px v-bind(primaryHoverColor);
+  }
+
+  &:not(.active-widget):hover {
+    border: 1px dashed v-bind(primaryHoverColor);
+    border-style: dashed;
+  }
+}
+
 .graphicbox-resize {
   border-color: v-bind(primaryColor);
-}
-.active-widget {
-  transition: box-shadow 0.3s ease;
-  box-shadow:
-    0 0 0 2px rgba(255, 255, 255, 0.9),
-    /* 白色内边框效果 */ 0 0 8px rgba(59, 130, 246, 0.5),
-    /* 蓝色模糊扩散 */ 0 0 16px rgba(59, 130, 246, 0.3); /* 更大范围的蓝色阴影 */
 }
 </style>

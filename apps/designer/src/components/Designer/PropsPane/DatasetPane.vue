@@ -11,10 +11,10 @@ const designerStore = useLargeScreenDesigner();
 
 const datasetId = computed({
   get() {
-    return designerStore.temporaryState.currentDatasetId;
+    return designerStore.currentDatasetId;
   },
   set(val) {
-    designerStore.temporaryState.currentDatasetId = val;
+    designerStore.currentDatasetId = val;
   },
 });
 
