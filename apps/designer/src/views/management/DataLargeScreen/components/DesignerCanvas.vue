@@ -23,7 +23,7 @@ const { handleActiveResize, isResizing } = useWidgetResize();
 
 // 组件移动
 const draggableOption = computed(() => ({ scale: designerStore.scale / 100 }));
-const { handleMouseDown: startMove, initPosition, position, isDragging } = useDraggable(draggableOption);
+const { handleMouseDown: startMove, initPosition, isDragging } = useDraggable(draggableOption);
 
 const canvasStyle = computed(() => {
   const { canvasBackgroundStyle, canvasStyle, scale } = designerStore;
@@ -43,28 +43,16 @@ const canvasMaskStyle = computed(() => {
   };
 });
 
-watch(
-  position.value,
-  val => designerStore.updateCurrentWidgetLocation(val),
-);
-
-function handleClickWidget(event: Event, widget: DataLargeScreenField) {
-  if (spacePressed.value || designerStore.currentWidget === widget) {
-    return;
-  }
-  designerStore.setCurrentWidget(widget, event as PointerEvent);
-}
-
 function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) {
   if (spacePressed.value || designerStore.currentWidget?.isLock) {
     return;
   }
-  if (designerStore.currentWidget !== widget) {
-    designerStore.setCurrentWidget(widget, event as PointerEvent);
-  }
+
+  designerStore.setCurrentWidget(widget, event as PointerEvent);
+
   const { location } = widget;
   initPosition(location);
-  startMove(event);
+  startMove(event, widget);
 }
 
 function handleClickCanvas() {
@@ -125,7 +113,7 @@ function handleDrop(e: DragEvent) {
     @drop="handleDrop"
   >
     <template v-for="item in designerStore.widgets" :key="item.id">
-      <DesignerWidget :widget="item" @mousedown.stop="handleWidgetMouseDown" @click-widget="handleClickWidget" @resize="handleResize" />
+      <DesignerWidget :widget="item" @mousedown.stop="handleWidgetMouseDown" @resize="handleResize" />
     </template>
     <SelectedWidgetsBounding />
     <DragDistanceIndicator :widget="designerStore.currentWidget" :is-dragging="isDragging" />

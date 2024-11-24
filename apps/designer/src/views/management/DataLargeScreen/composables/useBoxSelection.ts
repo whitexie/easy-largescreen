@@ -18,7 +18,6 @@ export function useBoxSelection(targetRef: Ref<HTMLElement | null>) {
   });
 
   function startBrush(event: MouseEvent, _scale?: number) {
-    isBrushing.value = true;
     const { left, top } = targetRef.value!.getBoundingClientRect();
 
     brushStart.x = brushEnd.x = event.clientX - left;

@@ -114,21 +114,19 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .designer-widget {
-  &:hover {
-    border: 1px dashed v-bind(primaryHoverColor);
+  &:hover,
+  &.active-widget {
+    border: 1px solid v-bind(primaryColor);
     box-shadow: 0 0 8px v-bind(primaryHoverColor);
+  }
+
+  &:not(.active-widget):hover {
+    border: 1px dashed v-bind(primaryHoverColor);
+    border-style: dashed;
   }
 }
 
 .graphicbox-resize {
   border-color: v-bind(primaryColor);
-}
-.active-widget {
-  border: 1px solid v-bind(primaryColor);
-  transition: box-shadow 0.3s ease;
-  box-shadow:
-    0 0 0 2px rgba(255, 255, 255, 0.9),
-    /* 白色内边框效果 */ 0 0 8px rgba(59, 130, 246, 0.5),
-    /* 蓝色模糊扩散 */ 0 0 16px rgba(59, 130, 246, 0.3); /* 更大范围的蓝色阴影 */
 }
 </style>
