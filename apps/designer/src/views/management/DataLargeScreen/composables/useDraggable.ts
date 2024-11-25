@@ -13,8 +13,6 @@ export function useDraggable(option: Options) {
   function setPosition(newPosition: { x: number, y: number }) {
     const x = Math.round(newPosition.x / option.value.scale);
     const y = Math.round(newPosition.y / option.value.scale);
-    position.value.x = Math.round(newPosition.x / option.value.scale);
-    position.value.y = Math.round(newPosition.y / option.value.scale);
 
     if (currentWidget.value) {
       currentWidget.value.location.x = x;
@@ -22,14 +20,9 @@ export function useDraggable(option: Options) {
     }
   }
 
-  function initPosition(newPosition: { x: number, y: number }) {
-    position.value.x = newPosition.x;
-    position.value.y = newPosition.y;
-  }
-
-  function handleMouseDown(event: MouseEvent, widget: DataLargeScreenField) {
-    startOffsetPosition.x = (event.clientX - position.value.x * option.value.scale);
-    startOffsetPosition.y = (event.clientY - position.value.y * option.value.scale);
+  function startMove(event: MouseEvent, widget: DataLargeScreenField) {
+    startOffsetPosition.x = (event.clientX - widget.location.x * option.value.scale);
+    startOffsetPosition.y = (event.clientY - widget.location.y * option.value.scale);
     currentWidget.value = widget;
 
     window.addEventListener('mousemove', handleMove);
@@ -58,7 +51,7 @@ export function useDraggable(option: Options) {
   return {
     isDragging,
     position,
-    handleMouseDown,
-    initPosition,
+    currentWidget,
+    startMove,
   };
 }

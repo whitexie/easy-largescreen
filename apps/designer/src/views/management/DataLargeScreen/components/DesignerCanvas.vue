@@ -23,7 +23,7 @@ const { handleActiveResize, isResizing } = useWidgetResize();
 
 // 组件移动
 const draggableOption = computed(() => ({ scale: designerStore.scale / 100 }));
-const { handleMouseDown: startMove, initPosition, isDragging } = useDraggable(draggableOption);
+const { startMove, isDragging, currentWidget } = useDraggable(draggableOption);
 
 const canvasStyle = computed(() => {
   const { canvasBackgroundStyle, canvasStyle, scale } = designerStore;
@@ -49,9 +49,6 @@ function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) 
   }
 
   designerStore.setCurrentWidget(widget, event as PointerEvent);
-
-  const { location } = widget;
-  initPosition(location);
   startMove(event, widget);
 }
 
@@ -116,7 +113,7 @@ function handleDrop(e: DragEvent) {
       <DesignerWidget :widget="item" @mousedown.stop="handleWidgetMouseDown" @resize="handleResize" />
     </template>
     <SelectedWidgetsBounding />
-    <DragDistanceIndicator :widget="designerStore.currentWidget" :is-dragging="isDragging" />
+    <DragDistanceIndicator :widget="currentWidget" :is-dragging="isDragging" />
   </div>
   <div v-show="spacePressed" class="mask absolute transform-origin-top-left" :style="canvasMaskStyle" @mousedown.stop="handleMouseDown" />
 </template>
