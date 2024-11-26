@@ -1,7 +1,7 @@
 import request from './request';
 
+export * from './canvas';
 export * from './upload';
-
 export { request };
 
 export function generateRandomID() {
