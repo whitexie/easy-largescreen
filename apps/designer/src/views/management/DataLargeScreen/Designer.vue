@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import { useLargeScreenDesigner } from '@/stores/designer';
+import { calculateBoxSelectionCoordinates } from '@/utils/canvas';
 import { loadAsyncComponent } from '@/utils/component';
 import { useMessage } from 'naive-ui';
 import { storeToRefs } from 'pinia';
-import { provide } from 'vue';
 import BoxSelection from './components/BoxSelection.vue';
-import { CANVAS_ELEMENT_KEY } from './composables/provideKey';
 
 const props = defineProps<{ id: string }>();
 
@@ -24,21 +23,24 @@ const Pane = loadAsyncComponent(() => import('@/components/Designer/PropsPane/Pa
 const Render = loadAsyncComponent(() => import('@/views/render/Render.vue'));
 window.$message = message;
 
-provide(CANVAS_ELEMENT_KEY, storeToRefs(designerStore).canvasRef);
-
 watch(
   () => isBrushing.value,
   (val) => {
-    if (!val && designerStore.canvasRef && canvasContainerRef.value) {
-      // 这里需要换算下 起始点 在 画布中 对应的位置
-      // TODO 画布缩放的场景还不支持
-      let { left: x, top: y, width, height } = boxSelectionRect.value;
-      const { left: containerLeft, top: containerTop } = canvasContainerRef.value.getBoundingClientRect();
-      const { left, top } = designerStore.canvasRef.getBoundingClientRect();
-      x = x - (left - containerLeft);
-      y = y - (top - containerTop);
+    if (val) {
+      return;
+    }
+    if (!designerStore.canvasRef || !canvasContainerRef.value) {
+      return;
+    }
+    const coordinates = calculateBoxSelectionCoordinates({
+      canvasRef: designerStore.canvasRef,
+      containerRef: canvasContainerRef.value,
+      boxSelectionRect: boxSelectionRect.value,
+      scale: designerStore.scale,
+    });
 
-      designerStore.calculateSelectedWidgetsBounding({ width, height, x, y });
+    if (coordinates) {
+      designerStore.calculateSelectedWidgetsBounding(coordinates);
     }
   },
   { immediate: true },
