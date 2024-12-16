@@ -1,7 +1,7 @@
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
 import { onUnmounted } from 'vue';
 
-export function useWidgetResize() {
+export function useMaterialResize() {
   let activeWidget: DataLargeScreenField | null = null;
   let horizontalDirection = 0; // -1 左 0 未选中 1 右
   let verticalDirection = 0; // -1 上 0 未选中 1 下

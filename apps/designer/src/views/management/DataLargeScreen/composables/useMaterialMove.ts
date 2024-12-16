@@ -3,7 +3,7 @@ import type { ComputedRef } from 'vue';
 
 type Options = ComputedRef<{ scale: number }>;
 
-export function useDraggable(option: Options) {
+export function useMaterialMove(option: Options) {
   const isDragging = ref(false);
 
   const position = ref({ x: 0, y: 0 });
@@ -58,6 +58,7 @@ export function useDraggable(option: Options) {
   return {
     isDragging,
     position,
+    currentWidget,
     handleMouseDown,
     initPosition,
   };
