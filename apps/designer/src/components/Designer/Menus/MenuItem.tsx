@@ -1,5 +1,4 @@
 import type { MenuItem as _MenuItem } from '@/types/dataLargeScreen'
-import { Icon } from '@iconify/vue'
 import { NPopover } from 'naive-ui'
 import { defineComponent } from 'vue'
 
@@ -32,11 +31,11 @@ export default defineComponent({
       const isGroup = item.type === 'group'
       return (
         <div draggable={!isGroup ? 'true' : 'false'} class="flex items-center select-none cursor-pointer px-2 h-30px hover:(rounded-l bg-#f2f2f2)" onClick={() => this.handleClick(item)} onDragstart={this.handleDragStart}>
-          <Icon icon={item.icon} style="width: 18px; height: 18px" />
+          <div class={`${item.icon} w-18px h-18px`} />
           <div class="ml-1">
             {item.name}
           </div>
-          {isGroup && <Icon icon="material-symbols:expand-more-rounded" style="width: 15px; height: 15px" />}
+          {isGroup && <div class="i-material-symbols:expand-more-rounded w-15px h-15px" />}
         </div>
       )
     }

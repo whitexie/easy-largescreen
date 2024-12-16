@@ -1,4 +1,5 @@
 import { defineConfig, presetAttributify, presetIcons, presetUno, transformerVariantGroup } from 'unocss';
+import unoIconList from './uno-icon-list';
 
 export default defineConfig({
   presets: [
@@ -16,15 +17,7 @@ export default defineConfig({
     transformerVariantGroup(),
   ],
   safelist: [
-    'i-mingcute:align-left-line',
-    'i-mingcute:align-center-line',
-    'i-mingcute:align-right-line',
-    'i-mingcute:align-justify-line',
-    'i-line-md:arrow-close-up',
-    'i-line-md:arrow-align-middle',
-    'i-line-md:arrow-close-down',
-    'i-solar:chart-bold',
-    'i-fluent:draw-text-24-regular',
+    ...unoIconList,
   ],
   rules: [
     [/^w-(calc\[.*\])/, ([, d]) => {
