@@ -27,7 +27,7 @@ export default antfu(
     },
     rules: {
       'no-undef': ['error'],
-      'no-console': 'warn',
+      'no-console': ['error', { allow: ['error', 'warn'] }],
       'semi': [2, 'always'],
       'style/semi': [2, 'always'],
       'curly': ['error', 'multi-line'],
