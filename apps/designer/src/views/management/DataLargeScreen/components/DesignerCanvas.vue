@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import type { AddWidgetOption, DataLargeScreenField, MenuItem } from '@/types/dataLargeScreen';
-import { useMenus } from '@/components/Designer/Menus/useMenus';
 import { useSpaceDraggable } from '@/composables/useSpaceDraggable';
+import { useMenus } from '@/materials/base/menus';
 import { useLargeScreenDesigner } from '@/stores/designer';
 import { omit } from 'lodash-es';
 import { storeToRefs } from 'pinia';
-import { useDraggable } from '../composables/useDraggable';
-import { useWidgetResize } from '../composables/useWidgetResize';
+import { useMaterialMove } from '../composables/useMaterialMove';
+import { useMaterialResize } from '../composables/useMaterialResize';
 import DesignerWidget from './DesignerWidget.vue';
 import DragDistanceIndicator from './DragDistanceIndicator.vue';
 import SelectedWidgetsBounding from './SelectedWidgetsBounding.vue';
@@ -19,11 +19,11 @@ const { canvasRef, isBrushing } = storeToRefs(designerStore);
 const { offsetStyle, cursorStyle, handleMouseDown, spacePressed } = useSpaceDraggable(canvasRef);
 
 // 组件缩放
-const { handleActiveResize, isResizing } = useWidgetResize();
+const { handleActiveResize, isResizing } = useMaterialResize();
 
 // 组件移动
 const draggableOption = computed(() => ({ scale: designerStore.scale / 100 }));
-const { handleMouseDown: startMove, initPosition, isDragging } = useDraggable(draggableOption);
+const { handleMouseDown: startMove, initPosition, isDragging, currentWidget } = useMaterialMove(draggableOption);
 
 const canvasStyle = computed(() => {
   const { canvasBackgroundStyle, canvasStyle, scale } = designerStore;
@@ -113,12 +113,16 @@ function handleDrop(e: DragEvent) {
     @drop="handleDrop"
   >
     <template v-for="item in designerStore.widgets" :key="item.id">
-      <DesignerWidget :widget="item" @mousedown.stop="handleWidgetMouseDown" @resize="handleResize" />
+      <DesignerWidget
+        :widget="item"
+        @mousedown.stop="handleWidgetMouseDown"
+        @resize="handleResize"
+      />
     </template>
     <SelectedWidgetsBounding />
-    <DragDistanceIndicator :widget="designerStore.currentWidget" :is-dragging="isDragging" />
+    <DragDistanceIndicator :widget="currentWidget" :is-dragging="isDragging" />
   </div>
-  <div v-show="spacePressed" class="mask absolute transform-origin-top-left" :style="canvasMaskStyle" @mousedown.stop="handleMouseDown" />
+  <div v-show="spacePressed" class="absolute transform-origin-top-left" :style="canvasMaskStyle" @mousedown.stop="handleMouseDown" />
 </template>
 
 <style scoped>
@@ -132,7 +136,8 @@ function handleDrop(e: DragEvent) {
 }
 
 .brush-area {
-  pointer-events: none; /* 确保不干扰其他事件 */
+  /* 确保不干扰其他事件 */
+  pointer-events: none;
   background-color: rgba(52, 152, 251, 0.24);
   border: 1px solid #103ffa50;
 }

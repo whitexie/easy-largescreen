@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import Menus from '@/components/Designer/Menus/Menus.vue';
 import { useLargeScreenDesigner } from '@/stores/designer';
-import { Icon } from '@iconify/vue/dist/iconify.js';
 import { useRouter } from 'vue-router';
 
 const emits = defineEmits<{
@@ -24,7 +23,7 @@ function handlePreview() {
   <div class="px-2">
     <div class="border-b-1px gap-2 flex items-center justify-between border-gray-200 border-b-solid h-50px">
       <div class="start flex items-center gap-1 cursor-pointer">
-        <Icon class="" icon="ion:arrow-back" @click="handleBack" />
+        <div class="w-4 h-4 i-ion:arrow-back cursor-pointer" @click="handleBack" />
         <n-input v-model:value="designerStore.state.name" placeholder="大屏名称" class="w-160px!" />
       </div>
       <div class="center flex-1 h-full">

@@ -1,13 +1,11 @@
 <script lang="ts" setup>
 import type { MenuItem } from '@/types/dataLargeScreen';
+import { getMenuConfig, MENUS as menus } from '@/materials/base/menus';
 import { useLargeScreenDesigner } from '@/stores/designer';
 import { nextTick } from 'vue';
 import MenuItemVue from './MenuItem';
-import { useMenus } from './useMenus';
 
 const designerStore = useLargeScreenDesigner();
-
-const { MENUS: menus, getMenuConfig } = useMenus();
 
 const dragPlaceholderElement = ref<HTMLElement | null>(null);
 

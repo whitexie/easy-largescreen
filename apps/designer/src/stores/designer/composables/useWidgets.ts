@@ -1,10 +1,8 @@
 import type { AddWidgetOption, DataLargeScreenField, MenuItem } from '@/types/dataLargeScreen';
-import { useMenus } from '@/components/Designer/Menus/useMenus';
+import { getMenuConfig, getWidgetProps } from '@/materials/base/menus';
 
 import { generateRandomString } from '@yss/utils';
 import { merge } from 'lodash-es';
-
-const { getMenuConfig, getWidgetProps } = useMenus();
 
 export function useWidgets() {
   const widgets = reactive<DataLargeScreenField[]>([]);
