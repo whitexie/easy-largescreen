@@ -1,18 +1,11 @@
 <script setup lang="ts">
-import type { GlobalThemeOverrides } from 'naive-ui';
-import { dateZhCN, NConfigProvider, NMessageProvider, zhCN } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 
-const theme = ref<GlobalThemeOverrides>({});
+const message = useMessage();
 
-import('@/assets/themes/shadcn.json').then((res) => {
-  theme.value = JSON.parse(JSON.stringify(res));
-});
+window.$message = message;
 </script>
 
 <template>
-  <NConfigProvider preflight-style-disabled class="h-full" :theme-overrides="theme" :locale="zhCN" :date-locale="dateZhCN">
-    <NMessageProvider>
-      <RouterView />
-    </NMessageProvider>
-  </NConfigProvider>
+  <RouterView />
 </template>
