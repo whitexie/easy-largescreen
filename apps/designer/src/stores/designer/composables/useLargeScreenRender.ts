@@ -18,6 +18,12 @@ interface LargeScreenDesigner {
   useDatasetIds: string[]
 }
 
+export interface CanvasBackgroundStyle {
+  backgroundColor: string
+  backgroundImage?: string
+  backgroundSize?: string
+}
+
 export function useLargeScreenRender() {
   const state = reactive<LargeScreenDesigner>(getDefaultState());
   const canvasRef = ref<HTMLDivElement | null>(null);
@@ -33,11 +39,14 @@ export function useLargeScreenRender() {
 
   const canvasBackgroundStyle = computed(() => {
     const { pageConfig: { background: { color, image } } } = state;
-    return {
+    const style: CanvasBackgroundStyle = {
       backgroundColor: color,
-      backgroundImage: `url(${image})`,
-      backgroundSize: 'cover',
     };
+    if (image) {
+      style.backgroundImage = `url(${image})`;
+      style.backgroundSize = 'cover';
+    }
+    return style;
   });
 
   function getConfig(): API.SaveLargescreenDto {
