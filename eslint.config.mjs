@@ -4,7 +4,9 @@ const files = [
   'packages/**/*.ts',
   'api/**/*.ts',
   'apps/backend/**/*.ts',
-  'apps/designer/**/*.{ts, mts}',
+  'apps/designer/**/*.tsx',
+  'apps/designer/**/*.mts',
+  'apps/designer/**/*.ts',
   'apps/designer/**/*.vue',
   'docs/**/*.md',
 ]
