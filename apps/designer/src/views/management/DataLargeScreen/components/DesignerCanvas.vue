@@ -1,29 +1,18 @@
 <script lang="ts" setup>
-import type { AddWidgetOption, DataLargeScreenField, MenuItem } from '@/types/dataLargeScreen';
+import type { AddWidgetOption, MenuItem } from '@/types/dataLargeScreen';
 import { useSpaceDraggable } from '@/composables/useSpaceDraggable';
 import { useMenus } from '@/materials/base/menus';
 import { useLargeScreenDesigner } from '@/stores/designer';
 import { omit } from 'lodash-es';
 import { storeToRefs } from 'pinia';
-import { useMaterialMove } from '../composables/useMaterialMove';
-import { useMaterialResize } from '../composables/useMaterialResize';
-import DesignerWidget from './DesignerWidget.vue';
-import DragDistanceIndicator from './DragDistanceIndicator.vue';
-import SelectedWidgetsBounding from './SelectedWidgetsBounding.vue';
 
 const designerStore = useLargeScreenDesigner();
 const { getMenuConfig } = useMenus();
 
-// 画布拖拽
 const { canvasRef, isBrushing } = storeToRefs(designerStore);
+
+// 画布拖拽
 const { offsetStyle, cursorStyle, handleMouseDown, spacePressed } = useSpaceDraggable(canvasRef);
-
-// 组件缩放
-const { handleActiveResize, isResizing } = useMaterialResize();
-
-// 组件移动
-const draggableOption = computed(() => ({ scale: designerStore.scale / 100 }));
-const { handleMouseDown: startMove, initPosition, isDragging, currentWidget } = useMaterialMove(draggableOption);
 
 const canvasStyle = computed(() => {
   const { canvasBackgroundStyle, canvasStyle, scale } = designerStore;
@@ -43,20 +32,8 @@ const canvasMaskStyle = computed(() => {
   };
 });
 
-function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) {
-  if (spacePressed.value || designerStore.currentWidget?.isLock) {
-    return;
-  }
-
-  designerStore.setCurrentWidget(widget, event as PointerEvent);
-
-  const { location } = widget;
-  initPosition(location);
-  startMove(event, widget);
-}
-
 function handleClickCanvas() {
-  if (isDragging.value || isResizing.value || isBrushing.value) {
+  if (isBrushing.value) {
     return;
   }
   designerStore.setCurrentWidget(null);
@@ -66,15 +43,7 @@ function handleDragOver(e: DragEvent) {
   e.preventDefault();
 }
 
-function handleResize(horizontal: -1 | 0 | 1, vertical: -1 | 0 | 1) {
-  const scale = designerStore.scale / 100;
-  handleActiveResize(designerStore.currentWidget!, canvasRef.value, horizontal, vertical, scale);
-}
-
 function handleDrop(e: DragEvent) {
-  if (isDragging.value) {
-    return;
-  }
   if (!canvasRef.value?.contains(e.target as Node)) {
     return;
   }
@@ -112,15 +81,7 @@ function handleDrop(e: DragEvent) {
     @dragover="handleDragOver"
     @drop="handleDrop"
   >
-    <template v-for="item in designerStore.widgets" :key="item.id">
-      <DesignerWidget
-        :widget="item"
-        @mousedown.stop="handleWidgetMouseDown"
-        @resize="handleResize"
-      />
-    </template>
-    <SelectedWidgetsBounding />
-    <DragDistanceIndicator :widget="currentWidget" :is-dragging="isDragging" />
+    <slot />
   </div>
   <div v-show="spacePressed" class="absolute transform-origin-top-left" :style="canvasMaskStyle" @mousedown.stop="handleMouseDown" />
 </template>
