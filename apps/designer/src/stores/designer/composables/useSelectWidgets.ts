@@ -1,6 +1,12 @@
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
 import type { Reactive } from 'vue';
 
+export interface SelectWidgetOptions {
+  ctrlKey?: boolean
+  shiftKey?: boolean
+  metaKey?: boolean
+}
+
 export function useSelectWidgets(widgets: Reactive<DataLargeScreenField[]>) {
   const selectedWidgets = reactive<DataLargeScreenField[]>([]);
   const currentWidget = ref<DataLargeScreenField | null>(null);
@@ -20,36 +26,56 @@ export function useSelectWidgets(widgets: Reactive<DataLargeScreenField[]>) {
     return rect;
   });
 
-  function setCurrentWidget(widget: DataLargeScreenField | null, options?: { ctrlKey?: boolean, shiftKey?: boolean, metaKey?: boolean }) {
+  function setCurrentWidget(widget: DataLargeScreenField | null, options?: SelectWidgetOptions) {
+    // 处理空输入
     if (!widget) {
       resetSelectedWidgets();
       return;
     }
 
     const isWidgetSelected = selectedWidgetIdSet.has(widget.id);
+    const isMultiSelectKey = options?.ctrlKey || options?.metaKey;
 
+    // 处理Shift多选
     if (options?.shiftKey && selectedWidgets.length > 0) {
-      const _widgets = getRangeWidgets(widget, selectedWidgets, widgets);
-      resetSelectedWidgets();
-      _widgets.forEach(addSelectedWidget);
-      currentWidget.value = widget;
+      handleShiftSelect(widget);
+      return;
     }
-    else if (options?.ctrlKey || options?.metaKey) {
-      if (isWidgetSelected) {
-        removeSelectedWidget(widget);
-        currentWidget.value = selectedWidgets.length > 0 ? selectedWidgets[selectedWidgets.length - 1] : null;
-        return;
-      }
-      addSelectedWidget(widget);
+
+    // 处理Ctrl/Meta多选
+    if (isMultiSelectKey) {
+      handleMultiSelect(widget, isWidgetSelected);
+      return;
     }
-    else {
-      if (isWidgetSelected && selectedWidgets.length === 1) {
-        resetSelectedWidgets();
-        return;
-      }
-      resetSelectedWidgets();
-      addSelectedWidget(widget);
+
+    // 处理普通选择
+    handleSingleSelect(widget);
+  }
+
+  // 辅助函数：处理Shift多选
+  function handleShiftSelect(widget: DataLargeScreenField) {
+    const rangeWidgets = getRangeWidgets(widget, selectedWidgets, widgets);
+    resetSelectedWidgets();
+    rangeWidgets.forEach(addSelectedWidget);
+    currentWidget.value = widget;
+  }
+
+  // 辅助函数：处理Ctrl/Meta多选
+  function handleMultiSelect(widget: DataLargeScreenField, isSelected: boolean) {
+    if (isSelected) {
+      removeSelectedWidget(widget);
+      currentWidget.value = selectedWidgets.length > 0
+        ? selectedWidgets[selectedWidgets.length - 1]
+        : null;
+      return;
     }
+    addSelectedWidget(widget);
+  }
+
+  // 辅助函数：处理普通选择
+  function handleSingleSelect(widget: DataLargeScreenField) {
+    resetSelectedWidgets();
+    addSelectedWidget(widget);
   }
 
   function addSelectedWidget(widget: DataLargeScreenField) {

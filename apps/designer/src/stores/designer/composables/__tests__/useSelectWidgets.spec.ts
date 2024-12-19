@@ -23,7 +23,7 @@ describe('useSelectWidgets', () => {
       expect(currentWidgetId.value).toBe(widget.id);
     });
 
-    it('当对1个组件连续选中2次时，取消选中状态', () => {
+    it('当对1个组件连续选中2次时, 还是选中该组件', () => {
       const { addWidgetById, widgets } = useWidgets();
       const { setCurrentWidget, selectedWidgets, currentWidgetId } = useSelectWidgets(widgets);
       const widget: DataLargeScreenField = addWidgetById('text', { id: '1' });
@@ -31,8 +31,8 @@ describe('useSelectWidgets', () => {
       setCurrentWidget(widget);
       setCurrentWidget(widget);
 
-      expect(selectedWidgets).toHaveLength(0);
-      expect(currentWidgetId.value).toBe('');
+      expect(selectedWidgets).toHaveLength(1);
+      expect(currentWidgetId.value).toBe(widget.id);
     });
 
     it('依次选中3个组件, 结果应为选中最后一个组件', () => {
