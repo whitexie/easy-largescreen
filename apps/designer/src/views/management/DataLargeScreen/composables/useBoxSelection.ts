@@ -1,7 +1,12 @@
 import type { Ref } from 'vue';
 import { onBeforeUnmount } from 'vue';
 
-export function useBoxSelection(targetRef: Ref<HTMLElement | null>) {
+interface BoxSelectionOptions {
+  /** 框选后执行的回调 */
+  onSelect?: () => void
+}
+
+export function useBoxSelection(targetRef: Ref<HTMLElement | null>, options?: BoxSelectionOptions) {
   let scale = 1;
 
   const isBrushing = ref(false);
@@ -46,6 +51,7 @@ export function useBoxSelection(targetRef: Ref<HTMLElement | null>) {
     window.removeEventListener('mouseup', endBrush);
     setTimeout(() => {
       isBrushing.value = false;
+      options?.onSelect?.();
     }, 100);
   }
 

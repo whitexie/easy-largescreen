@@ -9,7 +9,7 @@ import { storeToRefs } from 'pinia';
 const designerStore = useLargeScreenDesigner();
 const { getMenuConfig } = useMenus();
 
-const { canvasRef, isBrushing } = storeToRefs(designerStore);
+const { canvasRef } = storeToRefs(designerStore);
 
 // 画布拖拽
 const { offsetStyle, cursorStyle, handleMouseDown, spacePressed } = useSpaceDraggable(canvasRef);
@@ -33,9 +33,6 @@ const canvasMaskStyle = computed(() => {
 });
 
 function handleClickCanvas() {
-  if (isBrushing.value) {
-    return;
-  }
   designerStore.setCurrentWidget(null);
 }
 

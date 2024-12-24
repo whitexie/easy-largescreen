@@ -1,6 +1,5 @@
 import api from '@/api';
 import { calculateBestFitScale } from '@/utils';
-import { useBoxSelection } from '@/views/management/DataLargeScreen/composables/useBoxSelection';
 import { defineStore } from 'pinia';
 import { useLargeScreenRender } from './composables/useLargeScreenRender';
 import { useSelectWidgets } from './composables/useSelectWidgets';
@@ -39,9 +38,7 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
   const { state, canvasRef, widgetMap, clearWidgets, getConfig, ...rest } = useLargeScreenRender();
 
   /** 临时的状态，仅在本地使用，数据不入库 */
-  const canvasContainerRef = ref<HTMLDivElement | null>(null);
   const { currentWidgetId, currentWidget, setCurrentWidget, resetSelectedWidgets, ...SelectWidgetRest } = useSelectWidgets(rest.widgets);
-  const boxSelection = useBoxSelection(canvasContainerRef);
 
   const currentDatasetId = ref('');
   const scale = ref(100);
@@ -98,7 +95,6 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     scale,
     currentWidgetId,
     currentDatasetId,
-    canvasContainerRef,
     clearWidgets,
     getConfig,
     setCurrentWidget,
@@ -108,6 +104,5 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     $reset,
     ...rest,
     ...SelectWidgetRest,
-    ...boxSelection,
   };
 });
