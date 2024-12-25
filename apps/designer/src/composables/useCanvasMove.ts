@@ -1,24 +1,26 @@
 import type { Ref } from 'vue';
+import { useMagicKeys } from '@vueuse/core';
+import { onBeforeUnmount, onMounted } from 'vue';
 
-export function useSpaceDraggable(elRef?: Ref<HTMLElement | null>) {
-  const canvasRef = elRef || ref<HTMLElement | null>(null);
+export function useCanvasMove(targetRef?: Ref<HTMLElement | null>) {
+  const canvasRef = targetRef || ref<HTMLElement | null>(null);
   const isDragging = ref(false);
-  const spacePressed = ref(false);
+  const { space: spacePressed } = useMagicKeys();
   const offset = reactive({ x: 30, y: 30 });
   let startX = 0;
   let startY = 0;
 
   const cursorStyle = computed(() => {
     if (isDragging.value) {
-      return 'grabbing';
+      return 'grabbing !important';
     }
     else if (spacePressed.value) {
-      return 'grab';
+      return 'grab !important';
     }
-    else {
-      return 'default';
-    }
+
+    return 'default';
   });
+
   const offsetStyle = computed(() => {
     return {
       left: `${offset.x}px`,
@@ -55,26 +57,6 @@ export function useSpaceDraggable(elRef?: Ref<HTMLElement | null>) {
     }
   }
 
-  function handleKeyDown(e: KeyboardEvent) {
-    if (e.code === 'Space') {
-      const targetElement = e.target as HTMLElement;
-
-      if (['TEXTAREA', 'INPUT'].includes(targetElement.tagName)) {
-        return;
-      }
-
-      // 防止滚动
-      e.preventDefault();
-      spacePressed.value = true;
-    }
-  }
-
-  function handleKeyUp(e: KeyboardEvent) {
-    if (e.code === 'Space') {
-      spacePressed.value = false;
-    }
-  }
-
   function initOffset() {
     const canvas = canvasRef.value as HTMLElement;
     if (!canvas) {
@@ -86,15 +68,11 @@ export function useSpaceDraggable(elRef?: Ref<HTMLElement | null>) {
 
   onMounted(() => {
     initOffset();
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('keyup', handleKeyUp);
   });
 
-  onUnmounted(() => {
+  onBeforeUnmount(() => {
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
-    document.removeEventListener('keydown', handleKeyDown);
-    document.removeEventListener('keyup', handleKeyUp);
   });
 
   return {

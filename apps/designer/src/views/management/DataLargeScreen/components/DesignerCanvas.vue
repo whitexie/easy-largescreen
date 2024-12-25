@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { AddWidgetOption, MenuItem } from '@/types/dataLargeScreen';
-import { useSpaceDraggable } from '@/composables/useSpaceDraggable';
+import { useCanvasMove } from '@/composables/useCanvasMove';
 import { useMenus } from '@/materials/base/menus';
 import { useLargeScreenDesigner } from '@/stores/designer';
 import { omit } from 'lodash-es';
@@ -12,7 +12,7 @@ const { getMenuConfig } = useMenus();
 const { canvasRef } = storeToRefs(designerStore);
 
 // 画布拖拽
-const { offsetStyle, cursorStyle, handleMouseDown, spacePressed } = useSpaceDraggable(canvasRef);
+const { offsetStyle, cursorStyle, handleMouseDown, spacePressed } = useCanvasMove(canvasRef);
 
 const canvasStyle = computed(() => {
   const { canvasBackgroundStyle, canvasStyle, scale } = designerStore;
@@ -26,10 +26,7 @@ const canvasStyle = computed(() => {
   };
 });
 const canvasMaskStyle = computed(() => {
-  return {
-    ...omit(canvasStyle.value, ['cursor', 'backgroundColor', 'backgroundImage']),
-    cursor: 'move',
-  };
+  return omit(canvasStyle.value, ['backgroundColor', 'backgroundImage']);
 });
 
 function handleClickCanvas() {
@@ -80,7 +77,12 @@ function handleDrop(e: DragEvent) {
   >
     <slot />
   </div>
-  <div v-show="spacePressed" class="absolute transform-origin-top-left" :style="canvasMaskStyle" @mousedown.stop="handleMouseDown" />
+  <div
+    v-show="spacePressed"
+    class="absolute transform-origin-top-left"
+    :style="canvasMaskStyle"
+    @mousedown.stop="handleMouseDown"
+  />
 </template>
 
 <style scoped>
