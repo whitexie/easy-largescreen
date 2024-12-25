@@ -3,9 +3,11 @@ import type { AddWidgetOption, MenuItem } from '@/types/dataLargeScreen';
 import { useCanvasMove } from '@/composables/useCanvasMove';
 import { useMenus } from '@/materials/base/menus';
 import { useLargeScreenDesigner } from '@/stores/designer';
+import { onKeyStroke } from '@vueuse/core';
 import { omit } from 'lodash-es';
 import { storeToRefs } from 'pinia';
 
+const mouseEnter = ref(false);
 const designerStore = useLargeScreenDesigner();
 const { getMenuConfig } = useMenus();
 
@@ -64,6 +66,14 @@ function handleDrop(e: DragEvent) {
   const widget = designerStore.addWidget(menuItem, option);
   designerStore.setCurrentWidget(widget);
 }
+
+function handleDeleteWidget() {
+  if (mouseEnter.value) {
+    designerStore.removeSelectedWidgets();
+  }
+}
+
+onKeyStroke('Backspace', handleDeleteWidget);
 </script>
 
 <template>
@@ -74,6 +84,8 @@ function handleDrop(e: DragEvent) {
     @click.stop="handleClickCanvas"
     @dragover="handleDragOver"
     @drop="handleDrop"
+    @mouseenter="mouseEnter = true"
+    @mouseleave="mouseEnter = false"
   >
     <slot />
   </div>

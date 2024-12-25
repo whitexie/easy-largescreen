@@ -1,12 +1,14 @@
 <script name="Layers" lang="ts" setup>
 import type { DataLargeScreenField } from '@/types/dataLargeScreen';
 import { useLargeScreenDesigner } from '@/stores/designer';
+import { onKeyStroke } from '@vueuse/core';
 import { useThemeVars } from 'naive-ui';
 import { VueDraggable } from 'vue-draggable-plus';
 import LayerItem from './LayerItem.vue';
 
 const isExpand = ref(false);
 const theme = useThemeVars();
+const mouseEnter = ref(false);
 
 const bgColor = computed(() => theme.value.infoColor);
 const primaryColor = computed(() => theme.value.primaryColor);
@@ -32,10 +34,21 @@ function handleClickLayerItem(data: { item: DataLargeScreenField, event: Event }
   const { item, event } = data;
   designerStore.setCurrentWidget(item, event as PointerEvent);
 }
+
+onKeyStroke('Backspace', () => {
+  if (mouseEnter.value) {
+    designerStore.removeSelectedWidgets();
+  }
+});
 </script>
 
 <template>
-  <div class="layers  h-full bg-white w-200px overflow-hidden z-1001" :class="layersClass">
+  <div
+    class="layers  h-full bg-white w-200px overflow-hidden z-1001"
+    :class="layersClass"
+    @mouseenter="mouseEnter = true"
+    @mouseleave="mouseEnter = false"
+  >
     <div
       :class="isExpand && 'px-2'"
       class="title flex items-center select-none justify-between h-40px border-b border-gray-200 border-b-solid"

@@ -35,7 +35,7 @@ const DEFAULT_STATE: LargeScreenDesigner = {
 };
 
 export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
-  const { state, canvasRef, widgetMap, clearWidgets, getConfig, ...rest } = useLargeScreenRender();
+  const { state, canvasRef, widgetMap, clearWidgets, getConfig, removeWidget, ...rest } = useLargeScreenRender();
 
   /** 临时的状态，仅在本地使用，数据不入库 */
   const { currentWidgetId, currentWidget, setCurrentWidget, resetSelectedWidgets, ...SelectWidgetRest } = useSelectWidgets(rest.widgets);
@@ -87,6 +87,17 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     currentWidget.value.location.y = y;
   }
 
+  function removeSelectedWidgets() {
+    if (!SelectWidgetRest.selectedWidgets.length) {
+      return;
+    }
+
+    [...SelectWidgetRest.selectedWidgets].forEach((widget) => {
+      removeWidget(widget.id);
+    });
+    resetSelectedWidgets();
+  }
+
   return {
     state,
     canvasRef,
@@ -95,6 +106,7 @@ export const useLargeScreenDesigner = defineStore('LargeScreenDesigner', () => {
     scale,
     currentWidgetId,
     currentDatasetId,
+    removeSelectedWidgets,
     clearWidgets,
     getConfig,
     setCurrentWidget,
