@@ -110,6 +110,14 @@ export function useSelectWidgets(widgets: Reactive<DataLargeScreenField[]>) {
     }
   }
 
+  function lockSelectedWidgets() {
+    selectedWidgets.forEach(wgt => wgt.isLock = true);
+  }
+
+  function unlockSelectedWidgets() {
+    selectedWidgets.forEach(wgt => wgt.isLock = false);
+  }
+
   return {
     selectedWidgets,
     currentWidget,
@@ -122,6 +130,8 @@ export function useSelectWidgets(widgets: Reactive<DataLargeScreenField[]>) {
     resetSelectedWidgets,
     isSelectedWidget,
     calculateSelectedWidgetsBounding,
+    lockSelectedWidgets,
+    unlockSelectedWidgets,
   };
 }
 

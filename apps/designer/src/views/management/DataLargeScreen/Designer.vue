@@ -55,7 +55,10 @@ function handleBoxSelection() {
 }
 
 function handleWidgetMouseDown(event: MouseEvent, widget: DataLargeScreenField) {
-  if (designerStore.currentWidget?.isLock) {
+  // 是否右击且有多个选中的物料
+  const isInvalidRightClick = event.button === 2 && designerStore.selectedWidgets.length > 1;
+
+  if (designerStore.currentWidget?.isLock || isInvalidRightClick) {
     return;
   }
 

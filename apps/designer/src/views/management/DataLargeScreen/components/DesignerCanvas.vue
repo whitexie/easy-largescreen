@@ -6,6 +6,7 @@ import { useLargeScreenDesigner } from '@/stores/designer';
 import { onKeyStroke } from '@vueuse/core';
 import { omit } from 'lodash-es';
 import { storeToRefs } from 'pinia';
+import ContextMenu from './ContextMenu';
 
 const mouseEnter = ref(false);
 const designerStore = useLargeScreenDesigner();
@@ -30,6 +31,66 @@ const canvasStyle = computed(() => {
 const canvasMaskStyle = computed(() => {
   return omit(canvasStyle.value, ['backgroundColor', 'backgroundImage']);
 });
+
+const contextMenuOptions = computed(() => {
+  const wgts = designerStore.selectedWidgets;
+
+  const isAllLocked = wgts.every(wgt => wgt.isLock);
+
+  return [
+    {
+      label: '创建编组',
+      key: 'createGroup',
+      keys: ['Ctrl', 'G'],
+      // TODO: 选中的物料是否为编组
+      disabled: wgts.length < 1,
+    },
+    {
+      label: '解除编组',
+      key: 'unlockGroup',
+      keys: ['Ctrl', 'G'],
+      // TODO: 是否为编组
+    },
+    {
+      label: '删除',
+      key: 'delete',
+      keys: ['Backspace'],
+    },
+    {
+      label: '锁定',
+      key: 'lock',
+      keys: ['Ctrl', 'L'],
+      disabled: isAllLocked,
+    },
+    {
+      label: '解锁',
+      key: 'unlock',
+      keys: ['Ctrl', 'Shift', 'L'],
+      disabled: !isAllLocked,
+    },
+  ];
+});
+
+function handleContextMenuSelect(key: string) {
+  switch (key) {
+    case 'delete': {
+      designerStore.removeSelectedWidgets();
+      break;
+    }
+    case 'lock': {
+      designerStore.lockSelectedWidgets();
+      break;
+    }
+    case 'unlock': {
+      designerStore.unlockSelectedWidgets();
+      break;
+    }
+    // TODO: 其他功能...
+    default: {
+      console.error(key);
+    }
+  }
+}
 
 function handleClickCanvas() {
   designerStore.setCurrentWidget(null);
@@ -77,24 +138,26 @@ onKeyStroke('Backspace', handleDeleteWidget);
 </script>
 
 <template>
-  <div
-    ref="canvasRef"
-    class="large-screen-canvas absolute bg-white transform-origin-top-left "
-    :style="canvasStyle"
-    @click.stop="handleClickCanvas"
-    @dragover="handleDragOver"
-    @drop="handleDrop"
-    @mouseenter="mouseEnter = true"
-    @mouseleave="mouseEnter = false"
-  >
-    <slot />
-  </div>
-  <div
-    v-show="spacePressed"
-    class="absolute transform-origin-top-left"
-    :style="canvasMaskStyle"
-    @mousedown.stop="handleMouseDown"
-  />
+  <ContextMenu :options="contextMenuOptions" @select="handleContextMenuSelect">
+    <div
+      ref="canvasRef"
+      class="large-screen-canvas absolute bg-white transform-origin-top-left "
+      :style="canvasStyle"
+      @click.stop="handleClickCanvas"
+      @dragover="handleDragOver"
+      @drop="handleDrop"
+      @mouseenter="mouseEnter = true"
+      @mouseleave="mouseEnter = false"
+    >
+      <slot />
+    </div>
+    <div
+      v-show="spacePressed"
+      class="absolute transform-origin-top-left"
+      :style="canvasMaskStyle"
+      @mousedown.stop="handleMouseDown"
+    />
+  </ContextMenu>
 </template>
 
 <style scoped>
