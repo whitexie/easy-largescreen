@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import type { AddWidgetOption, MenuItem } from '@/types/dataLargeScreen';
 import { useCanvasMove } from '@/composables/useCanvasMove';
-import { useMenus } from '@/materials/base/menus';
+import { useSharedMaterialDragAdd } from '@/composables/useMaterialDragAdd';
 import { useLargeScreenDesigner } from '@/stores/designer';
 import { onKeyStroke } from '@vueuse/core';
 import { omit } from 'lodash-es';
@@ -10,7 +9,7 @@ import ContextMenu from './ContextMenu';
 
 const mouseEnter = ref(false);
 const designerStore = useLargeScreenDesigner();
-const { getMenuConfig } = useMenus();
+const { dragDrop } = useSharedMaterialDragAdd();
 
 const { canvasRef } = storeToRefs(designerStore);
 
@@ -101,31 +100,7 @@ function handleDragOver(e: DragEvent) {
 }
 
 function handleDrop(e: DragEvent) {
-  if (!canvasRef.value?.contains(e.target as Node)) {
-    return;
-  }
-
-  const menuItem = JSON.parse(e.dataTransfer?.getData('text/plain') || '{}') as MenuItem;
-  const widgetConfig = getMenuConfig(menuItem.id);
-
-  const canvasRect = canvasRef.value.getBoundingClientRect();
-  const x = e.clientX - canvasRect.left;
-  const y = e.clientY - canvasRect.top;
-
-  const scale = designerStore.scale / 100;
-  const width = widgetConfig.size.width / scale;
-  const height = widgetConfig.size.height / scale;
-
-  const option: AddWidgetOption = {
-    location: {
-      x: x / scale - width / 2,
-      y: y / scale - height / 2,
-    },
-    size: { width, height },
-  };
-
-  const widget = designerStore.addWidget(menuItem, option);
-  designerStore.setCurrentWidget(widget);
+  dragDrop(e, canvasRef.value!);
 }
 
 function handleDeleteWidget() {
