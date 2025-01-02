@@ -78,10 +78,10 @@ export function useMaterialResize() {
       }
 
       // 更新组件状态
-      activeWidget.size.width = newWidth / scaleRadio;
-      activeWidget.size.height = newHeight / scaleRadio;
-      activeWidget.location.x = newLeft / scaleRadio;
-      activeWidget.location.y = newTop / scaleRadio;
+      activeWidget.size.width = Math.round(newWidth / scaleRadio);
+      activeWidget.size.height = Math.round(newHeight / scaleRadio);
+      activeWidget.location.x = Math.round(newLeft / scaleRadio);
+      activeWidget.location.y = Math.round(newTop / scaleRadio);
 
       // 在操作完成后，重置frameId以便于下一次重新请求
       frameId = null;
